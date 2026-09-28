@@ -1,0 +1,14 @@
+{
+  "description": "Text that goes straight to TTS. Output guardrails sanitize it further (phase 4).",
+  "properties": {
+    "text": {
+      "description": "Spoken English reply, at most 350 characters, ending with a question. Plain text only: no markdown, lists, emojis, URLs or parentheses.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "text"
+  ],
+  "type": "object",
+  "additionalProperties": false
+}

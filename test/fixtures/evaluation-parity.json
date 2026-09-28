@@ -1,0 +1,4410 @@
+{
+  "normalize": [
+    ["um I went to the the beach in São Paulo!", "um i went to the beach in sao paulo"],
+    ["Don't DON'T stop", "don't don't stop"],
+    ["'quoted' words", "quoted words"],
+    ["ﬁne ½", "fine 1 2"],
+    ["well-known", "well known"],
+    ["a.m. 7", "a m 7"],
+    ["Ça va? Très bien", "ca va tres bien"],
+    ["I I I", "i"],
+    ["the theory the theory", "the theory the theory"],
+    ["don't don't", "don't don't"],
+    ["İstanbul", "istanbul"],
+    ["ΣΟΦΟΣ", "σοφος"],
+    ["naïve café", "naive cafe"],
+    ["x_y x_y", "x_y"],
+    ["tab\tand nbsp em", "tab and nbsp em"],
+    ["", ""]
+  ],
+  "overall_score": [
+    [90, 80, 70, 100, 85],
+    [100, 100, 100, 0, 50],
+    [100, 100, 100, 30, 65],
+    [81, 80, 80, 10, 55],
+    [50, 50, 51, 100, 63],
+    [51, 52, 51, 49, 51],
+    [0, 0, 0, 0, 0],
+    [100, 100, 100, 100, 100],
+    [61, 60, 60, 50, 58],
+    [33, 34, 35, 2, 26],
+    [70, 71, 71, 71, 71],
+    [60, 60, 60, 62, 60],
+    [61, 61, 61, 63, 62],
+    [80, 80, 82, 100, 86],
+    [50, 50, 50, 2, 38],
+    [90, 90, 90, 94, 91],
+    [70, 70, 72, 60, 68]
+  ],
+  "cases": [
+    {
+      "source": "test_a_fully_filtered_tip_becomes_the_default_not_the_models_text",
+      "input": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is the Foo Fighters.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Foo Fighters",
+            "correction": "the Foo Fighters",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "Remember: the Foo Fighters."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is Foo Fighters.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Nice answer! Next time, try adding one more detail or example."
+      },
+      "notes": ["article_before_name:Foo Fighters"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_a_fully_filtered_tip_becomes_the_default_not_the_models_text",
+      "input": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is the Foo Fighters.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 20
+        },
+        "mistakes": [
+          {
+            "original": "Foo Fighters",
+            "correction": "the Foo Fighters",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "Remember: the Foo Fighters."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is Foo Fighters.",
+        "score": 60,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 20
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Next time, try to answer the question with one or two full sentences."
+      },
+      "notes": ["article_before_name:Foo Fighters"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_a_guessed_correction_becomes_unclear_and_leaves_the_natural_version",
+      "input": {
+        "transcript": "My main stack is web development and I work has been show use.",
+        "corrected": "My main stack is web development, and I have been working as a software engineer for five years.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I work has been show use",
+            "correction": "I have been working as a software engineer for five years",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "Use 'for' with time. For example: 'I have been working as a software engineer for five years.' Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "My main stack is web development and I work has been show use.",
+        "corrected": "My main stack is web development and I work has been show use.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I work has been show use",
+            "correction": "I work has been show use",
+            "type": "unclear",
+            "explanation": "I couldn't understand this part, maybe because of the audio. Try saying it again slowly."
+          }
+        ],
+        "strengths": [],
+        "tip": "Use 'for' with time. Keep practicing."
+      },
+      "notes": ["invented:I work has been show use"],
+      "feedback": "No mistakes.\nUnclear (bad audio, nobody knows what they said): 'I work has been show use'"
+    },
+    {
+      "source": "test_a_lone_short_word_gets_the_word_before_it",
+      "input": {
+        "transcript": "In my city the people is friendly and there have many parks",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "is",
+            "correction": "are",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "have",
+            "correction": "are",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "In my city the people is friendly and there have many parks",
+        "corrected": "",
+        "score": 80,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "people is",
+            "correction": "people are",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "there have",
+            "correction": "there are",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'people is' -> 'people are'\nFixed: 'there have' -> 'there are'"
+    },
+    {
+      "source": "test_a_lone_short_word_gets_the_word_before_it",
+      "input": {
+        "transcript": "this is it",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "is",
+            "correction": "are",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "this is it",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "this is",
+            "correction": "this are",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'this is' -> 'this are'"
+    },
+    {
+      "source": "test_a_mistake_widened_by_the_code_is_checked_again",
+      "input": {
+        "transcript": "I like to play guitar",
+        "corrected": "I like to play the guitar.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "guitar",
+            "correction": "the guitar",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I like to play guitar",
+        "corrected": "I like to play guitar.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["play_instrument:guitar"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_a_real_article_mistake_is_kept",
+      "input": {
+        "transcript": "I have a dog and dog is big",
+        "corrected": "I have a dog and the dog is big.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "and dog is",
+            "correction": "and the dog is",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I have a dog and dog is big",
+        "corrected": "I have a dog and the dog is big.",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "and dog is",
+            "correction": "and the dog is",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I have a dog and the dog is big.\nFixed: 'and dog is' -> 'and the dog is'"
+    },
+    {
+      "source": "test_a_repeated_word_is_fixed_where_the_correction_applies",
+      "input": {
+        "transcript": "When I was child I go to the beach every summer with my parents and my brother, we was very happy, we make many things together like to swim and to play football in the sand, and in the night we eat fish in a restaurant near of our house, I miss very much this time",
+        "corrected": "When I was a child, I went to the beach every summer with my relatives and my brother. We were very happy and did many things together, like swimming and playing football in the sand. At night, we ate fish in a restaurant near our house. I miss that time very much.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "was",
+            "correction": "were",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "we make many things",
+            "correction": "did many things",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "When I was child I go to the beach every summer with my parents and my brother, we was very happy, we make many things together like to swim and to play football in the sand, and in the night we eat fish in a restaurant near of our house, I miss very much this time",
+        "corrected": "When I was a child, I went to the beach every summer with my relatives and my brother. We were very happy and did many things together, like swimming and playing football in the sand. At night, we ate fish in a restaurant near our house. I miss that time very much.",
+        "score": 80,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "we was",
+            "correction": "we were",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "we make many things",
+            "correction": "we did many things",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["moved:was", "aligned:we make many things"],
+      "feedback": "What they meant, in correct English: When I was a child, I went to the beach every summer with my relatives and my brother. We were very happy and did many things together, like swimming and playing football in the sand. At night, we ate fish in a restaurant near our house. I miss that time very much.\nFixed: 'we was' -> 'we were'\nFixed: 'we make many things' -> 'we did many things'"
+    },
+    {
+      "source": "test_a_short_answer_can_be_a_mistake_as_a_whole",
+      "input": {
+        "transcript": "I have 20 years",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I have 20 years",
+            "correction": "I'm 20",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I have 20 years",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I have 20 years",
+            "correction": "I'm 20",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'I have 20 years' -> 'I'm 20'"
+    },
+    {
+      "source": "test_a_slightly_miscopied_long_mistake_is_still_found",
+      "input": {
+        "transcript": "Last year I have gone to Rio with my family and we stayed in a hotel near the sea",
+        "corrected": "Last year I went to Rio with my family and we stayed in a hotel near the sea.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I have gone to Rio with my family and we stayed at a hotel",
+            "correction": "I went to Rio with my family and we stayed at a hotel",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Last year I have gone to Rio with my family and we stayed in a hotel near the sea",
+        "corrected": "Last year I went to Rio with my family and we stayed in a hotel near the sea.",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I have gone to",
+            "correction": "I went to",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["shrunk:I have gone to Rio with my family and we"],
+      "feedback": "What they meant, in correct English: Last year I went to Rio with my family and we stayed in a hotel near the sea.\nFixed: 'I have gone to' -> 'I went to'"
+    },
+    {
+      "source": "test_a_split_mistake_keeps_its_first_part_next_to_the_models_own",
+      "input": {
+        "transcript": "I am work in a bank since five years and I like very much my job",
+        "corrected": "I have been working in a bank for five years, and I really like my job.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "am work in a bank since five years",
+            "correction": "have been working in a bank for five years",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "since five years",
+            "correction": "for five years",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I am work in a bank since five years and I like very much my job",
+        "corrected": "I have been working in a bank for five years, and I really like my job.",
+        "score": 80,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "am work in",
+            "correction": "have been working in",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "since five years",
+            "correction": "for five years",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["split:am work in a bank since five years", "overlap:bank since five"],
+      "feedback": "What they meant, in correct English: I have been working in a bank for five years, and I really like my job.\nFixed: 'am work in' -> 'have been working in'\nFixed: 'since five years' -> 'for five years'"
+    },
+    {
+      "source": "test_a_whole_sentence_mistake_is_shrunk_to_what_changes",
+      "input": {
+        "transcript": "I pretend to travel to Europe next year with my wife",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I pretend to travel to Europe next year with my wife",
+            "correction": "I intend to travel to Europe next year with my wife",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I pretend to travel to Europe next year with my wife",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I pretend to",
+            "correction": "I intend to",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["shrunk:I pretend to travel to Europe next year "],
+      "feedback": "What they meant, in correct English: \nFixed: 'I pretend to' -> 'I intend to'"
+    },
+    {
+      "source": "test_a_word_heard_the_way_it_sounded_is_a_pronunciation_hint",
+      "input": {
+        "transcript": "And after, send another audio to Konshinui, the Tzauki, and it's for learning",
+        "corrected": "And after that, I send another audio to continue the talk.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Konshinui",
+            "correction": "continue",
+            "type": "pronunciation",
+            "explanation": "x."
+          },
+          {
+            "original": "Tzauki",
+            "correction": "talk",
+            "type": "pronunciation",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "And after, send another audio to Konshinui, the Tzauki, and it's for learning",
+        "corrected": "And after that, I send another audio to continue the talk.",
+        "score": 85,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Konshinui",
+            "correction": "continue",
+            "type": "pronunciation",
+            "explanation": "x."
+          },
+          {
+            "original": "Tzauki",
+            "correction": "talk",
+            "type": "pronunciation",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: And after that, I send another audio to continue the talk.\nHeard as 'Konshinui', probably 'continue' (pronunciation)\nHeard as 'Tzauki', probably 'talk' (pronunciation)"
+    },
+    {
+      "source": "test_alignment_ignores_glue_words",
+      "input": {
+        "transcript": "I like to play guitar, I play since I was fifteen",
+        "corrected": "I like to play guitar, and I've been playing since I was fifteen.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I play since I was fifteen",
+            "correction": "and I have been playing",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I like to play guitar, I play since I was fifteen",
+        "corrected": "I like to play guitar, and I've been playing since I was fifteen.",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I play since I was fifteen",
+            "correction": "I've been playing since I was fifteen",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["aligned:I play since I was fifteen"],
+      "feedback": "What they meant, in correct English: I like to play guitar, and I've been playing since I was fifteen.\nFixed: 'I play since I was fifteen' -> 'I've been playing since I was fifteen'"
+    },
+    {
+      "source": "test_an_explanation_saying_it_is_correct_drops_the_mistake",
+      "input": {
+        "transcript": "Yes I went there, it was amazing",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "it was",
+            "correction": "It was",
+            "type": "grammar",
+            "explanation": "The sentence is correct, but a new sentence reads better."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Yes I went there, it was amazing",
+        "corrected": "Yes I went there, it was amazing.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["says_correct:it was"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_an_explanation_saying_it_is_correct_drops_the_mistake",
+      "input": {
+        "transcript": "and usually I work in two companies",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "and usually I",
+            "correction": "and then I",
+            "type": "grammar",
+            "explanation": "'Usually I work' is correct, but 'then' is clearer."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "and usually I work in two companies",
+        "corrected": "And usually I work in two companies.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["says_correct:and usually I"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_capitalization_and_garbled_text_are_removed",
+      "input": {
+        "transcript": "I cook on sunday",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "on sunday",
+            "correction": "on Sundays",
+            "type": "grammar",
+            "explanation": "Days of the week always start with a capital letter. Use the plural for habits."
+          }
+        ],
+        "strengths": ["Good sentence, shows moreEducation.", "Clear sentence."],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I cook on sunday",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "on sunday",
+            "correction": "on Sundays",
+            "type": "grammar",
+            "explanation": "Use the plural for habits."
+          }
+        ],
+        "strengths": ["Clear sentence."],
+        "tip": "t"
+      },
+      "notes": ["strength_in_portuguese:Good sentence, shows moreEducation."],
+      "feedback": "What they meant, in correct English: \nFixed: 'on sunday' -> 'on Sundays'"
+    },
+    {
+      "source": "test_changes_that_are_only_punctuation_accents_or_repeats_are_dropped",
+      "input": {
+        "transcript": "I went to the the beach in Sao Paulo, it was amazing",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "the the beach",
+            "correction": "the beach",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "Sao Paulo, it",
+            "correction": "São Paulo; it",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "I went",
+            "correction": "I go",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I went to the the beach in Sao Paulo, it was amazing",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I went",
+            "correction": "I go",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["no_change:the the beach", "no_change:Sao Paulo, it"],
+      "feedback": "What they meant, in correct English: \nFixed: 'I went' -> 'I go'"
+    },
+    {
+      "source": "test_cjk_noise_in_feedback_is_dropped",
+      "input": {
+        "transcript": "I like pizza",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": ["Common vocabulary in英语.", "Clear sentence."],
+        "tip": "Good sentence. Use more adjectives for the英文."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I like pizza",
+        "corrected": "I like pizza.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": ["Clear sentence."],
+        "tip": "Good sentence."
+      },
+      "notes": ["strength_in_portuguese:Common vocabulary in英语."],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_corrected_without_mistakes_drops_fillers_and_repeats",
+      "input": {
+        "transcript": "um so I uh went to the the beach",
+        "corrected": "Um so I uh went...",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "um so I uh went to the the beach",
+        "corrected": "So I went to the beach.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_distant_changes_in_one_mistake_are_split",
+      "input": {
+        "transcript": "Yesterday I go to the big market near my house and I buyed some apples",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Yesterday I go to the big market near my house and I buyed some apples",
+            "correction": "Yesterday I went to the big market near my house and I bought some apples",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Yesterday I go to the big market near my house and I buyed some apples",
+        "corrected": "",
+        "score": 80,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I go to",
+            "correction": "I went to",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "I buyed some",
+            "correction": "I bought some",
+            "type": "grammar",
+            "explanation": "Same as the previous item."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["split:Yesterday I go to the big market near my"],
+      "feedback": "What they meant, in correct English: \nFixed: 'I go to' -> 'I went to'\nFixed: 'I buyed some' -> 'I bought some'"
+    },
+    {
+      "source": "test_dropping_yes_or_explaining_punctuation_is_not_a_mistake",
+      "input": {
+        "transcript": "Yes I went to their show in Sao Paulo in 2018, it was amazing",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Yes I",
+            "correction": "I",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Yes I went to their show in Sao Paulo in 2018, it was amazing",
+        "corrected": "Yes I went to their show in Sao Paulo in 2018, it was amazing.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["discourse_word:Yes I"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_dropping_yes_or_explaining_punctuation_is_not_a_mistake",
+      "input": {
+        "transcript": "Yes I went to their show in Sao Paulo in 2018, it was amazing",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "2018, it",
+            "correction": "2018. It",
+            "type": "grammar",
+            "explanation": "Add a semicolon between the two clauses."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Yes I went to their show in Sao Paulo in 2018, it was amazing",
+        "corrected": "Yes I went to their show in Sao Paulo in 2018, it was amazing.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["punctuation:2018, it"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_dropping_yes_or_explaining_punctuation_is_not_a_mistake",
+      "input": {
+        "transcript": "I work here since two years",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "since two years",
+            "correction": "for two years",
+            "type": "grammar",
+            "explanation": "Use 'for' with a period of time."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I work here since two years",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "since two years",
+            "correction": "for two years",
+            "type": "grammar",
+            "explanation": "Use 'for' with a period of time."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'since two years' -> 'for two years'"
+    },
+    {
+      "source": "test_english_feedback_and_brands_are_not_taken_for_portuguese",
+      "input": {
+        "transcript": "I watch YouTube every day",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "watch YouTube every",
+            "correction": "watch YouTube every",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [
+          "You watch YouTube every day: good everyday vocabulary.",
+          "Nice use of 'every day' for habits.",
+          "Clear answer about São Paulo."
+        ],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I watch YouTube every day",
+        "corrected": "I watch YouTube every day.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [
+          "You watch YouTube every day: good everyday vocabulary.",
+          "Nice use of 'every day' for habits.",
+          "Clear answer about São Paulo."
+        ],
+        "tip": "t"
+      },
+      "notes": ["no_change:watch YouTube every"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_english_feedback_and_brands_are_not_taken_for_portuguese",
+      "input": {
+        "transcript": "I go to school",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I go",
+            "correction": "I went",
+            "type": "grammar",
+            "explanation": "Use a past form here. Say 'went', not 'go'."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I go to school",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I go",
+            "correction": "I went",
+            "type": "grammar",
+            "explanation": "Use a past form here. Say 'went', not 'go'."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'I go' -> 'I went'"
+    },
+    {
+      "source": "test_fragments_not_in_the_answer_whole_answers_and_overlaps_are_dropped",
+      "input": {
+        "transcript": "I am work in a bank since five years and I like very much my job",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I am work in a bank since five years and I like very much my job",
+            "correction": "I have worked in a bank for five years and I really like my job",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "I am work",
+            "correction": "I have worked",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "am work in a bank",
+            "correction": "have worked at a bank",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "since five years",
+            "correction": "for five years",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "I likes",
+            "correction": "I like",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I am work in a bank since five years and I like very much my job",
+        "corrected": "",
+        "score": 80,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I like very much my",
+            "correction": "I really like my",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "I am work",
+            "correction": "I have worked",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "since five years",
+            "correction": "for five years",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [
+        "split:I am work in a bank since five years and",
+        "not_in_answer:I likes",
+        "overlap:bank since five",
+        "overlap:I am work in",
+        "overlap:am work in a bank"
+      ],
+      "feedback": "What they meant, in correct English: \nFixed: 'I like very much my' -> 'I really like my'\nFixed: 'I am work' -> 'I have worked'\nFixed: 'since five years' -> 'for five years'"
+    },
+    {
+      "source": "test_implausible_corrections_are_dropped",
+      "input": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is the Foo Fighters.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Foo Fighters",
+            "correction": "the Foo Fighters",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is Foo Fighters.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["article_before_name:Foo Fighters"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_implausible_corrections_are_dropped",
+      "input": {
+        "transcript": "Yes I went to their show in Sao Paulo",
+        "corrected": "Yes, I went to their show in São Paulo.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "their show",
+            "correction": "the Foo Fighters",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Yes I went to their show in Sao Paulo",
+        "corrected": "Yes I went to their show in Sao Paulo.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["not_in_corrected:their show"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_implausible_corrections_are_dropped",
+      "input": {
+        "transcript": "I want a pizza and a coke please",
+        "corrected": "I'd like a pizza and a coke, please.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I want",
+            "correction": "I'd like",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I want a pizza and a coke please",
+        "corrected": "I want a pizza and a coke please.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["register:I want"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_made_up_memory_is_removed_unless_there_is_memory",
+      "input": {
+        "transcript": "I have gone to Rio last year",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I have gone",
+            "correction": "I went",
+            "type": "grammar",
+            "explanation": "Use the past form. You made this mistake before."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I have gone to Rio last year",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I have gone",
+            "correction": "I went",
+            "type": "grammar",
+            "explanation": "Use the past form."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'I have gone' -> 'I went'"
+    },
+    {
+      "source": "test_made_up_memory_is_removed_unless_there_is_memory",
+      "input": {
+        "transcript": "I have gone to Rio last year",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I have gone",
+            "correction": "I went",
+            "type": "grammar",
+            "explanation": "Use the past form. You made this mistake before."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": true,
+      "output": {
+        "transcript": "I have gone to Rio last year",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I have gone",
+            "correction": "I went",
+            "type": "grammar",
+            "explanation": "Use the past form. You made this mistake before."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'I have gone' -> 'I went'"
+    },
+    {
+      "source": "test_mistakes_are_aligned_with_the_corrected_text",
+      "input": {
+        "transcript": "When I was child I go to the beach every summer",
+        "corrected": "When I was a child, I went to the beach every summer.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I go",
+            "correction": "went",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "When I was child",
+            "correction": "a child",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "When I was child I go to the beach every summer",
+        "corrected": "When I was a child, I went to the beach every summer.",
+        "score": 80,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I go",
+            "correction": "I went",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "When I was child",
+            "correction": "When I was a child",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["aligned:I go", "aligned:When I was child"],
+      "feedback": "What they meant, in correct English: When I was a child, I went to the beach every summer.\nFixed: 'I go' -> 'I went'\nFixed: 'When I was child' -> 'When I was a child'"
+    },
+    {
+      "source": "test_no_mistakes_means_corrected_is_the_answer_and_language_scores_are_high",
+      "input": {
+        "transcript": "i don't know",
+        "corrected": "Hello! I'm [Name] from Brazil.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 60,
+          "vocabulary": 0,
+          "fluency": 70,
+          "task": 10
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "i don't know",
+        "corrected": "I don't know.",
+        "score": 55,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 10
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_only_unclear_parts_keep_the_students_own_words_as_natural_version",
+      "input": {
+        "transcript": "Like about two years.",
+        "corrected": "Like about two years ago.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Like about two years",
+            "correction": "Like about two years",
+            "type": "unclear",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Like about two years.",
+        "corrected": "Like about two years.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["short_unclear:Like about two years"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_overall_score_is_computed_and_capped_when_the_question_is_ignored",
+      "input": {
+        "transcript": "Hello",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 100,
+          "fluency": 100,
+          "task": 0
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Hello",
+        "corrected": "Hello.",
+        "score": 50,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 100,
+          "fluency": 100,
+          "task": 0
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_pieces_of_one_mistake_do_not_repeat_the_explanation",
+      "input": {
+        "transcript": "Yesterday I go to the big market near my house and I buyed some apples",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Yesterday I go to the big market near my house and I buyed some apples",
+            "correction": "Yesterday I went to the big market near my house and I bought some apples",
+            "type": "grammar",
+            "explanation": "Use the past form."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Yesterday I go to the big market near my house and I buyed some apples",
+        "corrected": "",
+        "score": 80,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I go to",
+            "correction": "I went to",
+            "type": "grammar",
+            "explanation": "Use the past form."
+          },
+          {
+            "original": "I buyed some",
+            "correction": "I bought some",
+            "type": "grammar",
+            "explanation": "Same as the previous item."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["split:Yesterday I go to the big market near my"],
+      "feedback": "What they meant, in correct English: \nFixed: 'I go to' -> 'I went to'\nFixed: 'I buyed some' -> 'I bought some'"
+    },
+    {
+      "source": "test_play_guitar_needs_no_article_and_tips_with_ellipsis_are_filtered",
+      "input": {
+        "transcript": "I like to play guitar",
+        "corrected": "I like to play the guitar.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "play guitar",
+            "correction": "play the guitar",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I like to play guitar",
+        "corrected": "I like to play guitar.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["play_instrument:play guitar"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_play_guitar_needs_no_article_and_tips_with_ellipsis_are_filtered",
+      "input": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is the Foo Fighters.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Foo Fighters",
+            "correction": "the Foo Fighters",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "Nice! Remember the article before bands, like... 'the Foo Fighters'."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is Foo Fighters.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Nice!"
+      },
+      "notes": ["article_before_name:Foo Fighters"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_portuguese_sentences_are_removed_from_english_feedback",
+      "input": {
+        "transcript": "I like to swim",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Great job. Continue assim, está ótimo. Use o simple past."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I like to swim",
+        "corrected": "I like to swim.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Great job."
+      },
+      "notes": [],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_portuguese_sentences_are_removed_from_english_feedback",
+      "input": {
+        "transcript": "I pretend to go",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I pretend",
+            "correction": "I intend",
+            "type": "grammar",
+            "explanation": "'Pretend' means 'fingir'. For 'pretender', say 'intend'."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I pretend to go",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I pretend",
+            "correction": "I intend",
+            "type": "grammar",
+            "explanation": "'Pretend' means 'fingir'. For 'pretender', say 'intend'."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'I pretend' -> 'I intend'"
+    },
+    {
+      "source": "test_real_corrections_are_kept",
+      "input": {
+        "transcript": "Weather is very nice today.",
+        "corrected": "The weather is very nice today.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Weather is",
+            "correction": "The weather is",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Weather is very nice today.",
+        "corrected": "The weather is very nice today.",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Weather is",
+            "correction": "The weather is",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: The weather is very nice today.\nFixed: 'Weather is' -> 'The weather is'"
+    },
+    {
+      "source": "test_real_corrections_are_kept",
+      "input": {
+        "transcript": "I love the Brazil.",
+        "corrected": "I love Brazil.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "the Brazil",
+            "correction": "Brazil",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I love the Brazil.",
+        "corrected": "I love Brazil.",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "the Brazil",
+            "correction": "Brazil",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I love Brazil.\nFixed: 'the Brazil' -> 'Brazil'"
+    },
+    {
+      "source": "test_real_corrections_are_kept",
+      "input": {
+        "transcript": "Me like pizza",
+        "corrected": "I like pizza.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Me like",
+            "correction": "I like",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Me like pizza",
+        "corrected": "I like pizza.",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Me like",
+            "correction": "I like",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I like pizza.\nFixed: 'Me like' -> 'I like'"
+    },
+    {
+      "source": "test_real_corrections_are_kept",
+      "input": {
+        "transcript": "It is a good knowed place",
+        "corrected": "It is a well-known place.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "good knowed",
+            "correction": "well-known",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "It is a good knowed place",
+        "corrected": "It is a well-known place.",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "good knowed",
+            "correction": "",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["aligned:good knowed"],
+      "feedback": "What they meant, in correct English: It is a well-known place.\nFixed: 'good knowed' -> ''"
+    },
+    {
+      "source": "test_real_corrections_are_not_taken_for_guesses",
+      "input": {
+        "transcript": "I am work in a bank since five years and I like very much my job",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I am work in a bank",
+            "correction": "I have been working at a bank",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "I like very much my job",
+            "correction": "I really like my job",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I am work in a bank since five years and I like very much my job",
+        "corrected": "",
+        "score": 80,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "I am work in a bank",
+            "correction": "I have been working at a bank",
+            "type": "grammar",
+            "explanation": "x."
+          },
+          {
+            "original": "I like very much my job",
+            "correction": "I really like my job",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'I am work in a bank' -> 'I have been working at a bank'\nFixed: 'I like very much my job' -> 'I really like my job'"
+    },
+    {
+      "source": "test_scores_are_fair_to_short_answers_and_bad_audio",
+      "input": {
+        "transcript": "I'm software engineer",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 40,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 90
+        },
+        "mistakes": [
+          {
+            "original": "I'm software engineer",
+            "correction": "I'm a software engineer",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I'm software engineer",
+        "corrected": "",
+        "score": 84,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 90
+        },
+        "mistakes": [
+          {
+            "original": "I'm software engineer",
+            "correction": "I'm a software engineer",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: \nFixed: 'I'm software engineer' -> 'I'm a software engineer'"
+    },
+    {
+      "source": "test_scores_are_fair_to_short_answers_and_bad_audio",
+      "input": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 90
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is Foo Fighters.",
+        "score": 85,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 90
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_strengths_in_portuguese_are_dropped",
+      "input": {
+        "transcript": "Hello",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [
+          "'Hello' is a correct greeting.",
+          "Ótima saudação.",
+          "Boa resposta, bem natural.",
+          "Clear and friendly."
+        ],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Hello",
+        "corrected": "Hello.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": ["'Hello' is a correct greeting.", "Clear and friendly."],
+        "tip": "t"
+      },
+      "notes": [
+        "strength_in_portuguese:Ótima saudação.",
+        "strength_in_portuguese:Boa resposta, bem natural."
+      ],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_strengths_never_praise_a_mistake",
+      "input": {
+        "transcript": "in the night we eat fish",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "in the night",
+            "correction": "at night",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": ["You used 'in the night' correctly.", "A clear sentence about it."],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "in the night we eat fish",
+        "corrected": "",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "in the night",
+            "correction": "at night",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": ["A clear sentence about it."],
+        "tip": "t"
+      },
+      "notes": ["strength_praises_mistake:You used 'in the night' correctly."],
+      "feedback": "What they meant, in correct English: \nFixed: 'in the night' -> 'at night'"
+    },
+    {
+      "source": "test_the_model_can_mark_a_fragment_unclear_but_not_a_short_clear_one",
+      "input": {
+        "transcript": "I go to the flurb gat zon has show yesterday",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "flurb gat zon has show",
+            "correction": "flurb gat zon has show",
+            "type": "unclear",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I go to the flurb gat zon has show yesterday",
+        "corrected": "I go to the flurb gat zon has show yesterday.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "flurb gat zon has show",
+            "correction": "flurb gat zon has show",
+            "type": "unclear",
+            "explanation": "I couldn't understand this part, maybe because of the audio. Try saying it again slowly."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "No mistakes.\nUnclear (bad audio, nobody knows what they said): 'flurb gat zon has show'"
+    },
+    {
+      "source": "test_the_model_can_mark_a_fragment_unclear_but_not_a_short_clear_one",
+      "input": {
+        "transcript": "Like about two years.",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "about two years",
+            "correction": "about two years",
+            "type": "unclear",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Like about two years.",
+        "corrected": "Like about two years.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": ["short_unclear:about two years"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_the_tidy_answer_has_no_double_spaces",
+      "input": {
+        "transcript": "I wake up at 7 a.m. and I work",
+        "corrected": "",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I wake up at 7 a.m. and I work",
+        "corrected": "I wake up at 7 a.m. and I work.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "t"
+      },
+      "notes": [],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "test_the_tip_does_not_teach_a_dropped_mistake",
+      "input": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is Foo Fighters.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 80,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "Foo Fighters",
+            "correction": "the Foo Fighters",
+            "type": "grammar",
+            "explanation": "x."
+          }
+        ],
+        "strengths": [],
+        "tip": "Great answer. Remember to say 'the Foo Fighters' with the article."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "my favorite band is Foo Fighters",
+        "corrected": "My favorite band is Foo Fighters.",
+        "score": 82,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Great answer."
+      },
+      "notes": ["article_before_name:Foo Fighters"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I have 25 years and I live in Belo Horizonte",
+        "corrected": "I'm 25 years old and I live in Belo Horizonte.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I have 25 years",
+            "correction": "I'm 25 years old",
+            "type": "grammar",
+            "explanation": "Use 'be' for age, not 'have'."
+          }
+        ],
+        "strengths": ["Good use of 'live in'."],
+        "tip": "Say your age with 'I am'."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I have 25 years and I live in Belo Horizonte",
+        "corrected": "I'm 25 years old and I live in Belo Horizonte.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I have 25 years",
+            "correction": "I'm 25 years old",
+            "type": "grammar",
+            "explanation": "Use 'be' for age, not 'have'."
+          }
+        ],
+        "strengths": ["Good use of 'live in'."],
+        "tip": "Say your age with 'I am'."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I'm 25 years old and I live in Belo Horizonte.\nFixed: 'I have 25 years' -> 'I'm 25 years old'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "Yesterday I goed to the shopping with my friends",
+        "corrected": "Yesterday I went to the mall with my friends.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "goed",
+            "correction": "went",
+            "type": "grammar",
+            "explanation": "'Go' is irregular: the past is 'went'."
+          },
+          {
+            "original": "the shopping",
+            "correction": "the mall",
+            "type": "vocabulary",
+            "explanation": "In English, 'shopping' is not a place."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Yesterday I goed to the shopping with my friends",
+        "corrected": "Yesterday I went to the mall with my friends.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I goed",
+            "correction": "I went",
+            "type": "grammar",
+            "explanation": "'Go' is irregular: the past is 'went'."
+          },
+          {
+            "original": "the shopping",
+            "correction": "the mall",
+            "type": "vocabulary",
+            "explanation": "In English, 'shopping' is not a place."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: Yesterday I went to the mall with my friends.\nFixed: 'I goed' -> 'I went'\nFixed: 'the shopping' -> 'the mall'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "um uh I I work with with informatics since 2015",
+        "corrected": "I have worked in IT since 2015.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I work with with informatics since 2015",
+            "correction": "I have worked in IT since 2015",
+            "type": "grammar",
+            "explanation": "Use the present perfect with 'since'. Você já errou isso antes."
+          }
+        ],
+        "strengths": ["Você usou bem o 'since'.", "Nice date."],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "um uh I I work with with informatics since 2015",
+        "corrected": "I have worked in IT since 2015.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I work with informatics since 2015",
+            "correction": "I have worked in IT since 2015",
+            "type": "grammar",
+            "explanation": "Use the present perfect with 'since'."
+          }
+        ],
+        "strengths": ["Nice date."],
+        "tip": "Keep practicing."
+      },
+      "notes": ["strength_in_portuguese:Você usou bem o 'since'."],
+      "feedback": "What they meant, in correct English: I have worked in IT since 2015.\nFixed: 'I work with informatics since 2015' -> 'I have worked in IT since 2015'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "She don't like coffee but she like tea",
+        "corrected": "She doesn't like coffee, but she likes tea.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "She don't like",
+            "correction": "She doesn't like",
+            "type": "grammar",
+            "explanation": "Use 'doesn't' with 'she'."
+          },
+          {
+            "original": "she like tea",
+            "correction": "she likes tea",
+            "type": "grammar",
+            "explanation": "Add -s for 'she'. You made this mistake before."
+          }
+        ],
+        "strengths": [],
+        "tip": "Remember the third person -s."
+      },
+      "has_memory": true,
+      "output": {
+        "transcript": "She don't like coffee but she like tea",
+        "corrected": "She doesn't like coffee, but she likes tea.",
+        "score": 70,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "She don't like",
+            "correction": "She doesn't like",
+            "type": "grammar",
+            "explanation": "Use 'doesn't' with 'she'."
+          },
+          {
+            "original": "she like tea",
+            "correction": "she likes tea",
+            "type": "grammar",
+            "explanation": "Add -s for 'she'. You made this mistake before."
+          }
+        ],
+        "strengths": [],
+        "tip": "Remember the third person -s."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: She doesn't like coffee, but she likes tea.\nFixed: 'She don't like' -> 'She doesn't like'\nFixed: 'she like tea' -> 'she likes tea'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "She don't like coffee but she like tea",
+        "corrected": "She doesn't like coffee, but she likes tea.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "like",
+            "correction": "likes",
+            "type": "grammar",
+            "explanation": "Add -s for 'she'. You made the same mistake again."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "She don't like coffee but she like tea",
+        "corrected": "She doesn't like coffee, but she likes tea.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "she like",
+            "correction": "she likes",
+            "type": "grammar",
+            "explanation": "Add -s for 'she'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["moved:like"],
+      "feedback": "What they meant, in correct English: She doesn't like coffee, but she likes tea.\nFixed: 'she like' -> 'she likes'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I am agree with you",
+        "corrected": "I agree with you.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "am agree",
+            "correction": "agree",
+            "type": "grammar",
+            "explanation": "'Agree' is a verb; do not use 'am'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I am agree with you",
+        "corrected": "I agree with you.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "am agree",
+            "correction": "agree",
+            "type": "grammar",
+            "explanation": "'Agree' is a verb; do not use 'am'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I agree with you.\nFixed: 'am agree' -> 'agree'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "My mother is very preocupated with me",
+        "corrected": "My mother is very worried about me.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "preocupated with",
+            "correction": "worried about",
+            "type": "vocabulary",
+            "explanation": "'Preocupated' is not English; say 'worried'."
+          }
+        ],
+        "strengths": ["Frase clara.", "Good structure: 'My mother is very...'"],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "My mother is very preocupated with me",
+        "corrected": "My mother is very worried about me.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "preocupated with",
+            "correction": "worried about",
+            "type": "vocabulary",
+            "explanation": "'Preocupated' is not English; say 'worried'."
+          }
+        ],
+        "strengths": ["Good structure: 'My mother is very...'"],
+        "tip": "Keep practicing."
+      },
+      "notes": ["strength_in_portuguese:Frase clara."],
+      "feedback": "What they meant, in correct English: My mother is very worried about me.\nFixed: 'preocupated with' -> 'worried about'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I went to the São Paulo last weekend",
+        "corrected": "I went to São Paulo last weekend.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "the São Paulo",
+            "correction": "São Paulo",
+            "type": "grammar",
+            "explanation": "No article before city names."
+          }
+        ],
+        "strengths": ["Nice use of 'last weekend'."],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I went to the São Paulo last weekend",
+        "corrected": "I went to São Paulo last weekend.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "the São Paulo",
+            "correction": "São Paulo",
+            "type": "grammar",
+            "explanation": "No article before city names."
+          }
+        ],
+        "strengths": ["Nice use of 'last weekend'."],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I went to São Paulo last weekend.\nFixed: 'the São Paulo' -> 'São Paulo'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I live in sao paulo since I was born",
+        "corrected": "I have lived in São Paulo since I was born.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I live in sao paulo since",
+            "correction": "I have lived in São Paulo since",
+            "type": "grammar",
+            "explanation": "Use the present perfect with 'since'. São Paulo starts with a capital letter."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I live in sao paulo since I was born",
+        "corrected": "I have lived in São Paulo since I was born.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I live in sao paulo since",
+            "correction": "I have lived in São Paulo since",
+            "type": "grammar",
+            "explanation": "Use the present perfect with 'since'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I have lived in São Paulo since I was born.\nFixed: 'I live in sao paulo since' -> 'I have lived in São Paulo since'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I have a well-known restaurant in the downtown",
+        "corrected": "I have a well-known restaurant downtown.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "in the downtown",
+            "correction": "downtown",
+            "type": "grammar",
+            "explanation": "'Downtown' needs no 'in the'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I have a well-known restaurant in the downtown",
+        "corrected": "I have a well-known restaurant downtown.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "in the downtown",
+            "correction": "downtown",
+            "type": "grammar",
+            "explanation": "'Downtown' needs no 'in the'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I have a well-known restaurant downtown.\nFixed: 'in the downtown' -> 'downtown'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "It is a very good knowed brand",
+        "corrected": "It is a very well-known brand.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "good knowed",
+            "correction": "well-known",
+            "type": "vocabulary",
+            "explanation": "The adjective is 'well-known'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "It is a very good knowed brand",
+        "corrected": "It is a very well-known brand.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "good knowed",
+            "correction": "",
+            "type": "vocabulary",
+            "explanation": "The adjective is 'well-known'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["aligned:good knowed"],
+      "feedback": "What they meant, in correct English: It is a very well-known brand.\nFixed: 'good knowed' -> ''"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I want a coffee please",
+        "corrected": "I'd like a coffee, please.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I want",
+            "correction": "I'd like",
+            "type": "word_choice",
+            "explanation": "'I'd like' is more polite."
+          }
+        ],
+        "strengths": [],
+        "tip": "Try 'I'd like' to be polite."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I want a coffee please",
+        "corrected": "I want a coffee please.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Nice answer! Next time, try adding one more detail or example."
+      },
+      "notes": ["register:I want"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "Give me the menu",
+        "corrected": "Could I have the menu, please?",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "Give me",
+            "correction": "Could I have",
+            "type": "word_choice",
+            "explanation": "More polite."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Give me the menu",
+        "corrected": "Give me the menu.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["register:Give me"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I like to play piano and read books",
+        "corrected": "I like to play the piano and read books.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "piano",
+            "correction": "the piano",
+            "type": "grammar",
+            "explanation": "Use 'the' with instruments."
+          }
+        ],
+        "strengths": [],
+        "tip": "Great! Remember 'play the piano'."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I like to play piano and read books",
+        "corrected": "I like to play piano and read books.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Great!"
+      },
+      "notes": ["play_instrument:piano"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "The Beatles is my favorite band",
+        "corrected": "The Beatles are my favorite band.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "The Beatles is",
+            "correction": "The Beatles are",
+            "type": "grammar",
+            "explanation": "Plural band name: 'are'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "The Beatles is my favorite band",
+        "corrected": "The Beatles are my favorite band.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "The Beatles is",
+            "correction": "The Beatles are",
+            "type": "grammar",
+            "explanation": "Plural band name: 'are'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: The Beatles are my favorite band.\nFixed: 'The Beatles is' -> 'The Beatles are'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "Yes, I like very much football",
+        "corrected": "Yes, I really like football.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "Yes, I like very much football",
+            "correction": "I really like football",
+            "type": "word_choice",
+            "explanation": "Put 'really' before the verb."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Yes, I like very much football",
+        "corrected": "Yes, I really like football.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "Yes, I like very much football",
+            "correction": "Yes, I really like football",
+            "type": "word_choice",
+            "explanation": "Put 'really' before the verb."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["aligned:Yes, I like very much football"],
+      "feedback": "What they meant, in correct English: Yes, I really like football.\nFixed: 'Yes, I like very much football' -> 'Yes, I really like football'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "Well I think that the life in the city is more expensive",
+        "corrected": "Well, I think life in the city is more expensive.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "the life",
+            "correction": "life",
+            "type": "grammar",
+            "explanation": "No 'the' for life in general."
+          }
+        ],
+        "strengths": ["You compared well: 'more expensive'.", "Bom uso de comparativo."],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Well I think that the life in the city is more expensive",
+        "corrected": "Well, I think life in the city is more expensive.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "that the life",
+            "correction": "life",
+            "type": "grammar",
+            "explanation": "No 'the' for life in general."
+          }
+        ],
+        "strengths": ["You compared well: 'more expensive'."],
+        "tip": "Keep practicing."
+      },
+      "notes": ["aligned:the life", "strength_in_portuguese:Bom uso de comparativo."],
+      "feedback": "What they meant, in correct English: Well, I think life in the city is more expensive.\nFixed: 'that the life' -> 'life'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I work on a hospital as nurse since ten years",
+        "corrected": "I have worked in a hospital as a nurse for ten years.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I work on a hospital as nurse since ten years",
+            "correction": "I have worked in a hospital as a nurse for ten years",
+            "type": "grammar",
+            "explanation": "Use the present perfect and 'for' with a period. Also 'in a hospital'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I work on a hospital as nurse since ten years",
+        "corrected": "I have worked in a hospital as a nurse for ten years.",
+        "score": 70,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I work on a",
+            "correction": "I have worked in a",
+            "type": "grammar",
+            "explanation": "Use the present perfect and 'for' with a period. Also 'in a hospital'."
+          },
+          {
+            "original": "as nurse since ten",
+            "correction": "as a nurse for ten",
+            "type": "grammar",
+            "explanation": "Same as the previous item."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["split:I work on a hospital as nurse since ten "],
+      "feedback": "What they meant, in correct English: I have worked in a hospital as a nurse for ten years.\nFixed: 'I work on a' -> 'I have worked in a'\nFixed: 'as nurse since ten' -> 'as a nurse for ten'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "my name is Carlos and I am from Brazil I am engineer",
+        "corrected": "My name is Carlos and I'm from Brazil. I'm an engineer.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I am engineer",
+            "correction": "I'm an engineer",
+            "type": "grammar",
+            "explanation": "Use 'an' before a job."
+          }
+        ],
+        "strengths": ["Clear introduction with your name, Carlos."],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "my name is Carlos and I am from Brazil I am engineer",
+        "corrected": "My name is Carlos and I'm from Brazil. I'm an engineer.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I am engineer",
+            "correction": "I'm an engineer",
+            "type": "grammar",
+            "explanation": "Use 'an' before a job."
+          }
+        ],
+        "strengths": ["Clear introduction with your name, Carlos."],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: My name is Carlos and I'm from Brazil. I'm an engineer.\nFixed: 'I am engineer' -> 'I'm an engineer'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I travel for Rio de Janeiro in the last summer",
+        "corrected": "I traveled to Rio de Janeiro last summer.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "travel for",
+            "correction": "traveled to",
+            "type": "grammar",
+            "explanation": "Past form and 'to'."
+          },
+          {
+            "original": "in the last summer",
+            "correction": "last summer",
+            "type": "grammar",
+            "explanation": "No 'in the' before 'last summer'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I travel for Rio de Janeiro in the last summer",
+        "corrected": "I traveled to Rio de Janeiro last summer.",
+        "score": 70,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "travel for",
+            "correction": "traveled to",
+            "type": "grammar",
+            "explanation": "Past form and 'to'."
+          },
+          {
+            "original": "in the last summer",
+            "correction": "last summer",
+            "type": "grammar",
+            "explanation": "No 'in the' before 'last summer'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I traveled to Rio de Janeiro last summer.\nFixed: 'travel for' -> 'traveled to'\nFixed: 'in the last summer' -> 'last summer'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "the the the weather is is very hot hot today",
+        "corrected": "The weather is very hot today.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": ["Clear!"],
+        "tip": "Good job."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "the the the weather is is very hot hot today",
+        "corrected": "The weather is very hot today.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": ["Clear!"],
+        "tip": "Good job."
+      },
+      "notes": [],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "And after, send another audio to Konshinui, the Tzauki",
+        "corrected": "And after that, I send another audio to continue the talk.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "Konshinui",
+            "correction": "continue",
+            "type": "pronunciation",
+            "explanation": "Sounds like 'continue'."
+          },
+          {
+            "original": "the Tzauki",
+            "correction": "the talk",
+            "type": "pronunciation",
+            "explanation": "Sounds like 'talk'."
+          },
+          {
+            "original": "Blorp",
+            "correction": "blurb",
+            "type": "pronunciation",
+            "explanation": "Not in the answer."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "And after, send another audio to Konshinui, the Tzauki",
+        "corrected": "And after that, I send another audio to continue the talk.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "Konshinui",
+            "correction": "continue",
+            "type": "pronunciation",
+            "explanation": "Sounds like 'continue'."
+          },
+          {
+            "original": "the Tzauki",
+            "correction": "the talk",
+            "type": "pronunciation",
+            "explanation": "Sounds like 'talk'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["not_in_answer:Blorp"],
+      "feedback": "What they meant, in correct English: And after that, I send another audio to continue the talk.\nHeard as 'Konshinui', probably 'continue' (pronunciation)\nHeard as 'the Tzauki', probably 'the talk' (pronunciation)"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I went to the zork flim gat has been nop yesterday with my dog",
+        "corrected": "I went to the park yesterday with my dog.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "zork flim gat has been nop",
+            "correction": "zork flim gat has been nop",
+            "type": "unclear",
+            "explanation": "?"
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I went to the zork flim gat has been nop yesterday with my dog",
+        "corrected": "I went to the zork flim gat has been nop yesterday with my dog.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "zork flim gat has been nop",
+            "correction": "zork flim gat has been nop",
+            "type": "unclear",
+            "explanation": "I couldn't understand this part, maybe because of the audio. Try saying it again slowly."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "No mistakes.\nUnclear (bad audio, nobody knows what they said): 'zork flim gat has been nop'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I study English because I want work in Canada",
+        "corrected": "I study English because I want to work in Canada as a software developer.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I want work",
+            "correction": "I want to work as a software developer in Toronto",
+            "type": "grammar",
+            "explanation": "Use 'to' after 'want'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Say 'I want to work as a software developer in Toronto'. Keep going."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I study English because I want work in Canada",
+        "corrected": "I study English because I want work in Canada.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I want work",
+            "correction": "I want work",
+            "type": "unclear",
+            "explanation": "I couldn't understand this part, maybe because of the audio. Try saying it again slowly."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep going."
+      },
+      "notes": ["invented:I want work"],
+      "feedback": "No mistakes.\nUnclear (bad audio, nobody knows what they said): 'I want work'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I don't know",
+        "corrected": "I don't know.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 50,
+          "vocabulary": 30,
+          "fluency": 40,
+          "task": 5
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Try to answer with a full sentence."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I don't know",
+        "corrected": "I don't know.",
+        "score": 52,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 40,
+          "task": 5
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Try to answer with a full sentence."
+      },
+      "notes": [],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I watch Netflix and TikTok every night",
+        "corrected": "I watch Netflix and TikTok every night.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": [
+          "Nice use of brands like TikTok and McDonald's.",
+          "Good vocabulary inEnglish."
+        ],
+        "tip": "Use more linking words... like 'and then'."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I watch Netflix and TikTok every night",
+        "corrected": "I watch Netflix and TikTok every night.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Use more linking words… like 'and then'."
+      },
+      "notes": [
+        "strength_in_portuguese:Nice use of brands like TikTok and McDon",
+        "strength_in_portuguese:Good vocabulary inEnglish."
+      ],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "Me and my wife goes to the church every sunday",
+        "corrected": "My wife and I go to church every Sunday.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "goes",
+            "correction": "go",
+            "type": "grammar",
+            "explanation": "'My wife and I' is plural."
+          },
+          {
+            "original": "the church",
+            "correction": "church",
+            "type": "grammar",
+            "explanation": "No 'the' for church services."
+          },
+          {
+            "original": "sunday",
+            "correction": "Sunday",
+            "type": "grammar",
+            "explanation": "Days start with a capital letter."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Me and my wife goes to the church every sunday",
+        "corrected": "My wife and I go to church every Sunday.",
+        "score": 70,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "wife goes",
+            "correction": "wife I go",
+            "type": "grammar",
+            "explanation": "'My wife and I' is plural."
+          },
+          {
+            "original": "the church",
+            "correction": "church",
+            "type": "grammar",
+            "explanation": "No 'the' for church services."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["aligned:goes", "no_change:sunday"],
+      "feedback": "What they meant, in correct English: My wife and I go to church every Sunday.\nFixed: 'wife goes' -> 'wife I go'\nFixed: 'the church' -> 'church'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "It's depends of the weather",
+        "corrected": "It depends on the weather.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "It's depends of",
+            "correction": "It depends on",
+            "type": "grammar",
+            "explanation": "Remove 's and use 'on'."
+          }
+        ],
+        "strengths": ["Good idea.", "É uma boa frase."],
+        "tip": "Use 'depend on'. Não use 'of'."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "It's depends of the weather",
+        "corrected": "It depends on the weather.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "It's depends of",
+            "correction": "It depends on",
+            "type": "grammar",
+            "explanation": "Remove 's and use 'on'."
+          }
+        ],
+        "strengths": ["Good idea."],
+        "tip": "Use 'depend on'."
+      },
+      "notes": ["strength_in_portuguese:É uma boa frase."],
+      "feedback": "What they meant, in correct English: It depends on the weather.\nFixed: 'It's depends of' -> 'It depends on'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I was born in Curitiba, in Paraná, and I moved to Florianópolis",
+        "corrected": "I was born in Curitiba, Paraná, and I moved to Florianópolis.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "in Paraná",
+            "correction": "Paraná",
+            "type": "grammar",
+            "explanation": "The sentence is correct, but shorter is better."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I was born in Curitiba, in Paraná, and I moved to Florianópolis",
+        "corrected": "I was born in Curitiba, in Paraná, and I moved to Florianópolis.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["says_correct:in Paraná"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I prefer the summer because I can go to the beach, the winter is too cold",
+        "corrected": "I prefer summer because I can go to the beach; winter is too cold.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "beach, the winter",
+            "correction": "beach; winter",
+            "type": "grammar",
+            "explanation": "Use a semicolon here."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I prefer the summer because I can go to the beach, the winter is too cold",
+        "corrected": "I prefer the summer because I can go to the beach, the winter is too cold.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 90,
+          "vocabulary": 80,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["punctuation:beach, the winter"],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "Last night I have watched a movie with my girlfriend",
+        "corrected": "Last night I watched a movie with my girlfriend.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I have watched",
+            "correction": "I watched",
+            "type": "grammar",
+            "explanation": "Past time: simple past."
+          },
+          {
+            "original": "I have watched",
+            "correction": "I watched",
+            "type": "grammar",
+            "explanation": "Duplicate."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Last night I have watched a movie with my girlfriend",
+        "corrected": "Last night I watched a movie with my girlfriend.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "I have watched",
+            "correction": "I watched",
+            "type": "grammar",
+            "explanation": "Past time: simple past."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": ["overlap:I have watched"],
+      "feedback": "What they meant, in correct English: Last night I watched a movie with my girlfriend.\nFixed: 'I have watched' -> 'I watched'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "the people here is very friendly and the people there is not",
+        "corrected": "The people here are very friendly, and the people there are not.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "is",
+            "correction": "are",
+            "type": "grammar",
+            "explanation": "'People' is plural."
+          },
+          {
+            "original": "people there is",
+            "correction": "people there are",
+            "type": "grammar",
+            "explanation": "Plural."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "the people here is very friendly and the people there is not",
+        "corrected": "The people here are very friendly, and the people there are not.",
+        "score": 70,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "here is",
+            "correction": "here are",
+            "type": "grammar",
+            "explanation": "'People' is plural."
+          },
+          {
+            "original": "people there is",
+            "correction": "people there are",
+            "type": "grammar",
+            "explanation": "Plural."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: The people here are very friendly, and the people there are not.\nFixed: 'here is' -> 'here are'\nFixed: 'people there is' -> 'people there are'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I have many experience in sales",
+        "corrected": "I have a lot of experience in sales.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "many experience",
+            "correction": "a lot of experience",
+            "type": "vocabulary",
+            "explanation": "'Experience' here is uncountable."
+          }
+        ],
+        "strengths": ["Good use of 'in sales'."],
+        "tip": "Use 'much' or 'a lot of' with uncountable nouns."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I have many experience in sales",
+        "corrected": "I have a lot of experience in sales.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "many experience",
+            "correction": "a lot of experience",
+            "type": "vocabulary",
+            "explanation": "'Experience' here is uncountable."
+          }
+        ],
+        "strengths": ["Good use of 'in sales'."],
+        "tip": "Use 'much' or 'a lot of' with uncountable nouns."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I have a lot of experience in sales.\nFixed: 'many experience' -> 'a lot of experience'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I go to work of bus every day, it take one hour",
+        "corrected": "I go to work by bus every day. It takes one hour.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 40,
+          "vocabulary": 60,
+          "fluency": 60,
+          "task": 90
+        },
+        "mistakes": [
+          {
+            "original": "of bus",
+            "correction": "by bus",
+            "type": "grammar",
+            "explanation": "Use 'by' with transport."
+          },
+          {
+            "original": "it take",
+            "correction": "it takes",
+            "type": "grammar",
+            "explanation": "Add -s after 'it'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I go to work of bus every day, it take one hour",
+        "corrected": "I go to work by bus every day. It takes one hour.",
+        "score": 70,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 60,
+          "fluency": 60,
+          "task": 90
+        },
+        "mistakes": [
+          {
+            "original": "of bus",
+            "correction": "by bus",
+            "type": "grammar",
+            "explanation": "Use 'by' with transport."
+          },
+          {
+            "original": "it take",
+            "correction": "It takes",
+            "type": "grammar",
+            "explanation": "Add -s after 'it'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I go to work by bus every day. It takes one hour.\nFixed: 'of bus' -> 'by bus'\nFixed: 'it take' -> 'It takes'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "Hello",
+        "corrected": "Hello!",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 100,
+          "fluency": 100,
+          "task": 30
+        },
+        "mistakes": [],
+        "strengths": ["Ótima saudação.", "Friendly start."],
+        "tip": "Tell me more."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "Hello",
+        "corrected": "Hello.",
+        "score": 65,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 100,
+          "fluency": 100,
+          "task": 30
+        },
+        "mistakes": [],
+        "strengths": ["Friendly start."],
+        "tip": "Tell me more."
+      },
+      "notes": ["strength_in_portuguese:Ótima saudação."],
+      "feedback": "No mistakes."
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I lived in Porto Alegre during five years",
+        "corrected": "I lived in Porto Alegre for five years.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "during five years",
+            "correction": "for five years",
+            "type": "grammar",
+            "explanation": "Use 'for' with a period of time; 'during' goes with a noun (during the summer)."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I lived in Porto Alegre during five years",
+        "corrected": "I lived in Porto Alegre for five years.",
+        "score": 74,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "during five years",
+            "correction": "for five years",
+            "type": "grammar",
+            "explanation": "Use 'for' with a period of time; 'during' goes with a noun (during the summer)."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I lived in Porto Alegre for five years.\nFixed: 'during five years' -> 'for five years'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "I'm software engineer at a startup",
+        "corrected": "I'm a software engineer at a startup.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 30,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "software engineer",
+            "correction": "a software engineer",
+            "type": "grammar",
+            "explanation": "Jobs need 'a'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "I'm software engineer at a startup",
+        "corrected": "I'm a software engineer at a startup.",
+        "score": 81,
+        "score_breakdown": {
+          "grammar": 85,
+          "vocabulary": 80,
+          "fluency": 80,
+          "task": 80
+        },
+        "mistakes": [
+          {
+            "original": "software engineer",
+            "correction": "a software engineer",
+            "type": "grammar",
+            "explanation": "Jobs need 'a'."
+          }
+        ],
+        "strengths": [],
+        "tip": "Keep practicing."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: I'm a software engineer at a startup.\nFixed: 'software engineer' -> 'a software engineer'"
+    },
+    {
+      "source": "extra",
+      "input": {
+        "transcript": "So I I was saying that I lost my celular in the Uber",
+        "corrected": "So, I was saying that I lost my phone in the Uber.",
+        "score": 0,
+        "score_breakdown": {
+          "grammar": 70,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "my celular",
+            "correction": "my phone",
+            "type": "vocabulary",
+            "explanation": "'Celular' is Portuguese; say 'phone'."
+          }
+        ],
+        "strengths": ["You told the story in order."],
+        "tip": "Say 'phone' or 'cell phone'."
+      },
+      "has_memory": false,
+      "output": {
+        "transcript": "So I I was saying that I lost my celular in the Uber",
+        "corrected": "So, I was saying that I lost my phone in the Uber.",
+        "score": 78,
+        "score_breakdown": {
+          "grammar": 100,
+          "vocabulary": 70,
+          "fluency": 70,
+          "task": 70
+        },
+        "mistakes": [
+          {
+            "original": "my celular",
+            "correction": "my phone",
+            "type": "vocabulary",
+            "explanation": "'Celular' is Portuguese; say 'phone'."
+          }
+        ],
+        "strengths": ["You told the story in order."],
+        "tip": "Say 'phone' or 'cell phone'."
+      },
+      "notes": [],
+      "feedback": "What they meant, in correct English: So, I was saying that I lost my phone in the Uber.\nFixed: 'my celular' -> 'my phone'"
+    }
+  ]
+}

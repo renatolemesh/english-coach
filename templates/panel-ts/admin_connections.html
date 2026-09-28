@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field %}
+{% block title %}Conexões{% endblock %}
+{% block content %}
+<h1>Conexões do WhatsApp</h1>
+<p class="muted">Credenciais só pela API de admin (via túnel SSH); aqui dá para ver e ligar/desligar.</p>
+<div class="table-wrap"><table>
+  <tr><th>ID</th><th>Nome</th><th>Provedor</th><th>Webhook</th><th>Situação</th><th></th></tr>
+  {% for c in connections %}
+  <tr>
+    <td>{{ c.id }}</td><td>{{ c.name }}</td><td>{{ c.provider }}</td>
+    <td class="clip">{{ base }}/webhooks/{{ c.id }}</td>
+    <td>{% if c.enabled %}ativa{% else %}desligada{% endif %}</td>
+    <td><form method="post" action="/panel/admin/connections/{{ c.id }}">{{ csrf_field(csrf) }}<button class="secondary">{% if c.enabled %}Desligar{% else %}Ligar{% endif %}</button></form></td>
+  </tr>
+  {% endfor %}
+</table></div>
+{% endblock %}

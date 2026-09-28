@@ -1,0 +1,6 @@
+.env
+.git
+node_modules
+models
+out
+test

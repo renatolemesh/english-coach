@@ -1,0 +1,21 @@
+{
+  "event": "messages.upsert",
+  "instance": "coach",
+  "data": {
+    "key": {
+      "remoteJid": "217361872631234@lid",
+      "remoteJidAlt": "5541977770000@s.whatsapp.net",
+      "addressingMode": "lid",
+      "fromMe": false,
+      "id": "3EB0A1B2C3D4E5F6A7B8C9"
+    },
+    "pushName": "Bruno",
+    "message": { "conversation": "Hello, I am Bruno" },
+    "messageType": "conversation",
+    "messageTimestamp": 1758819700,
+    "instanceId": "8c1f7f36-1d2b-4c43-9d5d-0f8a3c9e3a11",
+    "source": "android"
+  },
+  "sender": "5541888880000@s.whatsapp.net",
+  "apikey": null
+}

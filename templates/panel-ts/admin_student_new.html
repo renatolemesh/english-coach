@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field %}
+{% block title %}Cadastrar aluno{% endblock %}
+{% block content %}
+<section class="narrow card">
+  <h1>Cadastrar aluno</h1>
+  <p class="muted">O aluno já pode conversar pelo WhatsApp. Para entrar no site, ele usa "Esqueci a senha".</p>
+  <form method="post" action="/panel/admin/students/new">
+    {{ csrf_field(csrf) }}
+    <label>Nome<input name="name" value="{{ form.name or '' }}" maxlength="120"></label>
+    <label>Telefone do WhatsApp (com DDI e DDD)<input name="phone" value="{{ form.phone or '' }}" inputmode="tel" required placeholder="+55 11 98765-4321"></label>
+    <label>Plano
+      <select name="plan_id">{% for p in plans %}<option value="{{ p.id }}">{{ p.name }}</option>{% endfor %}</select>
+    </label>
+    <label>Conexão do WhatsApp
+      <select name="connection">{% for c in connections %}<option>{{ c }}</option>{% endfor %}</select>
+    </label>
+    <button>Cadastrar</button>
+  </form>
+</section>
+{% endblock %}

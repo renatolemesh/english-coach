@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "macros.html" import score, kind, stat, icon %}
+{% block title %}Painel{% endblock %}
+{% block content %}
+<header class="page-head"><div><h1>Painel</h1><p class="muted">Visão geral de hoje e dos alunos.</p></div>
+  <a class="button" href="/panel/admin/students/new">{{ icon("plus") }} Cadastrar aluno</a></header>
+<div class="stats six">
+  {{ stat(stats.active, "alunos ativos", "users", "indigo") }}
+  {{ stat(stats.newWeek, "novos em 7 dias", "sparkle", "violet") }}
+  {{ stat(stats.turnsToday, "práticas hoje", "chat", "sky") }}
+  {{ stat(stats.avgToday if stats.avgToday is not null else '—', "nota média hoje", "target", "green") }}
+  {{ stat(stats.errorsToday, "erros técnicos hoje", "alert", "amber") }}
+  {{ stat(stats.blocked, "bloqueados", "ban", "rose") }}
+</div>
+<h2>Últimas mensagens</h2>
+<div class="table-wrap"><table>
+  <tr><th>Quando</th><th>Aluno</th><th>Tipo</th><th>Nota</th><th>Disse</th></tr>
+  {% for r in stats.recent %}
+  {% set turn = r.turn %}{% set student = r.student %}
+  <tr>
+    <td class="nowrap">{{ turn.createdAt | local }}</td>
+    {% set who = student.name or (student.phone | phone) %}
+    <td><a class="person" href="/panel/admin/students/{{ student.id }}"><span class="avatar sm">{{ who[0] | upper }}</span>{{ who }}</a></td>
+    <td>{{ kind(turn.kind, turn.blockedReason) }}</td>
+    <td>{{ score(turn.score) }}</td>
+    <td class="clip">{{ turn.transcript or '' }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5" class="muted">Nenhuma mensagem ainda.</td></tr>
+  {% endfor %}
+</table></div>
+{% endblock %}

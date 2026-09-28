@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+{{ font_faces | safe }}
+:root {
+  --bg: #f4f1ec; --card: #ffffff; --ink: #1d1b19; --muted: #6f6a63; --line: #e7e2da;
+  --red: #d64541; --red-bg: #fdecea; --green: #1f8a4c; --green-bg: #e6f5ec;
+  --great: #1f8a4c; --good: #2f7dd1; --ok: #d48a12; --low: #d64541;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  width: 1080px; background: var(--bg); color: var(--ink);
+  font-family: 'Inter', 'Liberation Sans', 'DejaVu Sans', sans-serif;
+  font-size: 34px; line-height: 1.4; padding: 48px;
+}
+.card { background: var(--card); border-radius: 36px; padding: 56px; }
+.head { display: flex; align-items: center; gap: 48px; padding-bottom: 44px;
+        border-bottom: 2px solid var(--line); }
+.ring { width: 240px; height: 240px; border-radius: 50%; flex: none;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        border: 18px solid currentColor; }
+.ring .num { font-size: 96px; font-weight: 800; line-height: 1; color: var(--ink); }
+.ring .of { font-size: 26px; color: var(--muted); margin-top: 6px; }
+.great { color: var(--great); } .good { color: var(--good); }
+.ok { color: var(--ok); } .low { color: var(--low); }
+.headline { font-size: 56px; font-weight: 800; line-height: 1.1; }
+.chips { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 12px; }
+.chip { font-size: 26px; font-weight: 600; background: var(--bg); color: var(--muted);
+        padding: 8px 20px; border-radius: 999px; }
+.bars { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 48px; margin: 40px 0 8px; }
+.bar .label { display: flex; justify-content: space-between; font-size: 28px; font-weight: 600; }
+.bar .label span:last-child { color: var(--muted); }
+.track { height: 16px; background: var(--line); border-radius: 8px; margin-top: 10px; overflow: hidden; }
+.fill { height: 100%; border-radius: 8px; background: currentColor; }
+section { margin-top: 48px; }
+h2 { font-size: 26px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+     color: var(--muted); margin-bottom: 18px; }
+.quote { font-size: 36px; }
+mark.err { background: var(--red-bg); color: var(--red); text-decoration: line-through;
+           text-decoration-thickness: 3px; border-radius: 6px; padding: 0 4px; }
+mark.unclear { background: none; color: var(--muted); text-decoration: underline dotted;
+               text-decoration-thickness: 3px; }
+.fix { padding: 28px 0; border-top: 2px solid var(--line); }
+.fix:first-of-type { border-top: none; padding-top: 4px; }
+.fix .pair { font-size: 38px; font-weight: 600; }
+.fix del { color: var(--red); text-decoration-thickness: 3px; }
+.fix .arrow { color: var(--muted); margin: 0 14px; }
+.fix ins { color: var(--green); text-decoration: none; background: var(--green-bg);
+           border-radius: 6px; padding: 0 6px; }
+.fix del.unclear { color: var(--muted); text-decoration: underline dotted; text-decoration-thickness: 3px; }
+.fix span.unclear { color: var(--muted); font-weight: 800; }
+.fix .why { margin-top: 10px; color: var(--muted); font-size: 30px; }
+.fix .type { font-size: 22px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+             color: var(--muted); margin-left: 12px; vertical-align: middle; }
+.natural { font-size: 36px; background: var(--green-bg); border-radius: 24px; padding: 28px 32px; }
+.none { font-size: 34px; color: var(--green); font-weight: 600; }
+ul.strengths { list-style: none; }
+ul.strengths li { padding-left: 52px; position: relative; margin-bottom: 12px; }
+ul.strengths li::before { content: ""; position: absolute; left: 6px; top: 12px; width: 14px; height: 26px;
+  border: solid var(--green); border-width: 0 6px 6px 0; transform: rotate(45deg); }
+.tip { background: #fff7e6; border-left: 10px solid var(--ok); border-radius: 18px;
+       padding: 28px 32px; font-size: 34px; }
+.foot { text-align: center; color: var(--muted); font-size: 24px; margin-top: 32px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="ring {{ band }}"><div class="num">{{ ev.score }}</div><div class="of">out of 100</div></div>
+    <div>
+      <div class="headline">{{ headline }}</div>
+      <div class="chips">
+        {% if topic %}<span class="chip">{{ topic }}</span>{% endif %}
+        {% if level %}<span class="chip">Level {{ level }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="bars">
+    {% for label, value in breakdown %}
+    <div class="bar">
+      <div class="label"><span>{{ label }}</span><span>{{ value }}</span></div>
+      <div class="track {{ band }}"><div class="fill" style="width: {{ value }}%"></div></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <section>
+    <h2>You said</h2>
+    <p class="quote">{{ transcript_html | safe }}</p>
+  </section>
+
+  <section>
+    <h2>Corrections</h2>
+    {% for m in ev.mistakes %}
+    <div class="fix">
+      {% if m.type == "unclear" %}
+      <div class="pair"><del class="unclear">{{ m.original }}</del><span class="arrow">&rarr;</span><span class="unclear">?</span><span class="type">{{ type_label[m.type] }}</span></div>
+      {% else %}
+      <div class="pair"><del>{{ m.original }}</del><span class="arrow">&rarr;</span><ins>{{ m.correction }}</ins><span class="type">{{ type_label[m.type] }}</span></div>
+      {% endif %}
+      <div class="why">{{ m.explanation }}</div>
+    </div>
+    {% else %}
+    <p class="none">No mistakes found. Excellent!</p>
+    {% endfor %}
+  </section>
+
+  {% if has_real_mistakes %}
+  <section>
+    <h2>Natural version</h2>
+    <p class="natural">{{ ev.corrected }}</p>
+  </section>
+  {% endif %}
+
+  {% if ev.strengths %}
+  <section>
+    <h2>What went well</h2>
+    <ul class="strengths">
+      {% for s in ev.strengths %}<li>{{ s }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if ev.tip %}
+  <section>
+    <h2>Tip</h2>
+    <div class="tip">{{ ev.tip }}</div>
+  </section>
+  {% endif %}
+</div>
+<div class="foot">saybest</div>
+</body>
+</html>

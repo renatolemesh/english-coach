@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "text": {
+      "description": "The translation only, natural and faithful, with no notes or quotes.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "text"
+  ],
+  "type": "object",
+  "additionalProperties": false
+}

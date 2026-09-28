@@ -1,0 +1,30 @@
+# Copy to connections.yaml (gitignored). Upserted into the database when the API starts.
+# Secrets come from .env via ${VAR}. The webhook URL of each connection is
+#   https://<your-domain>/webhooks/<id>
+connections:
+  # Official Meta WhatsApp Cloud API. In the Meta app dashboard set the callback URL above and
+  # the verify token; subscribe to the "messages" field.
+  - id: meta-main
+    name: WhatsApp oficial
+    provider: meta
+    credentials:
+      access_token: ${META_ACCESS_TOKEN}   # permanent system-user token
+      app_secret: ${META_APP_SECRET}       # validates X-Hub-Signature-256
+      verify_token: ${META_VERIFY_TOKEN}   # any random string, same as in the dashboard
+    settings:
+      phone_number_id: "106540352242922"
+      # graph_version: v26.0               # optional, default META_GRAPH_VERSION
+
+  # Evolution API v2. Configure the instance webhook (POST /webhook/set/{instance}):
+  #   {"webhook": {"enabled": true, "url": "https://<domain>/webhooks/evo-main",
+  #    "headers": {"x-webhook-secret": "<EVO_WEBHOOK_SECRET>"}, "base64": false,
+  #    "byEvents": false, "events": ["MESSAGES_UPSERT"]}}
+  - id: evo-main
+    name: Evolution principal
+    provider: evolution
+    webhook_secret: ${EVO_WEBHOOK_SECRET}
+    credentials:
+      api_key: ${EVO_API_KEY}              # instance token (header apikey)
+    settings:
+      base_url: http://evolution_api:8080  # reachable from the worker container
+      instance: coach

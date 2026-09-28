@@ -1,0 +1,26 @@
+topic: travel
+scenario: >
+  You are traveling abroad. You check in at the airport, talk about your trip, ask for
+  directions and tell someone about places you visited.
+vocabulary:
+  - {key: travel-boarding-pass, term: boarding pass, meaning_pt: cartão de embarque, example: "Can I see your boarding pass?", level: A2}
+  - {key: travel-check-in, term: check in, meaning_pt: fazer check-in, example: "We checked in at the hotel at 3 p.m.", level: A2}
+  - {key: travel-luggage, term: luggage, meaning_pt: bagagem (incontável), example: "I only have carry-on luggage.", level: A2}
+  - {key: travel-sightseeing, term: go sightseeing, meaning_pt: fazer passeios turísticos, example: "We went sightseeing in the old town.", level: B1}
+  - {key: travel-trip-travel, term: trip / travel, meaning_pt: viagem (substantivo) / viajar (verbo), example: "How was your trip? I love to travel.", level: A2}
+  - {key: travel-delayed, term: delayed, meaning_pt: atrasado, example: "Our flight was delayed by two hours.", level: A2}
+  - {key: travel-stay-at, term: stay at, meaning_pt: se hospedar em, example: "We stayed at a small hotel near the beach.", level: A2}
+  - {key: travel-get-to, term: get to, meaning_pt: chegar a, example: "How do I get to the train station?", level: A2}
+phrases:
+  - {key: travel-last-year-went, text: "Last year I went to Chile with my family.", level: A2}
+  - {key: travel-have-you-been, text: "Have you ever been to Portugal? / Yes, I've been there twice.", level: B1}
+  - {key: travel-directions, text: "Excuse me, is it far from here? Can I walk there?", level: A2}
+  - {key: travel-best-part, text: "The best part of the trip was the food.", level: A2}
+  - {key: travel-looking-forward, text: "I'm looking forward to visiting Japan next year.", level: B1}
+# First questions for topic_opener: an idea to start from, and the fallback when the model fails.
+# No greeting or name here: the tutor varies (/voz), and a line can replace a repeated question.
+openers:
+  - "What's the best trip you've ever taken?"
+  - "If you could travel anywhere next year, where would you go?"
+  - "Do you like traveling by plane, by car or by bus? Why?"
+  - "What's a place in Brazil that you think every tourist should visit?"

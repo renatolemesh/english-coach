@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "macros.html" import plan_label, status_badge %}
+{% block title %}Alunos{% endblock %}
+{% block content %}
+<div class="row-head"><h1>Alunos <small class="muted">({{ total }})</small></h1><a class="button" href="/panel/admin/students/new">Cadastrar aluno</a></div>
+<form method="get" class="filters">
+  <input name="q" value="{{ q }}" placeholder="Nome ou telefone">
+  <select name="status">
+    <option value="">Todos</option>
+    <option value="active" {% if status == 'active' %}selected{% endif %}>Ativos</option>
+    <option value="blocked" {% if status == 'blocked' %}selected{% endif %}>Bloqueados</option>
+  </select>
+  <select name="plan">
+    <option value="0">Todos os planos</option>
+    {% for p in plans %}<option value="{{ p.id }}" {% if plan == p.id %}selected{% endif %}>{{ p.name }}</option>{% endfor %}
+  </select>
+  <button>Filtrar</button>
+</form>
+<div class="table-wrap"><table>
+  <tr><th>Aluno</th><th>Telefone</th><th>Plano</th><th>Até</th><th>Status</th><th>Práticas</th><th>Última mensagem</th></tr>
+  {% for r in rows %}
+  <tr>
+    {% set who = r.student.name or '(sem nome)' %}
+    <td><a class="person" href="/panel/admin/students/{{ r.student.id }}"><span class="avatar sm">{{ who[0] | upper }}</span>{{ who }}</a></td>
+    <td class="nowrap">{{ r.student.phone | phone }}</td>
+    <td>{{ plan_label(r.plan) }}</td>
+    <td class="nowrap">{{ r.student.planEndsAt | day }}</td>
+    <td>{{ status_badge(r.student.status) }}</td>
+    <td>{{ r.turns }}</td>
+    <td class="nowrap">{{ r.student.lastMessageAt | local }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7" class="muted">Nenhum aluno encontrado.</td></tr>
+  {% endfor %}
+</table></div>
+<p class="pager">
+  {% if page > 0 %}<a href="?q={{ q }}&status={{ status }}&plan={{ plan }}&page={{ page - 1 }}">← anteriores</a>{% endif %}
+  {% if (page + 1) * pageSize < total %}<a href="?q={{ q }}&status={{ status }}&plan={{ plan }}&page={{ page + 1 }}">próximos →</a>{% endif %}
+</p>
+{% endblock %}

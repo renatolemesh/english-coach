@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field %}
+{% block title %}Configurações{% endblock %}
+{% block content %}
+<h1>Configurações</h1>
+<section class="card">
+<form method="post" action="/panel/admin/settings">
+  {{ csrf_field(csrf) }}
+  {% for field in fields %}
+  {% set name = field.name %}{% set value = config[name] %}
+  <label>{{ field.description }}
+    {% if name == 'unknown_numbers' %}
+      <select name="{{ name }}">
+        <option value="reject" {% if value == 'reject' %}selected{% endif %}>Recusar e mandar o link de cadastro</option>
+        <option value="trial" {% if value == 'trial' %}selected{% endif %}>Criar conta grátis na hora</option>
+      </select>
+    {% elif name == 'trial_plan' %}
+      <select name="{{ name }}">{% for p in plans %}<option {% if value == p %}selected{% endif %}>{{ p }}</option>{% endfor %}</select>
+    {% elif name == 'signup_connection' %}
+      <select name="{{ name }}">{% for c in connections %}<option {% if value == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select>
+    {% elif name == 'default_ui_lang' %}
+      <select name="{{ name }}"><option value="en" {% if value == 'en' %}selected{% endif %}>Inglês</option><option value="pt" {% if value == 'pt' %}selected{% endif %}>Português</option></select>
+    {% elif name == 'default_tutor' %}
+      <select name="{{ name }}">{% for t in ['emma', 'sarah', 'george', 'michael'] %}<option value="{{ t }}" {% if value == t %}selected{% endif %}>{{ t | capitalize }}</option>{% endfor %}</select>
+    {% elif field.isBool %}
+      <input type="checkbox" name="{{ name }}" {% if value %}checked{% endif %}>
+    {% else %}
+      <input name="{{ name }}" value="{{ value if value is not null and value is defined else '' }}">
+    {% endif %}
+  </label>
+  {% endfor %}
+  <button>Salvar</button>
+</form>
+</section>
+{% endblock %}

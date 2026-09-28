@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field, icon %}
+{% block title %}Configurações{% endblock %}
+{% block content %}
+<h1>Configurações</h1>
+<div class="grid2">
+<section class="card">
+  <h2>Conversa</h2>
+  <p class="muted">Vale a partir da próxima mensagem no WhatsApp.</p>
+  <form method="post" action="/panel/me/settings">
+    {{ csrf_field(csrf) }}
+    <label>Seu nome<input name="name" value="{{ student.name or '' }}" maxlength="120"></label>
+    <label>Nível
+      <select name="level">{% for lv in levels %}<option value="{{ lv.value }}" {% if student.level == lv.value %}selected{% endif %}>{{ lv.value }} — {{ lv.label }}</option>{% endfor %}</select>
+    </label>
+    <label>Tema
+      <select name="topic">
+        {% for t in topics %}<option value="{{ t.value }}" {% if student.topic == t.value %}selected{% endif %}>{{ t.label }}</option>{% endfor %}
+        {% if customTopic %}<option value="{{ customTopic }}" selected>{{ customTopic }}</option>{% endif %}
+      </select>
+    </label>
+    <label>Ou escreva um tema seu (em português ou inglês)<input name="custom_topic" maxlength="60" placeholder="ex.: futebol, meu trabalho"></label>
+    <label>Tutor e voz
+      <select name="tutor">{% for t in tutors %}<option value="{{ t.value }}" {% if tutor == t.value %}selected{% endif %}{% if t.locked %} disabled{% endif %}>{{ t.label }}{% if t.locked %} (planos pagos){% endif %}</option>{% endfor %}</select>
+    </label>
+    <label>Velocidade da fala
+      <select name="speed">{% for v in speeds %}<option value="{{ v.value }}" {% if speed == v.value %}selected{% endif %}{% if v.locked %} disabled{% endif %}>{{ v.label }}{% if v.locked %} (planos pagos){% endif %}</option>{% endfor %}</select>
+    </label>
+    {% if locked %}<p class="muted small">{{ icon("lock") }} Outras vozes e velocidades fazem parte dos planos pagos.</p>{% endif %}
+    <label>Meta diária (práticas por dia)
+      <input name="daily_goal" type="number" min="1" max="{{ maxGoal }}" step="1" value="{{ goal }}" list="goal-ideas" inputmode="numeric" required>
+      <datalist id="goal-ideas">{% for g in goals %}{% if g <= maxGoal %}<option value="{{ g }}"></option>{% endif %}{% endfor %}</datalist>
+      <small class="muted">Escolha de 1 a {{ maxGoal }}. Sugestões: {{ goals | join(", ") }}.</small>
+    </label>
+    <label class="check"><input type="checkbox" name="in_ranking" {% if student.inRanking %}checked{% endif %}> Aparecer no ranking da semana (só primeiro nome e inicial)</label>
+    <label>Mensagens de ajuda e correção em
+      <select name="ui_lang"><option value="en" {% if (student.uiLang or 'en') == 'en' %}selected{% endif %}>Inglês (recomendado)</option><option value="pt" {% if student.uiLang == 'pt' %}selected{% endif %}>Português</option></select>
+    </label>
+    <button>Salvar</button>
+  </form>
+</section>
+<section class="card">
+  <h2>Senha do site</h2>
+  <form method="post" action="/panel/me/password">
+    {{ csrf_field(csrf) }}
+    {% if student.passwordHash %}<label>Senha atual<input name="current" type="password" autocomplete="current-password" required></label>{% endif %}
+    <label>Nova senha<input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
+    <label>Repita<input name="password2" type="password" minlength="8" autocomplete="new-password" required></label>
+    <button>Trocar senha</button>
+  </form>
+</section>
+</div>
+{% endblock %}

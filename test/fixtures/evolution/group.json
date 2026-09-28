@@ -1,0 +1,16 @@
+{
+  "event": "messages.upsert",
+  "instance": "coach",
+  "data": {
+    "key": {
+      "remoteJid": "120363025246125486@g.us",
+      "participant": "5541999990000@s.whatsapp.net",
+      "fromMe": false,
+      "id": "3EB0FF00112233445566"
+    },
+    "pushName": "Ana",
+    "message": { "conversation": "hi group" },
+    "messageType": "conversation",
+    "messageTimestamp": 1758819800
+  }
+}

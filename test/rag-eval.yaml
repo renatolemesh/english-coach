@@ -1,0 +1,36 @@
+# Retrieval eval: realistic student utterances -> documents that should be retrieved.
+# A case is a hit when ANY expected key is in the top-k of its collection's hybrid search.
+# Run: npx vitest run test/integration/rag-eval.test.ts
+k: 3
+min_recall: 0.85  # local bge-small-en-v1.5: 0.96 in memory; paid text-embedding-3-small: 1.00
+cases:
+  # grammar_notes (no topic filter): the utterance contains the mistake
+  - {collection: grammar_notes, level: B1, query: "I am working in a bank since five years", expected: [since-for]}
+  - {collection: grammar_notes, level: A2, query: "Last year I have gone to Salvador with my friends", expected: [past-definite-time]}
+  - {collection: grammar_notes, level: A2, query: "Yesterday I goed to the mall and buyed a shirt", expected: [irregular-past]}
+  - {collection: grammar_notes, level: A2, query: "Did you went to the party last night?", expected: [did-base-form]}
+  - {collection: grammar_notes, level: A1, query: "She work in a hospital and she don't like the nights", expected: [third-person-s]}
+  - {collection: grammar_notes, level: A2, query: "Actually I am studying engineering, I started this year", expected: [actually-currently]}
+  - {collection: grammar_notes, level: B1, query: "I pretend to visit Canada next year with my wife", expected: [pretend-intend]}
+  - {collection: grammar_notes, level: A2, query: "The party was very funny, I had a great time", expected: [funny-fun]}
+  - {collection: grammar_notes, level: A2, query: "I assisted a great movie yesterday at the cinema", expected: [assist-watch]}
+  - {collection: grammar_notes, level: A2, query: "I am responsible of the sales team", expected: [responsible-for]}
+  - {collection: grammar_notes, level: A2, query: "I have many experiences with customers and many informations", expected: [uncountable-nouns]}
+  - {collection: grammar_notes, level: A1, query: "The peoples in my city is very friendly", expected: [people-plural]}
+  - {collection: grammar_notes, level: A1, query: "I have 30 years and I live in Recife", expected: [age-be]}
+  - {collection: grammar_notes, level: A1, query: "In my neighborhood have a lot of restaurants", expected: [there-is-have]}
+  - {collection: grammar_notes, level: A1, query: "Is very hot today, is raining a lot", expected: [subject-required]}
+  - {collection: grammar_notes, level: B1, query: "Can you explain me how this machine works?", expected: [explain-to]}
+  - {collection: grammar_notes, level: A2, query: "She said me that she was tired", expected: [say-tell]}
+  - {collection: grammar_notes, level: B1, query: "I did a big mistake in the exam", expected: [make-do]}
+  - {collection: grammar_notes, level: B1, query: "I arrived to London early in the morning", expected: [depend-arrive]}
+  - {collection: grammar_notes, level: A1, query: "I bought a car red and two shirts blues", expected: [adjective-order]}
+  # lesson_content (topic filter): paraphrases that do not use the document's words
+  - {collection: lesson_content, topic: job interview, level: B1, query: "I am the person who takes care of the accounts in my company", expected: [job-in-charge-of, job-responsible-for]}
+  - {collection: lesson_content, topic: travel, level: A2, query: "my flight was late two hours", expected: [travel-delayed]}
+  - {collection: lesson_content, topic: ordering at a restaurant, level: A2, query: "I want my meat not very cooked, a little red inside", expected: [rest-rare-medium]}
+  - {collection: lesson_content, topic: shopping, level: A2, query: "can I put this shirt on to see if it is good for me", expected: [shop-try-on, shop-fit-suit]}
+  - {collection: lesson_content, topic: daily routine, level: B1, query: "the time I spend going to my job every day is one hour", expected: [routine-commute, routine-takes-me]}
+  - {collection: lesson_content, topic: introducing yourself, level: A2, query: "I was born and passed my childhood in a small city", expected: [intro-grew-up, intro-hometown]}
+  - {collection: lesson_content, topic: ordering at a restaurant, level: A1, query: "how much we need to pay, bring the account please", expected: [rest-bill]}
+  - {collection: lesson_content, topic: travel, level: A2, query: "the paper you show to enter the airplane", expected: [travel-boarding-pass]}

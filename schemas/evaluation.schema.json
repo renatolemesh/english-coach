@@ -1,0 +1,107 @@
+{
+  "properties": {
+    "transcript": {
+      "description": "The student's answer exactly as received.",
+      "type": "string"
+    },
+    "corrected": {
+      "description": "The whole answer rewritten in natural, correct English, same meaning.",
+      "type": "string"
+    },
+    "score": {
+      "description": "Overall score 0-100 for the student's level.",
+      "type": "integer"
+    },
+    "score_breakdown": {
+      "properties": {
+        "grammar": {
+          "description": "Grammar accuracy, 0-100.",
+          "type": "integer"
+        },
+        "vocabulary": {
+          "description": "Range and precision of vocabulary, 0-100.",
+          "type": "integer"
+        },
+        "fluency": {
+          "description": "Naturalness and flow of the sentences, 0-100.",
+          "type": "integer"
+        },
+        "task": {
+          "description": "How well the answer addresses the topic, 0-100.",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "grammar",
+        "vocabulary",
+        "fluency",
+        "task"
+      ],
+      "type": "object",
+      "description": "Sub-scores, each 0-100.",
+      "additionalProperties": false
+    },
+    "mistakes": {
+      "description": "Most important mistakes, at most 8. Empty if none.",
+      "items": {
+        "properties": {
+          "original": {
+            "description": "Exact fragment the student said, copied from the transcript.",
+            "type": "string"
+          },
+          "correction": {
+            "description": "Single best corrected version of that fragment (one option).",
+            "type": "string"
+          },
+          "type": {
+            "description": "Category of the mistake. 'pronunciation': a word that is not English, written the way it sounded, and the English word it most likely was (by sound and context) is the correction. 'unclear': words that match no plausible English at all; then 'correction' repeats 'original' exactly.",
+            "enum": [
+              "grammar",
+              "vocabulary",
+              "word_choice",
+              "pronunciation",
+              "other",
+              "unclear"
+            ],
+            "type": "string"
+          },
+          "explanation": {
+            "description": "Short explanation in simple English (1-2 sentences) of why it is wrong.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "original",
+          "correction",
+          "type",
+          "explanation"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "type": "array"
+    },
+    "strengths": {
+      "description": "What the student did well, in simple English, at most 5.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "tip": {
+      "description": "One practical tip in simple English for the next answer.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "transcript",
+    "corrected",
+    "score",
+    "score_breakdown",
+    "mistakes",
+    "strengths",
+    "tip"
+  ],
+  "type": "object",
+  "additionalProperties": false
+}

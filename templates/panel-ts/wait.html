@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "macros.html" import logo %}
+{% block title %}Confirme pelo WhatsApp{% endblock %}
+{% block bodyclass %}auth{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+{% include "auth_side.html" %}
+<div class="auth-main">
+<section class="card auth-card center">
+  {% if status == 'pending' %}
+  <h1>Confirme pelo WhatsApp</h1>
+  <p>Envie esta mensagem para o saybest{% if number %} (<b>{{ number | phone }}</b>){% endif %}:</p>
+  <p class="code">{{ waText }}</p>
+  {% if link %}<p><a class="button wa" href="{{ link }}" target="_blank" rel="noopener noreferrer">Abrir o WhatsApp com a mensagem</a></p>{% endif %}
+  <p class="muted small">Esta página atualiza sozinha quando recebermos. O código vale por 30 minutos.</p>
+  {% elif status == 'wrong_phone' %}
+  <h1>Número diferente</h1>
+  <p>O código foi enviado de outro número. Envie do número que você digitou, ou <a href="/panel/signup">comece de novo</a>.</p>
+  {% else %}
+  <h1>Código expirado</h1>
+  <p><a href="/panel/signup">Comece de novo</a> ou <a href="/panel/login">entre</a>.</p>
+  {% endif %}
+</section>
+</div>
+</div>
+{% endblock %}

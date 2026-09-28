@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field, logo %}
+{% block title %}Criar conta{% endblock %}
+{% block bodyclass %}auth{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+{% include "auth_side.html" %}
+<div class="auth-main">
+<section class="card auth-card">
+  <h1>Crie sua conta grátis</h1>
+  {% if not enabled %}
+  <p>Os cadastros estão fechados no momento.</p>
+  {% else %}
+  <ol class="steps">
+    <li>Preencha seus dados aqui.</li>
+    <li>Mande o código que aparecer para o nosso WhatsApp.</li>
+    <li>Pronto: converse em inglês por áudio e receba correções.</li>
+  </ol>
+  <form method="post" action="/panel/signup">
+    {{ csrf_field(csrf) }}
+    <label>Seu nome<input name="name" value="{{ name }}" maxlength="120" autocomplete="name" required></label>
+    <label>Telefone do WhatsApp (com DDI e DDD)<input name="phone" value="{{ phone }}" inputmode="tel" autocomplete="tel" required placeholder="+55 11 98765-4321"></label>
+    <label>Senha (mínimo 8 caracteres)<input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
+    <label>Repita a senha<input name="password2" type="password" minlength="8" autocomplete="new-password" required></label>
+    <label>Mensagens de ajuda e correção em
+      <select name="lang">
+        <option value="en" {% if lang == 'en' %}selected{% endif %}>Inglês (recomendado: mais prática)</option>
+        <option value="pt" {% if lang == 'pt' %}selected{% endif %}>Português</option>
+      </select>
+    </label>
+    <button>Criar conta</button>
+  </form>
+  <p class="alt">Já tem conta? <a href="/panel/login">Entrar</a></p>
+  {% endif %}
+</section>
+</div>
+</div>
+{% endblock %}

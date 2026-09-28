@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field, limit %}
+{% block title %}Planos{% endblock %}
+{% block content %}
+<h1>Planos</h1>
+<p class="muted">Mensagens por dia e duração vazias = sem limite. Todas as vozes e velocidades marcadas = tudo liberado. Um plano com duração pode passar para outro ao terminar (o teste de 30 dias vira o Grátis); sem próximo plano, o aluno fica bloqueado ao fim do prazo. Quem se cadastra pelo site entra no plano definido em Configurações.</p>
+{% for p in plans %}
+<section class="card">
+  {% if session.isAdmin %}
+  <form method="post" action="/panel/admin/plans" class="inline-form">
+    {{ csrf_field(csrf) }}<input type="hidden" name="id" value="{{ p.id }}">
+    <label>Nome<input name="name" value="{{ p.name }}" maxlength="60" required></label>
+    <label>Mensagens/dia<input name="messages_per_day" type="number" min="1" value="{{ p.messagesPerDay or '' }}"></label>
+    <label>Duração (dias)<input name="duration_days" type="number" min="1" value="{{ p.durationDays or '' }}"></label>
+    <label class="wide">Descrição<input name="description" value="{{ p.description }}" maxlength="300"></label>
+    <fieldset class="wide picks"><legend>Vozes</legend>{% for t in tutors %}<label class="check"><input type="checkbox" name="tutor_{{ t.key }}" {% if not p.tutors or t.value in p.tutors %}checked{% endif %}> {{ t.label }}</label>{% endfor %}</fieldset>
+    <fieldset class="wide picks"><legend>Velocidades</legend>{% for v in speeds %}<label class="check"><input type="checkbox" name="speed_{{ v.key }}" {% if not p.speeds or v.value in p.speeds %}checked{% endif %}> {{ v.label }}</label>{% endfor %}</fieldset>
+    <label>Quando terminar, vai para<select name="next_plan_id"><option value="">nenhum</option>{% for q in plans %}{% if q.id != p.id %}<option value="{{ q.id }}" {% if p and p.nextPlanId == q.id %}selected{% endif %}>{{ q.name }}</option>{% endif %}{% endfor %}</select></label>
+    <label class="check"><input type="checkbox" name="is_active" {% if p.isActive %}checked{% endif %}> ativo</label>
+    <button>Salvar</button>
+  </form>
+  {% else %}
+  <h2>{{ p.name }}</h2><p>{{ limit(p) }}{% if p.durationDays %} · {{ p.durationDays }} dias{% endif %}{% if p.tutors or p.speeds %} · vozes e velocidades limitadas{% endif %} · {{ p.description }}</p>
+  {% endif %}
+</section>
+{% endfor %}
+{% if session.isAdmin %}
+<section class="card">
+  <h2>Novo plano</h2>
+  <form method="post" action="/panel/admin/plans" class="inline-form">
+    {{ csrf_field(csrf) }}
+    <label>Nome<input name="name" maxlength="60" required></label>
+    <label>Mensagens/dia<input name="messages_per_day" type="number" min="1"></label>
+    <label>Duração (dias)<input name="duration_days" type="number" min="1"></label>
+    <label class="wide">Descrição<input name="description" maxlength="300"></label>
+    <fieldset class="wide picks"><legend>Vozes</legend>{% for t in tutors %}<label class="check"><input type="checkbox" name="tutor_{{ t.key }}" checked> {{ t.label }}</label>{% endfor %}</fieldset>
+    <fieldset class="wide picks"><legend>Velocidades</legend>{% for v in speeds %}<label class="check"><input type="checkbox" name="speed_{{ v.key }}" checked> {{ v.label }}</label>{% endfor %}</fieldset>
+    <label>Quando terminar, vai para<select name="next_plan_id"><option value="">nenhum</option>{% for q in plans %}<option value="{{ q.id }}">{{ q.name }}</option>{% endfor %}</select></label>
+    <label class="check"><input type="checkbox" name="is_active" checked> ativo</label>
+    <button>Criar</button>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

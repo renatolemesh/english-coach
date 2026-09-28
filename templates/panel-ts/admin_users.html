@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field %}
+{% block title %}Usuários{% endblock %}
+{% block content %}
+<h1>Usuários do painel</h1>
+{% if newPassword %}
+<p class="note ok">Senha provisória de <b>{{ newEmail }}</b>: <code class="code">{{ newPassword }}</code><br>
+Ela aparece só agora. A pessoa vai trocar no primeiro acesso.</p>
+{% endif %}
+<div class="table-wrap"><table>
+  <tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Situação</th><th>Último acesso</th><th></th></tr>
+  {% for u in users %}
+  <tr>
+    <td>{{ u.name }}</td><td>{{ u.email }}</td>
+    <td>{% if u.role == 'admin' %}admin{% else %}equipe{% endif %}</td>
+    <td>{% if u.isActive %}ativo{% else %}desativado{% endif %}</td>
+    <td class="nowrap">{{ u.lastLoginAt | local }}</td>
+    <td class="actions">
+      {% if u.id != session.admin.id %}
+      <form method="post" action="/panel/admin/users/{{ u.id }}">{{ csrf_field(csrf) }}<input type="hidden" name="action" value="toggle"><button class="secondary">{% if u.isActive %}Desativar{% else %}Ativar{% endif %}</button></form>
+      <form method="post" action="/panel/admin/users/{{ u.id }}">{{ csrf_field(csrf) }}<input type="hidden" name="action" value="role"><button class="secondary">{% if u.role == 'admin' %}Tornar equipe{% else %}Tornar admin{% endif %}</button></form>
+      {% endif %}
+      <form method="post" action="/panel/admin/users/{{ u.id }}">{{ csrf_field(csrf) }}<input type="hidden" name="action" value="reset"><button class="secondary">Nova senha</button></form>
+    </td>
+  </tr>
+  {% endfor %}
+</table></div>
+<section class="card narrow">
+  <h2>Dar acesso</h2>
+  <form method="post" action="/panel/admin/users">
+    {{ csrf_field(csrf) }}
+    <label>Nome<input name="name" maxlength="120" required></label>
+    <label>E-mail<input name="email" type="email" required></label>
+    <label>Perfil<select name="role"><option value="staff">Equipe (alunos)</option><option value="admin">Admin (tudo)</option></select></label>
+    <button>Criar acesso</button>
+  </form>
+</section>
+{% endblock %}

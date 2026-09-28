@@ -1,0 +1,26 @@
+topic: introducing yourself
+scenario: >
+  You meet someone new at a language meetup. You say your name, where you are from,
+  what you do and one or two things you like. The other person asks follow-up questions.
+vocabulary:
+  - {key: intro-grew-up, term: grow up, meaning_pt: crescer (ser criado), example: "I grew up in a small town near Curitiba.", level: A2}
+  - {key: intro-hometown, term: hometown, meaning_pt: cidade natal, example: "My hometown is famous for its coffee.", level: A2}
+  - {key: intro-currently, term: currently, meaning_pt: atualmente, example: "I'm currently working as a nurse.", level: B1}
+  - {key: intro-hobby, term: in my free time, meaning_pt: no meu tempo livre, example: "In my free time I play the guitar.", level: A1}
+  - {key: intro-be-into, term: be into something, meaning_pt: curtir / gostar muito de algo, example: "I'm really into hiking lately.", level: B1}
+  - {key: intro-years-old, term: years old, meaning_pt: anos de idade, example: "I'm twenty-eight years old.", level: A1}
+  - {key: intro-major, term: major in, meaning_pt: se formar em / cursar, example: "I majored in engineering.", level: B1}
+  - {key: intro-outgoing, term: outgoing, meaning_pt: extrovertido, example: "People say I'm quite outgoing.", level: B1}
+phrases:
+  - {key: intro-nice-to-meet, text: "Nice to meet you! I'm Ana, I'm from Brazil.", level: A1}
+  - {key: intro-what-do-you-do, text: "What do you do? / I work in marketing.", level: A1}
+  - {key: intro-been-living, text: "I've been living in São Paulo for about ten years.", level: B1}
+  - {key: intro-ask-back, text: "How about you? Where are you from?", level: A1}
+  - {key: intro-describe, text: "I'd describe myself as a curious person who loves learning.", level: B2}
+# First questions for topic_opener: an idea to start from, and the fallback when the model fails.
+# No greeting or name here: the tutor varies (/voz), and a line can replace a repeated question.
+openers:
+  - "Tell me a little about yourself. Where are you from?"
+  - "What do you do for work or study?"
+  - "What do you like to do in your free time?"
+  - "Tell me about your city. What do you like about living there?"

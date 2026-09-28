@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field, limit, status_badge, score, kind %}
+{% block title %}{{ row.student.name or 'Aluno' }}{% endblock %}
+{% block content %}
+{% set s = row.student %}
+<div class="row-head">
+  <h1>{{ s.name or '(sem nome)' }} {{ status_badge(s.status) }}</h1>
+  <a href="/panel/admin/students">← alunos</a>
+</div>
+<p class="muted">{{ s.phone | phone }} · conexão {{ s.connectionId }} · desde {{ s.createdAt | day }} · última mensagem {{ s.lastMessageAt | local }}
+  · {% if s.passwordHash %}tem senha no site{% else %}sem senha no site{% endif %}</p>
+<div class="stats">
+  <div class="stat"><span>{{ usedToday }}</span>mensagens hoje ({{ limit(row.plan) }})</div>
+  <div class="stat"><span>{{ progress.practices }}</span>práticas ({{ progress.audio }} por áudio)</div>
+  <div class="stat"><span>{{ progress.avgScore if progress.avgScore is not null else '—' }}</span>nota média</div>
+  <div class="stat"><span>{{ progress.streak }}</span>dias seguidos</div>
+</div>
+<div class="grid2">
+<section class="card">
+  <h2>Cadastro e plano</h2>
+  <form method="post" action="/panel/admin/students/{{ s.id }}">
+    {{ csrf_field(csrf) }}
+    <label>Nome<input name="name" value="{{ s.name or '' }}" maxlength="120"></label>
+    <label>Status
+      <select name="status">{% for st in statuses %}<option value="{{ st }}" {% if s.status == st %}selected{% endif %}>{% if st == 'active' %}ativo{% else %}bloqueado{% endif %}</option>{% endfor %}</select>
+    </label>
+    <label>Plano
+      <select name="plan_id">
+        <option value="">sem plano (ilimitado)</option>
+        {% for p in plans %}<option value="{{ p.id }}" {% if s.planId == p.id %}selected{% endif %}>{{ p.name }} — {{ limit(p) }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Plano válido até (vazio: sem fim; trocar de plano recomeça o prazo)
+      <input name="plan_ends_at" type="date" value="{{ s.planEndsAt | isodate }}">
+    </label>
+    <label>Nível
+      <select name="level">{% for lv in levels %}<option {% if s.level == lv %}selected{% endif %}>{{ lv }}</option>{% endfor %}</select>
+    </label>
+    <label>Notas internas<textarea name="notes" rows="3" maxlength="2000">{{ s.notes }}</textarea></label>
+    <button>Salvar</button>
+  </form>
+  <div class="actions">
+    <form method="post" action="/panel/admin/students/{{ s.id }}/reset-today">{{ csrf_field(csrf) }}<button class="secondary">Zerar mensagens de hoje</button></form>
+    {% if session.isAdmin %}
+    <form method="post" action="/panel/admin/students/{{ s.id }}/delete">{{ csrf_field(csrf) }}<button class="danger">Excluir aluno e histórico</button></form>
+    {% endif %}
+  </div>
+</section>
+<section class="card">
+  <h2>Erros mais frequentes</h2>
+  <ul class="plain">
+    {% for m in progress.topMistakes %}
+    <li class="fix"><span class="pair"><del>{{ m.original }}</del><span class="arrow">→</span><ins>{{ m.correction }}</ins></span><span class="count">×{{ m.n }}</span></li>
+    {% else %}<li class="muted">Nenhum ainda.</li>{% endfor %}
+  </ul>
+  <h2>Preferências</h2>
+  <p class="muted">Tema {{ s.topic or '—' }} · idioma {{ s.uiLang or 'padrão' }} · tutor {{ s.tutor or 'padrão' }} · velocidade {{ s.speed or '1.0' }}</p>
+</section>
+</div>
+<h2>Últimas mensagens</h2>
+<div class="table-wrap"><table>
+  <tr><th>Quando</th><th>Tipo</th><th>Nota</th><th>Disse</th><th>Tutor respondeu</th></tr>
+  {% for t in turns %}
+  <tr>
+    <td class="nowrap">{{ t.createdAt | local }}</td>
+    <td>{{ kind(t.kind, t.blockedReason) }}</td>
+    <td>{{ score(t.score) }}</td>
+    <td>{{ t.transcript or '' }}</td>
+    <td class="muted">{{ t.replyText or '' }}</td>
+  </tr>
+  {% else %}<tr><td colspan="5" class="muted">Nenhuma mensagem.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

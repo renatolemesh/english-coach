@@ -1,0 +1,267 @@
+/**
+ * Drizzle schema of the existing database (created before Drizzle; its alembic_version table
+ * stays but is not managed here). Field names in TS are camelCase; columns keep their
+ * snake_case names. Defaults applied on insert by the app, not by the database, are
+ * `$defaultFn` so the schema matches the database exactly.
+ */
+import { sql } from "drizzle-orm";
+import {
+  boolean,
+  customType,
+  doublePrecision,
+  foreignKey,
+  index,
+  integer,
+  jsonb,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  unique,
+  varchar,
+  vector,
+} from "drizzle-orm/pg-core";
+
+const tsvector = customType<{ data: string }>({ dataType: () => "tsvector" });
+const tz = (name: string) => timestamp(name, { withTimezone: true, mode: "date" });
+
+export const webhookEvents = pgTable(
+  "webhook_events",
+  {
+    id: serial().primaryKey(),
+    connectionId: varchar("connection_id", { length: 64 }).notNull(),
+    messageId: varchar("message_id", { length: 128 }),
+    payload: jsonb().notNull(),
+    status: varchar({ length: 16 }).notNull().default("received"),
+    error: text(),
+    receivedAt: tz("received_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("ix_webhook_events_connection_id").on(t.connectionId),
+    index("ix_webhook_events_message_id").on(t.messageId),
+  ],
+);
+
+export const plans = pgTable(
+  "plans",
+  {
+    id: serial().primaryKey(),
+    name: varchar({ length: 60 }).notNull(),
+    description: text().notNull().default(""),
+    messagesPerDay: integer("messages_per_day"),
+    durationDays: integer("duration_days"),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: tz("created_at").defaultNow().notNull(),
+    tutors: text().array(), // tutor ids the plan offers; null: all
+    speeds: doublePrecision().array(), // TTS speeds the plan offers; null: all
+    nextPlanId: integer("next_plan_id"), // where the student goes when the plan ends
+  },
+  (t) => [
+    unique("plans_name_key").on(t.name),
+    foreignKey({
+      columns: [t.nextPlanId],
+      foreignColumns: [t.id],
+      name: "plans_next_plan_id_fkey",
+    }).onDelete("set null"),
+  ],
+);
+
+export const students = pgTable(
+  "students",
+  {
+    id: serial().primaryKey(),
+    connectionId: varchar("connection_id", { length: 64 }).notNull(),
+    phone: varchar({ length: 32 }).notNull(),
+    topic: varchar({ length: 120 }),
+    level: varchar({ length: 8 }).notNull().default("B1"),
+    createdAt: tz("created_at").defaultNow().notNull(),
+    name: varchar({ length: 120 }),
+    status: varchar({ length: 16 }).notNull().default("active"),
+    planId: integer("plan_id"),
+    planStartedAt: tz("plan_started_at"),
+    planEndsAt: tz("plan_ends_at"),
+    passwordHash: varchar("password_hash", { length: 255 }),
+    verifiedAt: tz("verified_at"),
+    notes: text().notNull().default(""),
+    uiLang: varchar("ui_lang", { length: 4 }),
+    tutor: varchar({ length: 16 }),
+    speed: doublePrecision(),
+    lastMessageAt: tz("last_message_at"),
+    dailyGoal: integer("daily_goal").notNull().default(5), // practices a day (panel, /meta)
+    inRanking: boolean("in_ranking").notNull().default(true),
+  },
+  (t) => [
+    index("ix_students_connection_id").on(t.connectionId),
+    foreignKey({
+      columns: [t.planId],
+      foreignColumns: [plans.id],
+      name: "students_plan_id_fkey",
+    }).onDelete("set null"),
+    unique("students_connection_id_phone_key").on(t.connectionId, t.phone),
+  ],
+);
+
+export const turns = pgTable(
+  "turns",
+  {
+    id: serial().primaryKey(),
+    studentId: integer("student_id").notNull(),
+    kind: varchar({ length: 16 }).notNull(),
+    topic: varchar({ length: 120 }).notNull(),
+    level: varchar({ length: 8 }).notNull(),
+    transcript: text(),
+    evaluation: jsonb(),
+    score: integer(),
+    replyText: text("reply_text"),
+    blockedReason: varchar("blocked_reason", { length: 32 }),
+    costUsd: doublePrecision("cost_usd")
+      .notNull()
+      .$defaultFn(() => 0),
+    inputTokens: integer("input_tokens")
+      .notNull()
+      .$defaultFn(() => 0),
+    outputTokens: integer("output_tokens")
+      .notNull()
+      .$defaultFn(() => 0),
+    latencyMs: doublePrecision("latency_ms")
+      .notNull()
+      .$defaultFn(() => 0),
+    errors: jsonb().$type<string[]>(),
+    createdAt: tz("created_at").defaultNow().notNull(),
+    notes: jsonb().$type<string[]>(),
+  },
+  (t) => [
+    index("ix_turns_student_id").on(t.studentId),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "turns_student_id_fkey",
+    }).onDelete("cascade"),
+  ],
+);
+
+export const mistakes = pgTable(
+  "mistakes",
+  {
+    id: serial().primaryKey(),
+    studentId: integer("student_id").notNull(),
+    turnId: integer("turn_id").notNull(),
+    original: text().notNull(),
+    correction: text().notNull(),
+    type: varchar({ length: 16 }).notNull(),
+    explanation: text().notNull(),
+    topic: varchar({ length: 120 }).notNull(),
+    createdAt: tz("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("ix_mistakes_student_id").on(t.studentId),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "mistakes_student_id_fkey",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [t.turnId],
+      foreignColumns: [turns.id],
+      name: "mistakes_turn_id_fkey",
+    }).onDelete("cascade"),
+  ],
+);
+
+export const channelConnections = pgTable("channel_connections", {
+  id: varchar({ length: 64 }).primaryKey(),
+  name: varchar({ length: 120 }).notNull(),
+  provider: varchar({ length: 16 }).notNull(),
+  enabled: boolean().notNull(),
+  credentials: text().notNull(), // Fernet token of a JSON object
+  webhookSecret: text("webhook_secret").notNull(), // Fernet token
+  settings: jsonb().$type<Record<string, unknown>>().notNull(),
+  createdAt: tz("created_at").defaultNow().notNull(),
+  updatedAt: tz("updated_at").defaultNow().notNull(),
+});
+
+export const documents = pgTable(
+  "documents",
+  {
+    id: serial().primaryKey(),
+    collection: varchar({ length: 32 }).notNull(),
+    contentHash: varchar("content_hash", { length: 64 }).notNull(),
+    key: varchar({ length: 120 }),
+    source: varchar({ length: 200 }),
+    content: text().notNull(),
+    topic: varchar({ length: 120 }),
+    level: varchar({ length: 8 }),
+    kind: varchar({ length: 32 }).notNull(),
+    userId: integer("user_id"),
+    metadata: jsonb().$type<Record<string, unknown>>().notNull(),
+    embedding: vector({ dimensions: 384 }).notNull(),
+    tsv: tsvector("tsv")
+      .notNull()
+      .generatedAlwaysAs(sql`to_tsvector('english'::regconfig, content)`),
+    createdAt: tz("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("ix_documents_embedding_hnsw").using("hnsw", t.embedding.op("vector_cosine_ops")),
+    index("ix_documents_filters").on(t.collection, t.topic, t.level),
+    index("ix_documents_tsv").using("gin", t.tsv),
+    index("ix_documents_user").on(t.userId).where(sql`(user_id IS NOT NULL)`),
+    foreignKey({
+      columns: [t.userId],
+      foreignColumns: [students.id],
+      name: "documents_user_id_fkey",
+    }).onDelete("cascade"),
+    unique("documents_content_hash_key").on(t.contentHash),
+  ],
+);
+
+export const adminUsers = pgTable(
+  "admin_users",
+  {
+    id: serial().primaryKey(),
+    email: varchar({ length: 200 }).notNull(),
+    name: varchar({ length: 120 }).notNull(),
+    passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+    role: varchar({ length: 16 }).notNull().default("staff"),
+    isActive: boolean("is_active").notNull().default(true),
+    mustChangePassword: boolean("must_change_password").notNull().default(false),
+    lastLoginAt: tz("last_login_at"),
+    createdAt: tz("created_at").defaultNow().notNull(),
+  },
+  (t) => [unique("admin_users_email_key").on(t.email)],
+);
+
+export const webSessions = pgTable(
+  "web_sessions",
+  {
+    id: varchar({ length: 64 }).primaryKey(), // SHA-256 of the cookie token
+    kind: varchar({ length: 8 }).notNull(),
+    subjectId: integer("subject_id").notNull(),
+    csrf: varchar({ length: 64 }).notNull(),
+    ip: varchar({ length: 64 }).notNull().default(""),
+    userAgent: varchar("user_agent", { length: 200 }).notNull().default(""),
+    createdAt: tz("created_at").defaultNow().notNull(),
+    lastSeenAt: tz("last_seen_at").defaultNow().notNull(),
+    expiresAt: tz("expires_at").notNull(),
+  },
+  (t) => [index("ix_web_sessions_subject").on(t.kind, t.subjectId)],
+);
+
+export const appSettings = pgTable("app_settings", {
+  key: varchar({ length: 64 }).primaryKey(),
+  value: jsonb().notNull(),
+  updatedBy: varchar("updated_by", { length: 200 }).notNull().default(""),
+  updatedAt: tz("updated_at").defaultNow().notNull(),
+});
+
+export const auditLog = pgTable(
+  "audit_log",
+  {
+    id: serial().primaryKey(),
+    actor: varchar({ length: 200 }).notNull(),
+    action: varchar({ length: 64 }).notNull(),
+    target: varchar({ length: 200 }).notNull().default(""),
+    details: jsonb().$type<Record<string, unknown>>(),
+    createdAt: tz("created_at").defaultNow().notNull(),
+  },
+  (t) => [index("ix_audit_log_created_at").on(t.createdAt)],
+);

@@ -1,0 +1,35 @@
+{
+  "event": "messages.upsert",
+  "instance": "coach",
+  "data": {
+    "key": {
+      "remoteJid": "5541999990000@s.whatsapp.net",
+      "fromMe": false,
+      "id": "3A09D988F34AA24A71A915"
+    },
+    "pushName": "Ana",
+    "status": "DELIVERY_ACK",
+    "message": {
+      "audioMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7117-24/12345_n.enc?ccb=11-4",
+        "mimetype": "audio/ogg; codecs=opus",
+        "fileSha256": "n0kTvYsDgHK3vn3TDMYCd9uGlxjoM1bdHk1k8vzkrUc=",
+        "fileLength": "47336",
+        "seconds": 12,
+        "ptt": true,
+        "mediaKey": "hQbNfAXqHo1Rk9yG0HoP3Qm6mF0w0k2c3G6y6nR0bDs=",
+        "directPath": "/v/t62.7117-24/12345_n.enc?ccb=11-4"
+      },
+      "base64": "T2dnUw=="
+    },
+    "messageType": "audioMessage",
+    "messageTimestamp": 1758819660,
+    "instanceId": "8c1f7f36-1d2b-4c43-9d5d-0f8a3c9e3a11",
+    "source": "ios"
+  },
+  "destination": "https://coach.example/webhooks/evo-main",
+  "date_time": "2026-09-25T14:01:00.000Z",
+  "sender": "5541888880000@s.whatsapp.net",
+  "server_url": "http://evolution_api:8080",
+  "apikey": "B6D711FCDE4D4FD5936544120E713976"
+}

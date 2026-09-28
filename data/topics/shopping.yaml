@@ -1,0 +1,26 @@
+topic: shopping
+scenario: >
+  You are shopping for clothes and gifts. You ask about sizes and prices, try things on,
+  and ask about returns and payment.
+vocabulary:
+  - {key: shop-try-on, term: try on, meaning_pt: experimentar (roupa), example: "Can I try on this jacket?", level: A2}
+  - {key: shop-fitting-room, term: fitting room, meaning_pt: provador, example: "Where is the fitting room?", level: A2}
+  - {key: shop-size, term: size, meaning_pt: tamanho, example: "Do you have this in a medium size?", level: A1}
+  - {key: shop-on-sale, term: on sale, meaning_pt: em promoção, example: "These shoes are on sale today.", level: A2}
+  - {key: shop-refund, term: refund, meaning_pt: reembolso, example: "Can I get a refund if it doesn't fit?", level: B1}
+  - {key: shop-receipt, term: receipt, meaning_pt: recibo / nota fiscal, example: "Here's your receipt.", level: A2}
+  - {key: shop-afford, term: afford, meaning_pt: ter dinheiro para / poder pagar, example: "I can't afford it right now.", level: B1}
+  - {key: shop-fit-suit, term: fit / suit, meaning_pt: servir (tamanho) / ficar bem (estilo), example: "It fits well, but the color doesn't suit me.", level: B1}
+phrases:
+  - {key: shop-how-much, text: "How much is this? / How much are these?", level: A1}
+  - {key: shop-just-looking, text: "I'm just looking, thanks.", level: A1}
+  - {key: shop-pay-card, text: "Can I pay by card?", level: A1}
+  - {key: shop-bigger-size, text: "Do you have it in a bigger size?", level: A2}
+  - {key: shop-bought-yesterday, text: "I bought this yesterday, but it's too small.", level: A2}
+# First questions for topic_opener: an idea to start from, and the fallback when the model fails.
+# No greeting or name here: the tutor varies (/voz), and a line can replace a repeated question.
+openers:
+  - "Welcome to the store! Are you looking for anything in particular today?"
+  - "Do you prefer shopping online or going to real stores? Why?"
+  - "What's the last thing you bought that you were really happy with?"
+  - "Can I help you find something? What are you shopping for today?"

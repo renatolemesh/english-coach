@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field, logo %}
+{% block title %}Nova senha{% endblock %}
+{% block bodyclass %}auth{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+{% include "auth_side.html" %}
+<div class="auth-main">
+<section class="card auth-card">
+  <h1>Escolha a nova senha</h1>
+  <form method="post" action="/panel/forgot/reset">
+    {{ csrf_field(csrf) }}
+    <input type="hidden" name="token" value="{{ token }}">
+    <label>Nova senha<input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
+    <label>Repita<input name="password2" type="password" minlength="8" autocomplete="new-password" required></label>
+    <button>Salvar e entrar</button>
+  </form>
+</section>
+</div>
+</div>
+{% endblock %}

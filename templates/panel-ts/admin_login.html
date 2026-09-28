@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field, logo %}
+{% block title %}Equipe{% endblock %}
+{% block bodyclass %}auth{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+{% include "auth_side.html" %}
+<div class="auth-main">
+<section class="card auth-card">
+  <h1>Acesso da equipe</h1>
+  <form method="post" action="/panel/admin/login">
+    {{ csrf_field(csrf) }}
+    <label>E-mail<input name="email" type="email" value="{{ email }}" autocomplete="username" required></label>
+    <label>Senha<input name="password" type="password" autocomplete="current-password" required></label>
+    <button>Entrar</button>
+  </form>
+</section>
+</div>
+</div>
+{% endblock %}

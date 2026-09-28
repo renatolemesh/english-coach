@@ -1,0 +1,27 @@
+topic: job interview
+scenario: >
+  A recruiter interviews you for a position at an international company. They ask about
+  your experience, strengths and weaknesses, and why you want the job.
+vocabulary:
+  - {key: job-in-charge-of, term: be in charge of, meaning_pt: ser responsável por, example: "I'm in charge of the client accounts.", level: B1}
+  - {key: job-responsible-for, term: responsible for, meaning_pt: responsável por, example: "I'm responsible for a team of five people.", level: A2}
+  - {key: job-background, term: background, meaning_pt: formação / histórico profissional, example: "I have a background in finance.", level: B1}
+  - {key: job-strength, term: strength / weakness, meaning_pt: ponto forte / ponto fraco, example: "My main strength is problem solving.", level: B1}
+  - {key: job-deadline, term: deadline, meaning_pt: prazo, example: "I always meet my deadlines.", level: A2}
+  - {key: job-apply-for, term: apply for, meaning_pt: se candidatar a, example: "I'm applying for the analyst position.", level: A2}
+  - {key: job-hands-on, term: hands-on experience, meaning_pt: experiência prática, example: "I have hands-on experience with Excel and SQL.", level: B2}
+  - {key: job-promoted, term: get promoted, meaning_pt: ser promovido, example: "I got promoted to supervisor last year.", level: B1}
+  - {key: job-salary-expectations, term: salary expectations, meaning_pt: pretensão salarial, example: "What are your salary expectations?", level: B1}
+phrases:
+  - {key: job-been-working, text: "I've been working in banking for five years.", level: B1}
+  - {key: job-why-want, text: "I want this job because it matches my experience and goals.", level: A2}
+  - {key: job-tell-about-yourself, text: "Tell me about yourself. / Sure, I'm a data analyst with three years of experience.", level: A2}
+  - {key: job-example-challenge, text: "One challenge I faced was a tight deadline, and I solved it by reorganizing tasks.", level: B2}
+  - {key: job-questions-for-us, text: "Do you have any questions for us? / Yes, what does a typical day look like?", level: B1}
+# First questions for topic_opener: an idea to start from, and the fallback when the model fails.
+# No greeting or name here: the tutor varies (/voz), and a line can replace a repeated question.
+openers:
+  - "Thanks for coming! Could you tell me a bit about yourself?"
+  - "Let's start the interview. Why are you interested in this position?"
+  - "Can you tell me about your current job and what you do day to day?"
+  - "What would you say is your biggest strength at work?"

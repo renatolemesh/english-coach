@@ -1,0 +1,27 @@
+topic: ordering at a restaurant
+scenario: >
+  You are at a restaurant abroad. You ask for a table, order food and drinks, ask about
+  the dishes, and ask for the bill at the end.
+vocabulary:
+  - {key: rest-table-for, term: a table for two, meaning_pt: uma mesa para dois, example: "Hi, a table for two, please.", level: A1}
+  - {key: rest-id-like, term: I'd like, meaning_pt: eu gostaria, example: "I'd like the grilled chicken, please.", level: A1}
+  - {key: rest-bill, term: the bill / the check, meaning_pt: a conta, example: "Could we have the bill, please?", level: A1}
+  - {key: rest-rare-medium, term: rare / medium / well done, meaning_pt: mal passado / ao ponto / bem passado, example: "I'd like my steak medium, please.", level: A2}
+  - {key: rest-side-dish, term: side dish, meaning_pt: acompanhamento, example: "It comes with fries or salad as a side dish.", level: A2}
+  - {key: rest-orange-juice, term: orange juice, meaning_pt: suco de laranja, example: "Can I get an orange juice?", level: A1}
+  - {key: rest-allergic, term: be allergic to, meaning_pt: ser alérgico a, example: "I'm allergic to peanuts. Does this dish have any?", level: A2}
+  - {key: rest-tip, term: tip, meaning_pt: gorjeta, example: "Is the tip included?", level: A2}
+  - {key: rest-to-go, term: to go / for here, meaning_pt: para viagem / para comer aqui, example: "Is that for here or to go?", level: A2}
+phrases:
+  - {key: rest-what-recommend, text: "What would you recommend?", level: A2}
+  - {key: rest-could-i-have, text: "Could I have some water, please?", level: A1}
+  - {key: rest-what-comes-with, text: "What does the burger come with?", level: A2}
+  - {key: rest-excuse-me-order, text: "Excuse me, I think there's a mistake with my order.", level: B1}
+  - {key: rest-split-bill, text: "Can we split the bill?", level: B1}
+# First questions for topic_opener: an idea to start from, and the fallback when the model fails.
+# No greeting or name here: the tutor varies (/voz), and a line can replace a repeated question.
+openers:
+  - "Welcome in! I'll be your server tonight. Can I get you something to drink to start?"
+  - "Good evening! Are you ready to order, or do you need a few more minutes with the menu?"
+  - "What's your favorite restaurant in your city, and what do you order there?"
+  - "When you eat out, what kind of food do you usually go for?"

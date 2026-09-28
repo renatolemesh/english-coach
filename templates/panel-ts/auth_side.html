@@ -1,0 +1,18 @@
+{% from "macros.html" import logo, icon %}
+<aside class="auth-side">
+  <a class="brand light" href="/panel/">{{ logo() }}<span>say<b>best</b></span></a>
+  <div class="auth-pitch">
+    <h2>Fale inglês com confiança, <em>direto no WhatsApp.</em></h2>
+    <ul class="features">
+      <li>{{ icon("mic") }}<span>Responda por áudio e converse com um tutor nativo por voz.</span></li>
+      <li>{{ icon("check") }}<span>Receba a correção de cada frase, explicada de um jeito simples.</span></li>
+      <li>{{ icon("chart") }}<span>Acompanhe sua nota e os erros que mais se repetem.</span></li>
+    </ul>
+    <div class="demo" aria-hidden="true">
+      <div class="bubble me"><span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>0:04</small></div>
+      <div class="bubble tutor"><b>Score 82</b><span><del>I am work</del> {{ icon("arrow") }} <ins>I work</ins></span></div>
+      <div class="bubble tutor">Nice! What do you like most about your job?</div>
+    </div>
+  </div>
+  <p class="auth-foot">Tutores com vozes naturais · correções na hora</p>
+</aside>

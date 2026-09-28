@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field, logo %}
+{% block title %}Entrar{% endblock %}
+{% block bodyclass %}auth{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+{% include "auth_side.html" %}
+<div class="auth-main">
+<section class="card auth-card">
+  <h1>Entrar</h1>
+  <p class="lead">Veja seu progresso e ajuste suas preferências.</p>
+  <form method="post" action="/panel/login">
+    {{ csrf_field(csrf) }}
+    <label>Telefone do WhatsApp (com DDI e DDD)<input name="phone" value="{{ phone }}" inputmode="tel" autocomplete="tel" required placeholder="+55 11 98765-4321"></label>
+    <label>Senha<input name="password" type="password" autocomplete="current-password" required></label>
+    <button>Entrar</button>
+  </form>
+  <p class="alt"><a href="/panel/forgot">Esqueci a senha</a></p>
+  <p class="alt">Ainda não tem conta? <a href="/panel/signup">Crie sua conta grátis</a></p>
+  <p class="alt small"><a class="muted" href="/panel/admin/login">Acesso da equipe</a></p>
+</section>
+</div>
+</div>
+{% endblock %}

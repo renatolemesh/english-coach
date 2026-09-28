@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% from "macros.html" import score, icon, stat, bar %}
+{% block title %}Meu progresso{% endblock %}
+{% block content %}
+{% set s = row.student %}
+{% set week = progress.avgScoreWeek %}
+<section class="hero">
+  <div class="hero-main">
+    <span class="eyebrow">{{ icon("sparkle") }} Seu progresso</span>
+    <h1>Olá, {{ (s.name or 'aluno').split(' ')[0] }}!</h1>
+    <p>{% if progress.streak %}Você bateu a meta <b>{{ progress.streak }} {{ 'dia' if progress.streak == 1 else 'dias' }} seguidos</b>. Continue assim!{% else %}Bata a meta de hoje e comece uma sequência.{% endif %}</p>
+    <div class="chips">
+      <span class="chip">{{ icon("layers") }} Plano {{ row.plan.name if row.plan else 'sem limite' }}{% if s.planEndsAt %} · até {{ s.planEndsAt | day }}{% endif %}</span>
+      <span class="chip">{{ icon("chat") }} Hoje: {{ usedToday }}{% if row.plan and row.plan.messagesPerDay %} de {{ row.plan.messagesPerDay }}{% endif %} mensagens</span>
+    </div>
+    {% if whatsapp %}<a class="button amber" href="https://wa.me/{{ whatsapp }}" target="_blank" rel="noopener noreferrer">{{ icon("mic") }} Praticar agora no WhatsApp</a>{% endif %}
+  </div>
+  <div class="ring" role="img" aria-label="Nota dos últimos 7 dias: {{ week if week is not null else 'sem dados' }}">
+    <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" class="ring-bg"/>
+      {% if week is not null %}<circle cx="50" cy="50" r="42" class="ring-fg" stroke-dasharray="{{ (week / 100 * 263.9) | round(1) }} 263.9"/>{% endif %}</svg>
+    <div class="ring-text"><strong>{{ week if week is not null else '—' }}</strong><span>nota da semana</span></div>
+  </div>
+</section>
+<div class="goals">
+  <section class="card goal">
+    <div class="goal-head"><span class="stat-ic amber">{{ icon("target") }}</span><div><strong>Meta de hoje</strong><span class="muted small">{% if progress.today >= goal %}Batida! 🎉{% else %}faltam {{ goal - progress.today }}{% endif %}</span></div><b class="goal-num">{{ progress.today }}/{{ goal }}</b></div>
+    {{ bar(progress.today, goal) }}
+    <p class="muted small">Práticas avaliadas hoje · <a href="/panel/me/settings">mudar a meta</a></p>
+  </section>
+  <section class="card goal">
+    {% if way.next %}
+    <div class="goal-head"><span class="stat-ic indigo">{{ icon("stairs") }}</span><div><strong>Rumo ao {{ way.next }}</strong><span class="muted small">você está no {{ s.level }}</span></div><b class="goal-num">{{ way.good }}/{{ way.need }}</b></div>
+    {{ bar(way.good, way.need) }}
+    <p class="muted small">Respostas com nota {{ way.min }} ou mais. Ao completar, você sobe de nível.</p>
+    {% else %}
+    <div class="goal-head"><span class="stat-ic indigo">{{ icon("stairs") }}</span><div><strong>Nível máximo</strong><span class="muted small">você está no {{ s.level }} 🏆</span></div></div>
+    {{ bar(1, 1) }}
+    <p class="muted small">Continue praticando para manter o nível.</p>
+    {% endif %}
+  </section>
+  <a class="card goal link" href="/panel/me/ranking">
+    <div class="goal-head"><span class="stat-ic sky">{{ icon("trophy") }}</span><div><strong>Ranking da semana</strong><span class="muted small">{% if not s.inRanking %}você está fora do ranking{% elif rank %}{{ rank.points }} pontos{% else %}sem pontos ainda{% endif %}</span></div><b class="goal-num">{% if rank %}{{ rank.position }}º{% else %}—{% endif %}</b></div>
+    <p class="muted small">{% if ranked %}{{ ranked }} {{ 'aluno' if ranked == 1 else 'alunos' }} pontuando nesta semana.{% else %}Ninguém pontuou nesta semana ainda.{% endif %} Ver ranking {{ icon("arrow") }}</p>
+  </a>
+</div>
+<div class="stats">
+  {{ stat(progress.avgScore if progress.avgScore is not null else '—', "nota média geral", "target", "indigo") }}
+  {{ stat(progress.practices, "práticas no total", "chat", "violet") }}
+  {{ stat(progress.audio, "respostas por áudio", "mic", "sky") }}
+  {{ stat(progress.daysActive, "dias praticados", "calendar", "amber") }}
+</div>
+<section class="card">
+  <div class="card-head"><h2>Sua nota por dia</h2><span class="muted small">últimos 30 dias · {{ progress.daily | length }} com prática</span></div>
+  {% if chart %}
+  <div class="chart-box">
+    <div class="axis" aria-hidden="true"><span>100</span><span>50</span><span>0</span></div>
+    <svg class="chart" viewBox="0 0 640 180" preserveAspectRatio="none" role="img" aria-label="Nota média por dia">
+      <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="area-top"/><stop offset="1" class="area-bottom"/></linearGradient></defs>
+      <line x1="0" y1="45" x2="640" y2="45" class="grid"/><line x1="0" y1="90" x2="640" y2="90" class="grid"/><line x1="0" y1="135" x2="640" y2="135" class="grid"/>
+      <polygon points="0,180 {{ chart }} 640,180" fill="url(#area)"/>
+      <polyline points="{{ chart }}" class="line"/>
+    </svg>
+  </div>
+  {% else %}
+  <div class="empty">{{ icon("chart") }}<p>Pratique em pelo menos dois dias para ver a sua evolução aqui.</p></div>
+  {% endif %}
+</section>
+<div class="grid2">
+<section class="card">
+  <div class="card-head"><h2>Erros que mais se repetem</h2><span class="muted small">foque nestes</span></div>
+  <ul class="plain">
+    {% for m in progress.topMistakes %}
+    <li class="fix"><span class="pair"><del>{{ m.original }}</del><span class="arrow">{{ icon("arrow") }}</span><ins>{{ m.correction }}</ins></span><span class="count">×{{ m.n }}</span></li>
+    {% else %}<li class="empty">{{ icon("check") }}<p>Nenhum erro repetido ainda. Mande um áudio!</p></li>{% endfor %}
+  </ul>
+</section>
+<section class="card">
+  <div class="card-head"><h2>Últimas práticas</h2></div>
+  <ul class="plain timeline">
+    {% for t in progress.recent %}
+    <li class="practice">{{ score(t.score) }}
+      <div><div class="said">{{ t.transcript or '' }}</div>
+        {% if t.evaluation and t.evaluation.mistakes and t.evaluation.mistakes | length %}<div class="fixd">{{ icon("check") }} {{ t.evaluation.corrected or '' }}</div>{% endif %}
+        <div class="when">{{ t.createdAt | local }}</div></div></li>
+    {% else %}<li class="empty">{{ icon("mic") }}<p>Nenhuma prática ainda.</p></li>{% endfor %}
+  </ul>
+</section>
+</div>
+{% endblock %}

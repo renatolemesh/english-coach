@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% from "macros.html" import icon %}
+{% block title %}Ranking{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Ranking da semana</h1><p class="muted">Zera toda segunda-feira. Aparecem só o primeiro nome e a inicial do sobrenome.</p></div></div>
+{% if not inRanking %}<p class="note">{{ icon("alert") }}<span>Você está fora do ranking. Para aparecer, marque a opção em <a href="/panel/me/settings">Configurações</a>.</span></p>{% endif %}
+<div class="grid2 wide-left">
+<section class="card">
+  {% if top | length %}
+  <ol class="ranking">
+    {% for r in top %}
+    <li class="{{ 'me' if r.studentId == myId }}{{ ' podium p' ~ r.position if r.position <= 3 }}"><span class="pos">{{ r.position }}</span><span class="avatar sm">{{ r.name[0] | upper }}</span><span class="who-rank"><b>{{ r.name }}{% if r.studentId == myId %} (você){% endif %}</b><small>{{ r.practices }} {{ 'prática' if r.practices == 1 else 'práticas' }}</small></span><span class="pts">{{ r.points }}<small>pts</small></span></li>
+    {% endfor %}
+    {% if mine %}
+    <li class="gap" aria-hidden="true">…</li>
+    <li class="me"><span class="pos">{{ mine.position }}</span><span class="avatar sm">{{ mine.name[0] | upper }}</span><span class="who-rank"><b>{{ mine.name }} (você)</b><small>{{ mine.practices }} práticas</small></span><span class="pts">{{ mine.points }}<small>pts</small></span></li>
+    {% endif %}
+  </ol>
+  {% else %}
+  <div class="empty">{{ icon("trophy") }}<p>Ninguém pontuou nesta semana ainda. Mande um áudio e saia na frente!</p></div>
+  {% endif %}
+</section>
+<section class="card">
+  <h2>Como ganhar pontos</h2>
+  <ul class="plain rules">
+    <li><b>+{{ points.practice }}</b><span>por prática avaliada</span></li>
+    <li><b>+10</b><span>no máximo pela nota (nota 80 vale +8)</span></li>
+    <li><b>+{{ points.audio }}</b><span>quando a resposta é por áudio</span></li>
+    <li><b>+{{ points.goal }}</b><span>por dia com a meta batida</span></li>
+  </ul>
+  <p class="muted small">Contam as {{ maxPerDay }} primeiras práticas de cada dia.</p>
+</section>
+</div>
+{% endblock %}

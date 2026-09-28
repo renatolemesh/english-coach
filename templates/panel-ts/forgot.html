@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_field, logo %}
+{% block title %}Esqueci a senha{% endblock %}
+{% block bodyclass %}auth{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+{% include "auth_side.html" %}
+<div class="auth-main">
+<section class="card auth-card">
+  <h1>Esqueci a senha</h1>
+  <p class="muted">Você vai confirmar que o número é seu mandando um código pelo WhatsApp.</p>
+  <form method="post" action="/panel/forgot">
+    {{ csrf_field(csrf) }}
+    <label>Telefone do WhatsApp (com DDI e DDD)<input name="phone" value="{{ phone }}" inputmode="tel" required placeholder="+55 11 98765-4321"></label>
+    <button>Continuar</button>
+  </form>
+</section>
+</div>
+</div>
+{% endblock %}

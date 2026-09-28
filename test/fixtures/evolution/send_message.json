@@ -1,0 +1,15 @@
+{
+  "event": "send.message",
+  "instance": "coach",
+  "data": {
+    "key": {
+      "remoteJid": "5541999990000@s.whatsapp.net",
+      "fromMe": true,
+      "id": "BAE5F1C2D3E4F5A6"
+    },
+    "message": { "conversation": "Oh nice! What happened next?" },
+    "messageType": "conversation",
+    "messageTimestamp": 1758819950,
+    "status": "PENDING"
+  }
+}

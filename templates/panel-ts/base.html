@@ -1,0 +1,56 @@
+<!doctype html>
+{% from "macros.html" import navlink, logo, icon %}
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<title>{% block title %}saybest{% endblock %} · saybest</title>
+<link rel="preload" href="/panel/static/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/panel/static/panel.css">
+</head>
+<body class="{% block bodyclass %}{% if session and (session.admin or session.student) %}app{% endif %}{% endblock %}">
+{% include "icons.html" %}
+{% if session and (session.admin or session.student) %}
+<aside class="side">
+  <a class="brand" href="/panel/">{{ logo() }}<span>say<b>best</b></span></a>
+  <nav aria-label="Menu">
+    {% if session.admin %}
+    <span class="nav-label">Geral</span>
+    {{ navlink("/panel/admin", "Painel", path, "home", true) }}
+    {{ navlink("/panel/admin/students", "Alunos", path, "users") }}
+    {{ navlink("/panel/admin/plans", "Planos", path, "layers") }}
+    {% if session.isAdmin %}
+    <span class="nav-label">Administração</span>
+    {{ navlink("/panel/admin/settings", "Configurações", path, "sliders") }}
+    {{ navlink("/panel/admin/users", "Usuários", path, "shield") }}
+    {{ navlink("/panel/admin/connections", "Conexões", path, "plug") }}
+    {{ navlink("/panel/admin/audit", "Auditoria", path, "list") }}
+    {% endif %}
+    <span class="nav-label">Conta</span>
+    {{ navlink("/panel/admin/password", "Senha", path, "key") }}
+    {% else %}
+    {{ navlink("/panel/me", "Meu progresso", path, "chart", true) }}
+    {{ navlink("/panel/me/ranking", "Ranking", path, "trophy") }}
+    {{ navlink("/panel/me/settings", "Configurações", path, "sliders") }}
+    {% endif %}
+  </nav>
+  <div class="who">
+    {% set who = session.admin.name if session.admin else (session.student.name or 'Aluno') %}
+    <span class="avatar">{{ (who or '?')[0] | upper }}</span>
+    <span class="who-text"><b>{{ who }}</b><small>{% if session.admin %}{{ 'Administrador' if session.isAdmin else 'Equipe' }}{% else %}Aluno{% endif %}</small></span>
+    <form method="post" action="/panel/logout" class="logout">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button class="icon-btn" title="Sair" aria-label="Sair">{{ icon("logout") }}</button>
+    </form>
+  </div>
+</aside>
+{% endif %}
+<main>
+  {% if message %}<p class="note ok">{{ icon("check") }}<span>{{ message }}</span></p>{% endif %}
+  {% if error %}<p class="note err">{{ icon("alert") }}<span>{{ error }}</span></p>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "summary": {
+      "description": "Compact summary of the conversation so far, in English, at most 5 sentences.",
+      "type": "string"
+    },
+    "recurring_mistakes": {
+      "description": "Mistakes the student repeats, each as 'wrong phrase -> right phrase' with enough surrounding words to stand alone. At most 5.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "summary",
+    "recurring_mistakes"
+  ],
+  "type": "object",
+  "additionalProperties": false
+}

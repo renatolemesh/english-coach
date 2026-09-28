@@ -1,0 +1,15 @@
+{
+  "event": "messages.upsert",
+  "instance": "coach",
+  "data": {
+    "key": {
+      "remoteJid": "5541999990000@s.whatsapp.net",
+      "fromMe": true,
+      "id": "3EB0AABBCCDDEEFF0011"
+    },
+    "pushName": "Você",
+    "message": { "conversation": "typed on the phone" },
+    "messageType": "conversation",
+    "messageTimestamp": 1758819900
+  }
+}

@@ -1,0 +1,77 @@
+# saybest. Everything binds to 127.0.0.1; only `api` joins the external `shared-net` so the
+# host nginx can proxy /webhooks/ and /panel/ to saybest-api:8000.
+#   docker compose up -d --build
+
+x-app: &app
+  env_file: .env
+  environment: &env
+    DATABASE_URL: postgresql://coach:${POSTGRES_PASSWORD:-coach}@db:5432/coach
+    REDIS_URL: redis://cache:6379/0
+    STT_MIN_CONFIDENCE: "-2.0" # whisper.cpp scale
+    STT_SURE_CONFIDENCE: "-1.05"
+    LOCAL_EMBEDDING_MODEL: Xenova/bge-small-en-v1.5 # ONNX export for transformers.js
+    CONNECTIONS_FILE: "" # connections live in channel_connections (admin API)
+  restart: unless-stopped
+  depends_on:
+    db: { condition: service_healthy }
+    cache: { condition: service_healthy }
+
+services:
+  api:
+    <<: *app
+    build: { context: ., dockerfile: docker/api.Dockerfile }
+    image: saybest-ts-api
+    container_name: saybest-api
+    ports: ["127.0.0.1:8010:8000"]
+    networks: [default, shared-net]
+    mem_limit: 512m
+
+  worker:
+    <<: *app
+    build: { context: ., dockerfile: docker/worker.Dockerfile }
+    image: saybest-ts-worker
+    container_name: saybest-worker
+    mem_limit: 2g
+
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: saybest-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: coach
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-coach}
+      POSTGRES_DB: coach
+      TZ: UTC
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports: ["127.0.0.1:5433:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U coach -d coach"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    mem_limit: 512m
+
+  cache:
+    image: redis:7-alpine
+    container_name: saybest-redis
+    restart: unless-stopped
+    # noeviction: rate-limit, budget and idempotency keys must never be evicted early.
+    # Cache entries are bounded by their TTLs; cache writes are best-effort in RedisCache.
+    command: redis-server --appendonly yes --maxmemory 200mb --maxmemory-policy noeviction
+    volumes: [redisdata:/data]
+    ports: ["127.0.0.1:6380:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    mem_limit: 256m
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  shared-net:
+    external: true

@@ -1,0 +1,26 @@
+topic: daily routine
+scenario: >
+  You describe a typical day: when you wake up, how you get to work or school, what you do
+  after work, and your habits on weekends.
+vocabulary:
+  - {key: routine-wake-up, term: wake up / get up, meaning_pt: acordar / levantar, example: "I wake up at six but I get up at six thirty.", level: A1}
+  - {key: routine-commute, term: commute, meaning_pt: trajeto casa-trabalho, example: "My commute takes about an hour.", level: B1}
+  - {key: routine-have-breakfast, term: have breakfast, meaning_pt: tomar café da manhã, example: "I usually have breakfast at home.", level: A1}
+  - {key: routine-take-shower, term: take a shower, meaning_pt: tomar banho, example: "I take a shower before work.", level: A1}
+  - {key: routine-do-chores, term: do the chores, meaning_pt: fazer as tarefas de casa, example: "On Saturdays I do the chores.", level: A2}
+  - {key: routine-work-out, term: work out, meaning_pt: malhar / treinar, example: "I work out three times a week.", level: A2}
+  - {key: routine-go-to-bed, term: go to bed, meaning_pt: ir dormir, example: "I usually go to bed around eleven.", level: A1}
+  - {key: routine-used-to, term: used to, meaning_pt: costumava, example: "I used to take the bus, but now I cycle.", level: B1}
+phrases:
+  - {key: routine-typical-day, text: "On a typical day, I start work at nine.", level: A2}
+  - {key: routine-frequency, text: "I always / usually / sometimes / never cook dinner.", level: A1}
+  - {key: routine-after-work, text: "After work, I like to relax and watch a series.", level: A2}
+  - {key: routine-weekends, text: "On weekends I sleep in and meet my friends.", level: A2}
+  - {key: routine-takes-me, text: "It takes me twenty minutes to get to the office.", level: B1}
+# First questions for topic_opener: an idea to start from, and the fallback when the model fails.
+# No greeting or name here: the tutor varies (/voz), and a line can replace a repeated question.
+openers:
+  - "What's the first thing you do when you wake up?"
+  - "Tell me about a normal weekday for you. What time do you usually start working or studying?"
+  - "What does your evening usually look like after a long day?"
+  - "What's your favorite part of the day, and why?"
