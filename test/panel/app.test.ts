@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { MemoryCache } from "../../src/adapters/cache/memory.js";
 import { loadSettings } from "../../src/config.js";
 import type { Db } from "../../src/db/client.js";
-import { createPanel } from "../../src/panel/index.js";
+import { createPanel, landingPage } from "../../src/panel/index.js";
 import { COOKIE, PRE_CSRF_COOKIE } from "../../src/panel/security.js";
 
 const panel = createPanel({
@@ -31,6 +31,32 @@ describe("panel app", () => {
     expect(res.headers.get("referrer-policy")).toBe("same-origin");
     const refused = await request("/panel/login", { method: "POST" });
     expect(refused.headers.get("x-frame-options")).toBe("DENY");
+  });
+
+  it("serves only the known static files", async () => {
+    for (const [name, type] of [
+      ["landing.css", "text/css"],
+      ["card-sample.png", "image/png"],
+      ["favicon.svg", "image/svg+xml"],
+    ]) {
+      const res = await request(`/panel/static/${name}`);
+      expect([name, res.status, res.headers.get("content-type")?.split(";")[0]]).toEqual([
+        name,
+        200,
+        type,
+      ]);
+    }
+    expect((await request("/panel/static/landing.html")).status).toBe(404);
+    expect((await request("/panel/static/..%2F..%2F.env")).status).toBe(404);
+  });
+
+  it("the landing page links to signup and has the panel's CSP", async () => {
+    const page = landingPage(loadSettings({}, { publicBaseUrl: "https://saybest.test/" }))();
+    const html = await page.text();
+    expect(page.headers.get("content-security-policy")).toContain("default-src 'none'");
+    expect(html).toContain('href="/panel/signup"');
+    expect(html).toContain('content="https://saybest.test/panel/static/card-sample.png"');
+    expect(html).not.toContain("<script");
   });
 
   it("serves only the known font files", async () => {

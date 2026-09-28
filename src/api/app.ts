@@ -10,7 +10,7 @@ import { ConnectionStore } from "../connections/store.js";
 import { loadConnectionsYaml } from "../connections/yaml-loader.js";
 import { connect } from "../db/client.js";
 import { getLogger } from "../logging.js";
-import { createPanel } from "../panel/index.js";
+import { createPanel, landingPage } from "../panel/index.js";
 import { BullTaskQueue } from "../worker/queue.js";
 import { adminRouter } from "./admin.js";
 import type { AppState } from "./deps.js";
@@ -83,6 +83,7 @@ export function createApp(state: AppState): Hono {
     return c.json({ status: "ok", redis });
   });
 
+  app.get("/", landingPage(state.settings)); // the public site (nginx proxies only "/" exactly)
   app.route("/webhooks", webhooksRouter(state));
   app.route("/admin", adminRouter(state));
   if (state.db) {

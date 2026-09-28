@@ -26,6 +26,14 @@ export const PANEL_HEADERS: Readonly<Record<string, string>> = {
   "Referrer-Policy": "same-origin",
 };
 
+// Files served from templates/panel-ts/static (the panel, the landing page at / and its images).
+const STATIC: Readonly<Record<string, string>> = {
+  "panel.css": "text/css; charset=utf-8",
+  "landing.css": "text/css; charset=utf-8",
+  "card-sample.png": "image/png",
+  "favicon.svg": "image/svg+xml",
+};
+
 const FONTS = new Set([
   "inter-latin-400-normal.woff2",
   "inter-latin-600-normal.woff2",
@@ -41,7 +49,7 @@ export function createPanel(deps: PanelDeps): Hono {
     throttle: new Throttle(deps.cache),
     views: new Views(deps.settings.templatesDir),
   };
-  const stylesheet = path.join(deps.settings.templatesDir, "panel-ts", "static", "panel.css");
+  const staticDir = path.join(deps.settings.templatesDir, "panel-ts", "static");
   const app = new Hono();
 
   app.use("*", async (c, next) => {
@@ -55,12 +63,15 @@ export function createPanel(deps: PanelDeps): Hono {
     throw err;
   });
 
-  app.get("/static/panel.css", async (c) =>
-    c.body(await readFile(stylesheet), 200, {
-      "Content-Type": "text/css; charset=utf-8",
+  app.get("/static/:name", async (c) => {
+    const name = c.req.param("name");
+    const type = Object.hasOwn(STATIC, name) ? STATIC[name] : undefined;
+    if (!type) return c.notFound();
+    return c.body(await readFile(path.join(staticDir, name)), 200, {
+      "Content-Type": type,
       "Cache-Control": "public, max-age=3600",
-    }),
-  );
+    });
+  });
   // Inter (OFL), the same files the evaluation card embeds; only these names are served
   const fontsDir = path.join(deps.settings.templatesDir, "fonts");
   app.get("/static/fonts/:name", async (c) => {
@@ -75,4 +86,21 @@ export function createPanel(deps: PanelDeps): Hono {
   adminRoutes(app, panel);
   studentRoutes(app, panel);
   return app;
+}
+
+/** The public landing page at / (templates/panel-ts/landing.html): static text, no session. */
+export function landingPage(settings: PanelDeps["settings"]): () => Response {
+  const views = new Views(settings.templatesDir);
+  const base = settings.publicBaseUrl.replace(/\/+$/, "");
+  let html: string | null = null; // the same for everyone: rendered once
+  return () => {
+    html ??= views.renderPage("landing.html", { base, year: new Date().getFullYear() });
+    return new Response(html, {
+      headers: {
+        ...PANEL_HEADERS,
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "public, max-age=300",
+      },
+    });
+  };
 }

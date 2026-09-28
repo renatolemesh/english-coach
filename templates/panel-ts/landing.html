@@ -1,0 +1,187 @@
+<!doctype html>
+{% from "macros.html" import logo, icon %}
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>saybest · Pratique inglês falando, direto no WhatsApp</title>
+<meta name="description" content="Mande um áudio em inglês no WhatsApp e receba na hora sua nota, as correções explicadas e a resposta do tutor em voz. Comece com 30 dias ilimitados, grátis.">
+<link rel="canonical" href="{{ base }}/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="saybest · Pratique inglês falando, direto no WhatsApp">
+<meta property="og:description" content="Mande um áudio em inglês e receba nota, correções e a resposta do tutor em voz. 30 dias ilimitados, grátis.">
+<meta property="og:image" content="{{ base }}/panel/static/card-sample.png">
+<meta property="og:url" content="{{ base }}/">
+<link rel="icon" href="/panel/static/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/panel/static/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/panel/static/landing.css">
+</head>
+<body>
+{% include "icons.html" %}
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="/">{{ logo() }}<span>say<b>best</b></span></a>
+    <nav aria-label="Seções">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#planos">Planos</a>
+      <a href="#duvidas">Dúvidas</a>
+    </nav>
+    <div class="top-cta">
+      <a class="link" href="/panel/login">Entrar</a>
+      <a class="btn sm" href="/panel/signup">Começar grátis</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <span class="eyebrow">{{ icon("sparkle") }} Tutor de inglês no WhatsApp</span>
+      <h1>Fale inglês todo dia. <em>Direto no WhatsApp.</em></h1>
+      <p class="lead">Mande um áudio em inglês e receba na hora sua nota, as correções explicadas e a resposta do tutor em voz, para a conversa continuar. Sem app, sem horário marcado.</p>
+      <div class="cta">
+        <a class="btn" href="/panel/signup">Começar grátis {{ icon("arrow") }}</a>
+        <a class="btn ghost" href="#como-funciona">Ver como funciona</a>
+      </div>
+      <ul class="trust">
+        <li>{{ icon("check") }} 30 dias ilimitados</li>
+        <li>{{ icon("check") }} Sem cartão de crédito</li>
+        <li>{{ icon("check") }} Do básico ao avançado</li>
+      </ul>
+    </div>
+    <div class="phone" aria-hidden="true">
+      <div class="phone-top"><span class="av">{{ logo() }}</span><div><b>saybest</b><small>online</small></div></div>
+      <div class="chat">
+        <div class="msg tutor voice"><span class="play">{{ icon("play") }}</span><span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>0:06</small></div>
+        <div class="msg tutor text">So, what do you do for a living?</div>
+        <div class="msg me voice"><span class="play">{{ icon("play") }}</span><span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>0:09</small></div>
+        <div class="msg tutor card"><img src="/panel/static/card-sample.png" alt="" width="1080" height="2541"><span>Score: 78/100</span></div>
+        <div class="msg tutor voice"><span class="play">{{ icon("play") }}</span><span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>0:07</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona" class="section">
+  <div class="wrap">
+    <div class="head"><span class="kicker">Como funciona</span><h2>Três passos, quantas vezes quiser</h2><p>Cada mensagem vira uma aula curta. Você fala, aprende com o erro e já responde de novo.</p></div>
+    <ol class="steps">
+      <li><span class="num">1</span>{{ icon("mic") }}<h3>Você responde por áudio</h3><p>O tutor puxa assunto sobre um tema do dia a dia. Você grava a resposta em inglês, do seu jeito, ou digita se preferir.</p></li>
+      <li><span class="num">2</span>{{ icon("target") }}<h3>Recebe nota e correções</h3><p>Em segundos chega uma imagem com a nota de 0 a 100, o que corrigir, o porquê de cada correção e a versão natural da frase.</p></li>
+      <li><span class="num">3</span>{{ icon("chat") }}<h3>A conversa continua</h3><p>O tutor responde com um áudio em voz nativa e uma nova pergunta. Não entendeu? Um toque transcreve ou traduz para o português.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap split">
+    <div class="shot"><img src="/panel/static/card-sample.png" alt="Exemplo de correção do saybest: nota 78, quatro correções explicadas, a versão natural da frase e uma dica" width="1080" height="2541" loading="lazy"></div>
+    <div class="split-copy">
+      <span class="kicker">A correção</span>
+      <h2>Você vê exatamente onde errou, e por quê</h2>
+      <ul class="checks">
+        <li>{{ icon("check") }}<span><b>Nota de 0 a 100</b> separada em gramática, vocabulário, fluência e resposta.</span></li>
+        <li>{{ icon("check") }}<span><b>Cada erro marcado</b> na sua frase, com a correção e uma explicação curta.</span></li>
+        <li>{{ icon("check") }}<span><b>A versão natural</b> do que você quis dizer, como um nativo falaria.</span></li>
+        <li>{{ icon("check") }}<span><b>O que foi bem</b> e uma dica prática para a próxima resposta.</span></li>
+      </ul>
+      <p class="muted">O tutor lembra dos erros que você repete e volta a eles na hora certa.</p>
+    </div>
+  </div>
+</section>
+
+<section id="recursos" class="section">
+  <div class="wrap">
+    <div class="head"><span class="kicker">Recursos</span><h2>Feito para você praticar de verdade</h2></div>
+    <div class="grid">
+      <article class="feat">{{ icon("globe") }}<h3>Sotaques americano e britânico</h3><p>Escolha seu tutor: Sarah, Michael, Emma ou George, com vozes naturais.</p></article>
+      <article class="feat">{{ icon("gauge") }}<h3>Velocidade da fala</h3><p>Deixe os áudios do tutor mais devagar enquanto seu ouvido se acostuma.</p></article>
+      <article class="feat">{{ icon("stairs") }}<h3>Do A1 ao C2</h3><p>A conversa acompanha seu nível e você sobe conforme acerta mais.</p></article>
+      <article class="feat">{{ icon("sparkle") }}<h3>Temas do seu dia a dia</h3><p>Entrevista de emprego, viagem, restaurante ou qualquer tema que você escolher.</p></article>
+      <article class="feat">{{ icon("translate") }}<h3>Ajuda em português</h3><p>Transcreva ou traduza a fala do tutor e escreva em português quando faltar a palavra.</p></article>
+      <article class="feat">{{ icon("trophy") }}<h3>Metas, sequência e ranking</h3><p>Defina sua meta diária, mantenha a sequência e dispute o ranking da semana.</p></article>
+    </div>
+    <div class="panel-band">
+      <div>{{ icon("chart") }}<h3>Seu progresso num painel</h3><p>Veja sua nota por dia, os erros que mais se repetem e todas as práticas em um só lugar.</p></div>
+      <a class="btn ghost dark" href="/panel/login">Acessar o painel {{ icon("arrow") }}</a>
+    </div>
+  </div>
+</section>
+
+<section id="planos" class="section alt">
+  <div class="wrap">
+    <div class="head"><span class="kicker">Planos</span><h2>Comece sem pagar nada</h2><p>Crie sua conta e pratique à vontade por 30 dias. Depois, continue de graça.</p></div>
+    <div class="plans">
+      <article class="plan featured">
+        <span class="tag">Ao criar a conta</span>
+        <h3>Teste Ilimitado</h3>
+        <p class="price"><b>R$ 0</b> por 30 dias</p>
+        <ul>
+          <li>{{ icon("check") }} Mensagens ilimitadas</li>
+          <li>{{ icon("check") }} Todos os tutores e sotaques</li>
+          <li>{{ icon("check") }} Todas as velocidades</li>
+          <li>{{ icon("check") }} Painel, metas e ranking</li>
+        </ul>
+        <a class="btn" href="/panel/signup">Começar grátis</a>
+      </article>
+      <article class="plan">
+        <span class="tag muted-tag">Depois dos 30 dias</span>
+        <h3>Grátis</h3>
+        <p class="price"><b>R$ 0</b> para sempre</p>
+        <ul>
+          <li>{{ icon("check") }} 15 mensagens por dia</li>
+          <li>{{ icon("check") }} Tutora Sarah (sotaque americano)</li>
+          <li>{{ icon("check") }} Velocidade normal e um pouco mais lenta</li>
+          <li>{{ icon("check") }} Painel, metas e ranking</li>
+        </ul>
+        <a class="btn ghost dark" href="/panel/signup">Criar conta</a>
+      </article>
+      <article class="plan soon">
+        <span class="tag muted-tag">Em breve</span>
+        <h3>Planos pagos</h3>
+        <p class="price">Mais prática, <b>mais recursos</b></p>
+        <ul>
+          <li>{{ icon("plus") }} Mais mensagens por dia</li>
+          <li>{{ icon("plus") }} Todos os tutores e velocidades</li>
+          <li>{{ icon("plus") }} Novidades primeiro</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="duvidas" class="section">
+  <div class="wrap narrow">
+    <div class="head"><span class="kicker">Dúvidas</span><h2>Perguntas frequentes</h2></div>
+    <div class="faq">
+      <details><summary>Preciso instalar algum aplicativo?</summary><p>Não. Tudo acontece no WhatsApp que você já usa. Você cria a conta no site, confirma o número mandando um código pelo WhatsApp e já pode começar.</p></details>
+      <details><summary>Serve para quem está começando?</summary><p>Sim. Você escolhe o nível, do A1 (iniciante) ao C2, e pode deixar as mensagens de ajuda em português. Se faltar uma palavra, pode até misturar: "I went to the praia" também vale.</p></details>
+      <details><summary>Quem é o tutor?</summary><p>Um tutor de inteligência artificial, com vozes naturais e sotaque americano ou britânico. Ele conversa com você, corrige cada resposta e se lembra dos erros que você mais comete.</p></details>
+      <details><summary>Posso responder por texto?</summary><p>Pode, e você recebe a correção do mesmo jeito. Mas responder por áudio treina a fala e a pronúncia, que é onde a maioria trava.</p></details>
+      <details><summary>Quanto custa?</summary><p>Nada para começar: 30 dias com mensagens ilimitadas e, depois, o plano Grátis com 15 mensagens por dia, sem prazo. Planos pagos com mais recursos estão chegando.</p></details>
+      <details><summary>Como acompanho minha evolução?</summary><p>No painel do site: nota por dia, erros que mais se repetem, suas últimas práticas, a meta do dia, o caminho para o próximo nível e o ranking da semana.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap final-in">
+    <h2>Seu inglês melhora quando você fala. <em>Comece hoje.</em></h2>
+    <p>Crie sua conta em um minuto e mande seu primeiro áudio.</p>
+    <a class="btn" href="/panel/signup">Começar grátis {{ icon("arrow") }}</a>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="brand" href="/">{{ logo() }}<span>say<b>best</b></span></a>
+    <nav aria-label="Rodapé"><a href="/panel/signup">Criar conta</a><a href="/panel/login">Entrar</a><a href="#duvidas">Dúvidas</a></nav>
+    <small>© {{ year }} saybest</small>
+  </div>
+</footer>
+</body>
+</html>
