@@ -55,6 +55,7 @@ export const plans = pgTable(
     tutors: text().array(), // tutor ids the plan offers; null: all
     speeds: doublePrecision().array(), // TTS speeds the plan offers; null: all
     nextPlanId: integer("next_plan_id"), // where the student goes when the plan ends
+    lessonsPerDay: integer("lessons_per_day"), // course lessons a day (/aula); null: unlimited
   },
   (t) => [
     unique("plans_name_key").on(t.name),
@@ -264,4 +265,88 @@ export const auditLog = pgTable(
     createdAt: tz("created_at").defaultNow().notNull(),
   },
   (t) => [index("ix_audit_log_created_at").on(t.createdAt)],
+);
+
+/** Spaced-repetition card of one course item per student (ts-fsrs Card in `fsrs`). Items:
+ * "w:<word id>", "g:<grammar trap>", "ff:<false friend>", "mp:<minimal pair>", "c:<chat>",
+ * "m:<hash>" (a mistake from the conversation; its content is in `data`). */
+export const courseCards = pgTable(
+  "course_cards",
+  {
+    id: serial().primaryKey(),
+    studentId: integer("student_id").notNull(),
+    item: varchar({ length: 160 }).notNull(),
+    due: tz("due").notNull(),
+    fsrs: jsonb().$type<Record<string, unknown>>().notNull(),
+    data: jsonb().$type<Record<string, unknown>>(),
+    createdAt: tz("created_at").defaultNow().notNull(),
+    updatedAt: tz("updated_at").defaultNow().notNull(),
+  },
+  (t) => [
+    unique("course_cards_student_item_key").on(t.studentId, t.item),
+    index("ix_course_cards_due").on(t.studentId, t.due),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "course_cards_student_id_fkey",
+    }).onDelete("cascade"),
+  ],
+);
+
+/** A lesson (/aula) or review (/revisar): the planned steps and the exercise waiting for an
+ * answer. status: active | paused | done | abandoned. */
+export const courseLessons = pgTable(
+  "course_lessons",
+  {
+    id: serial().primaryKey(),
+    studentId: integer("student_id").notNull(),
+    kind: varchar({ length: 12 }).notNull(),
+    status: varchar({ length: 12 }).notNull(),
+    plan: jsonb().$type<unknown[]>().notNull(),
+    position: integer().notNull().default(0),
+    current: jsonb().$type<Record<string, unknown>>(),
+    correct: integer().notNull().default(0),
+    answered: integer().notNull().default(0),
+    points: integer().notNull().default(0),
+    startedAt: tz("started_at").defaultNow().notNull(),
+    updatedAt: tz("updated_at").defaultNow().notNull(),
+    finishedAt: tz("finished_at"),
+  },
+  (t) => [
+    index("ix_course_lessons_student").on(t.studentId, t.startedAt),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "course_lessons_student_id_fkey",
+    }).onDelete("cascade"),
+  ],
+);
+
+/** Every answered exercise (stats, weekly points, sentences not to repeat soon). */
+export const courseAttempts = pgTable(
+  "course_attempts",
+  {
+    id: serial().primaryKey(),
+    lessonId: integer("lesson_id").notNull(),
+    studentId: integer("student_id").notNull(),
+    item: varchar({ length: 160 }).notNull(), // card item, or "s:<sentence id>"
+    type: varchar({ length: 16 }).notNull(),
+    correct: boolean().notNull(),
+    score: integer(), // 0-100 for dictation and speaking
+    answer: text(),
+    createdAt: tz("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("ix_course_attempts_student").on(t.studentId, t.createdAt),
+    foreignKey({
+      columns: [t.lessonId],
+      foreignColumns: [courseLessons.id],
+      name: "course_attempts_lesson_id_fkey",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "course_attempts_student_id_fkey",
+    }).onDelete("cascade"),
+  ],
 );

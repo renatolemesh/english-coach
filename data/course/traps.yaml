@@ -1,0 +1,2245 @@
+# Content for saybest's course. Hand-written; see data/course/LICENSE.md.
+# American English by default. In every item the FIRST wrong option / chat reply order matters:
+# grammar.wrong[0] is the typical Brazilian mistake; chats.options[0] is the right reply.
+
+grammar:
+  # ---------------------------------------------------------------- A1
+  - id: age-be
+    level: A1
+    pt: "Eu tenho 20 anos."
+    right: "I'm 20 years old."
+    wrong: ["I have 20 years.", "I have 20 years old."]
+    tip: "Idade em inglês usa o verbo *be*: I'm 20 (years old). Nunca *have*."
+  - id: age-question
+    level: A1
+    pt: "Quantos anos você tem?"
+    right: "How old are you?"
+    wrong: ["How many years do you have?", "How old do you have?"]
+    tip: "Para perguntar a idade: *How old are you?* (ao pé da letra, 'quão velho você é?')."
+  - id: null-subject-rain
+    level: A1
+    pt: "Está chovendo."
+    right: "It's raining."
+    wrong: ["Is raining."]
+    tip: "Toda frase em inglês precisa de sujeito. Para tempo e clima use *it*: It's raining, it's hot."
+  - id: null-subject-cold-day
+    level: A1
+    pt: "Está frio hoje."
+    right: "It's cold today."
+    wrong: ["Is cold today.", "Makes cold today."]
+    tip: "'Faz frio' não usa *make*: diga *It's cold*. O *it* é obrigatório, mesmo sem significar nada."
+  - id: null-subject-time
+    level: A1
+    pt: "São três horas."
+    right: "It's three o'clock."
+    wrong: ["Are three o'clock.", "Is three o'clock."]
+    tip: "Horas também começam com *it*, sempre no singular: It's three o'clock. Nunca *are*."
+  - id: null-subject-far
+    level: A1
+    pt: "É longe daqui?"
+    right: "Is it far from here?"
+    wrong: ["Is far from here?", "Is it far of here?"]
+    tip: "Na pergunta o *it* vem depois do verbo: *Is it far?* E 'longe de' é *far from*."
+  - id: there-is-bank
+    level: A1
+    pt: "Tem um banco aqui perto?"
+    right: "Is there a bank near here?"
+    wrong: ["Has a bank near here?", "Have a bank near here?"]
+    tip: "'Tem' no sentido de existir é *there is / there are*. Na pergunta: *Is there...? Are there...?*"
+  - id: there-are-parks
+    level: A1
+    pt: "Tem muitos parques na minha cidade."
+    right: "There are many parks in my city."
+    wrong: ["Have many parks in my city.", "Has many parks in my city."]
+    tip: "Para dizer que algo existe num lugar: *There is* (singular) / *There are* (plural)."
+  - id: there-anybody
+    level: A1
+    pt: "Tem alguém aí?"
+    right: "Is anybody there?"
+    wrong: ["Has anybody there?", "Have anybody there?"]
+    tip: "'Tem alguém?' = *Is anybody there?* ou *Is anyone there?* O 'tem' de existir não é *have*."
+  - id: people-are
+    level: A1
+    pt: "As pessoas são simpáticas aqui."
+    right: "People are nice here."
+    wrong: ["People is nice here.", "People are nices here."]
+    tip: "*People* já é plural: *people are*. E adjetivo em inglês não tem plural: *nice*, nunca *nices*."
+  - id: third-person-works
+    level: A1
+    pt: "Ela trabalha num banco."
+    right: "She works at a bank."
+    wrong: ["She work at a bank.", "She working at a bank."]
+    tip: "Com *he/she/it* no presente o verbo ganha *-s*: she works, he lives, it costs."
+  - id: third-person-has
+    level: A1
+    pt: "Ela tem dois filhos."
+    right: "She has two children."
+    wrong: ["She have two children.", "She haves two children."]
+    tip: "*Have* com he/she/it vira *has*: she has, he has. Nunca *haves*."
+  - id: third-person-goes
+    level: A1
+    pt: "Ele vai para o trabalho de ônibus."
+    right: "He goes to work by bus."
+    wrong: ["He go to work by bus.", "He goes to work of bus."]
+    tip: "*Go* com he/she vira *goes*. E meio de transporte usa *by*: by bus, by car, by train."
+  - id: doesnt-like
+    level: A1
+    pt: "Ele não gosta de café."
+    right: "He doesn't like coffee."
+    wrong: ["He doesn't likes coffee.", "He no like coffee."]
+    tip: "Negativa com he/she/it: *doesn't* + verbo sem -s. O -s já está no *does*: he doesn't like."
+  - id: does-she-speak
+    level: A1
+    pt: "Ela fala inglês?"
+    right: "Does she speak English?"
+    wrong: ["Do she speak English?", "Does she speaks English?"]
+    tip: "Pergunta com he/she/it começa com *Does*, e o verbo fica sem -s: Does she speak...?"
+  - id: do-you-live
+    level: A1
+    pt: "Você mora aqui?"
+    right: "Do you live here?"
+    wrong: ["Are you live here?", "Do you lives here?"]
+    tip: "Pergunta com verbo comum usa *Do*: *Do you live here?* Não junte *are* com o verbo na forma básica."
+  - id: dont-have-car
+    level: A1
+    pt: "Nós não temos carro."
+    right: "We don't have a car."
+    wrong: ["We no have a car.", "We don't have car."]
+    tip: "Negativa no presente: *don't* + verbo. E substantivo contável no singular pede *a*: a car."
+  - id: article-job
+    level: A1
+    pt: "Eu sou professor."
+    right: "I'm a teacher."
+    wrong: ["I'm teacher.", "I'm an teacher."]
+    tip: "Profissão em inglês leva *a/an*: I'm a teacher, she's an engineer."
+  - id: article-an-job
+    level: A1
+    pt: "Ela é engenheira."
+    right: "She's an engineer."
+    wrong: ["She's engineer.", "She's a engineer."]
+    tip: "Use *an* antes de som de vogal: an engineer, an apple, an hour. *A* antes de som de consoante."
+  - id: article-an-apple
+    level: A1
+    pt: "Eu comi uma maçã."
+    right: "I ate an apple."
+    wrong: ["I ate a apple.", "I eated an apple."]
+    tip: "*An* antes de som de vogal: an apple. E o passado de *eat* é irregular: *ate*."
+  - id: adjective-before-noun
+    level: A1
+    pt: "Eu tenho um carro vermelho."
+    right: "I have a red car."
+    wrong: ["I have a car red.", "I have a reds car."]
+    tip: "Em inglês o adjetivo vem *antes* do substantivo: a red car, a big house, good food."
+  - id: can-no-to
+    level: A1
+    pt: "Ele sabe nadar."
+    right: "He can swim."
+    wrong: ["He can to swim.", "He cans swim."]
+    tip: "Depois de *can* o verbo vem direto, sem *to*: can swim, can speak. E *can* não ganha -s."
+  - id: hungry-be
+    level: A1
+    pt: "Estou com fome."
+    right: "I'm hungry."
+    wrong: ["I have hungry.", "I'm with hunger."]
+    tip: "'Estar com fome/sede' em inglês é *be* + adjetivo: I'm hungry, I'm thirsty."
+  - id: cold-be
+    level: A1
+    pt: "Estou com frio."
+    right: "I'm cold."
+    wrong: ["I have cold.", "I'm with cold."]
+    tip: "'Estou com frio' = *I'm cold*. Cuidado: *I have a cold* é 'estou resfriado'."
+  - id: listen-to
+    level: A1
+    pt: "Eu escuto música todo dia."
+    right: "I listen to music every day."
+    wrong: ["I listen music every day.", "I hear to music every day."]
+    tip: "*Listen* sempre pede *to* antes do que se escuta: listen to music, listen to me."
+  - id: on-monday
+    level: A1
+    pt: "A reunião é na segunda."
+    right: "The meeting is on Monday."
+    wrong: ["The meeting is in Monday.", "The meeting is at Monday."]
+    tip: "Dias da semana e datas usam *on*: on Monday, on Friday night, on May 5th."
+  - id: at-oclock
+    level: A1
+    pt: "A aula começa às 7 horas."
+    right: "The class starts at 7 o'clock."
+    wrong: ["The class starts in 7 o'clock.", "The class starts on 7 o'clock."]
+    tip: "Horário exato usa *at*: at 7 o'clock, at noon, at 9:30."
+  - id: born-in
+    level: A1
+    pt: "Eu nasci em 1995."
+    right: "I was born in 1995."
+    wrong: ["I born in 1995.", "I was born on 1995."]
+    tip: "'Nasci' é *I was born* (com *was*). Ano e mês usam *in*: in 1995, in May."
+  - id: at-home
+    level: A1
+    pt: "Estou em casa."
+    right: "I'm at home."
+    wrong: ["I'm in home.", "I'm on home."]
+    tip: "'Em casa' é *at home* (ou só *I'm home*). O mesmo vale para *at work* e *at school*."
+  - id: how-much-price
+    level: A1
+    pt: "Quanto custa?"
+    right: "How much is it?"
+    wrong: ["How many is it?", "How much costs?"]
+    tip: "Preço: *How much is it?* ou *How much does it cost?* *How many* é para quantidade que se conta."
+  - id: how-many-siblings
+    level: A1
+    pt: "Quantos irmãos você tem?"
+    right: "How many siblings do you have?"
+    wrong: ["How much siblings do you have?", "How many siblings do you has?"]
+    tip: "*How many* para o que se conta, e a pergunta precisa do *do*. *Siblings* = irmãos e irmãs."
+  - id: language-no-article
+    level: A1
+    pt: "Eu estudo inglês."
+    right: "I study English."
+    wrong: ["I study the English.", "I studies English."]
+    tip: "Idiomas não levam *the* e sempre têm inicial maiúscula: English, Portuguese, Spanish."
+  - id: would-like-no-of
+    level: A1
+    pt: "Eu queria um café, por favor."
+    right: "I'd like a coffee, please."
+    wrong: ["I'd like of a coffee, please."]
+    tip: "Para pedir com educação: *I'd like* + a coisa, sem *of*: I'd like a coffee, I'd like the menu."
+  - id: what-do-you-do
+    level: A1
+    pt: "O que você faz? (profissão)"
+    right: "What do you do?"
+    wrong: ["What does you do?", "What are you do?"]
+    tip: "Para perguntar a profissão: *What do you do?* Resposta: I'm a nurse / I work in sales."
+
+  # ---------------------------------------------------------------- A2
+  - id: height-be
+    level: A2
+    pt: "Eu tenho 1,80 m."
+    right: "I'm 1.80 meters tall."
+    wrong: ["I have 1.80 meters.", "I have 1.80 meters tall."]
+    tip: "Altura também usa *be*: I'm 1.80 m (tall). E em inglês o decimal é com ponto: 1.80."
+  - id: police-are
+    level: A2
+    pt: "A polícia está chegando."
+    right: "The police are coming."
+    wrong: ["The police is coming.", "The polices are coming."]
+    tip: "*Police* é sempre plural em inglês: the police are, the police have. Nunca *polices*."
+  - id: everybody-is
+    level: A2
+    pt: "Todo mundo está feliz."
+    right: "Everybody is happy."
+    wrong: ["Everybody are happy.", "Everybodies are happy."]
+    tip: "*Everybody/everyone* parece plural, mas o verbo fica no singular: everybody is, everyone knows."
+  - id: didnt-go
+    level: A2
+    pt: "Eu não fui à festa."
+    right: "I didn't go to the party."
+    wrong: ["I didn't went to the party.", "I no went to the party."]
+    tip: "Depois de *didn't* o verbo volta à forma básica: didn't go, didn't see. O passado já está no *did*."
+  - id: want-you-to
+    level: A2
+    pt: "Eu quero que você venha."
+    right: "I want you to come."
+    wrong: ["I want that you come.", "I want you come."]
+    tip: "'Querer que alguém faça' = *want* + pessoa + *to*: I want you to come. Nunca *want that*."
+  - id: what-do-you-call
+    level: A2
+    pt: "Como se chama isso em inglês?"
+    right: "What do you call this in English?"
+    wrong: ["How do you call this in English?", "How is called this in English?"]
+    tip: "Com *call* a pergunta é com *What*: What do you call this? Ou: *How do you say ... in English?*"
+  - id: i-agree
+    level: A2
+    pt: "Eu concordo com você."
+    right: "I agree with you."
+    wrong: ["I'm agree with you.", "I agree to you."]
+    tip: "*Agree* já é verbo: I agree. Nada de *I'm agree*. Concordar com alguém: *agree with*."
+  - id: depend-on
+    level: A2
+    pt: "Depende do tempo."
+    right: "It depends on the weather."
+    wrong: ["It depends of the weather.", "Depends of the weather."]
+    tip: "Em inglês é *depend on*, nunca *depend of*. E lembre do sujeito: *It depends*."
+  - id: married-to
+    level: A2
+    pt: "Ela é casada com um médico."
+    right: "She's married to a doctor."
+    wrong: ["She's married with a doctor.", "She's married of a doctor."]
+    tip: "Ser casado com alguém: *married to*. Casar com alguém: *marry someone*, sem preposição."
+  - id: arrive-in-city
+    level: A2
+    pt: "Chegamos em Londres ontem."
+    right: "We arrived in London yesterday."
+    wrong: ["We arrived to London yesterday.", "We arrived on London yesterday."]
+    tip: "*Arrive* nunca usa *to*. Cidade ou país: *arrive in*. Lugar específico: *arrive at* (at the airport)."
+  - id: arrive-at-place
+    level: A2
+    pt: "Chegamos no aeroporto às 8."
+    right: "We arrived at the airport at 8."
+    wrong: ["We arrived to the airport at 8.", "We arrived the airport at 8."]
+    tip: "Chegar a um lugar específico: *arrive at* (the airport, the hotel, work). Com *arrive*, nada de *to*."
+  - id: in-month
+    level: A2
+    pt: "Meu aniversário é em maio."
+    right: "My birthday is in May."
+    wrong: ["My birthday is on May.", "My birthday is at May."]
+    tip: "Meses, anos e estações usam *in*: in May, in 2025, in the summer."
+  - id: on-date
+    level: A2
+    pt: "Meu aniversário é no dia 5 de maio."
+    right: "My birthday is on May 5th."
+    wrong: ["My birthday is in May 5th.", "My birthday is at May 5th."]
+    tip: "Data com dia usa *on*: on May 5th. Só o mês usa *in*: in May."
+  - id: in-the-morning
+    level: A2
+    pt: "Eu corro de manhã."
+    right: "I run in the morning."
+    wrong: ["I run on the morning.", "I run at the morning."]
+    tip: "Partes do dia: *in the morning*, *in the afternoon*, *in the evening*. Exceção: *at night*."
+  - id: good-at
+    level: A2
+    pt: "Sou bom em cozinhar."
+    right: "I'm good at cooking."
+    wrong: ["I'm good in cooking.", "I'm good on cooking."]
+    tip: "Ser bom em algo: *good at*: good at math, good at cooking. Depois de preposição, verbo com *-ing*."
+  - id: interested-in
+    level: A2
+    pt: "Tenho interesse em arte."
+    right: "I'm interested in art."
+    wrong: ["I'm interested on art.", "I'm interesting in art."]
+    tip: "*Interested in* = interessado em. Cuidado: *I'm interesting* = eu sou interessante!"
+  - id: wait-for
+    level: A2
+    pt: "Estou esperando o ônibus."
+    right: "I'm waiting for the bus."
+    wrong: ["I'm waiting the bus.", "I'm waiting to the bus."]
+    tip: "*Wait* pede *for* antes do que se espera: wait for the bus, wait for me."
+  - id: at-work
+    level: A2
+    pt: "Ela está no trabalho."
+    right: "She's at work."
+    wrong: ["She's in the work.", "She's on work."]
+    tip: "'No trabalho' = *at work*, sem *the*. Igual a *at home* e *at school*."
+  - id: go-home
+    level: A2
+    pt: "Vou para casa agora."
+    right: "I'm going home now."
+    wrong: ["I'm going to home now.", "I'm going at home now."]
+    tip: "Com *home* não se usa *to*: go home, come home, get home. Mas: go to work, go to school."
+  - id: where-does-she-live
+    level: A2
+    pt: "Onde ela mora?"
+    right: "Where does she live?"
+    wrong: ["Where she lives?", "Where does she lives?"]
+    tip: "Pergunta com Wh- + verbo comum precisa de *do/does*: Where does she live? O -s vai para o *does*."
+  - id: where-is-station
+    level: A2
+    pt: "Onde fica a estação?"
+    right: "Where is the station?"
+    wrong: ["Where the station is?", "Where stays the station?"]
+    tip: "Na pergunta direta o *is* vem antes do sujeito: Where is the station? 'Ficar' aqui é só *be*."
+  - id: like-word-order
+    level: A2
+    pt: "Eu gosto muito de pizza."
+    right: "I really like pizza."
+    wrong: ["I like very much pizza.", "I very like pizza."]
+    tip: "*Very much* vai no fim: I like pizza very much. Ou use *really* antes do verbo: I really like pizza."
+  - id: make-mistake
+    level: A2
+    pt: "Eu cometi um erro."
+    right: "I made a mistake."
+    wrong: ["I did a mistake.", "I maked a mistake."]
+    tip: "Erro usa *make*: make a mistake. E o passado de *make* é *made*."
+  - id: do-homework
+    level: A2
+    pt: "Eu fiz a lição de casa."
+    right: "I did my homework."
+    wrong: ["I made my homework.", "I maked my homework."]
+    tip: "Tarefas e obrigações usam *do*: do homework, do the dishes, do the laundry."
+  - id: ask-question
+    level: A2
+    pt: "Posso fazer uma pergunta?"
+    right: "Can I ask a question?"
+    wrong: ["Can I make a question?", "Can I do a question?"]
+    tip: "Fazer uma pergunta é *ask a question*. Nem *make*, nem *do*."
+  - id: have-party
+    level: A2
+    pt: "Vamos dar uma festa no sábado."
+    right: "We're having a party on Saturday."
+    wrong: ["We're making a party on Saturday."]
+    tip: "Festa usa *have* (ou *throw*): have a party. Com festa não se usa *make*."
+  - id: go-to-gym
+    level: A2
+    pt: "Eu faço academia três vezes por semana."
+    right: "I go to the gym three times a week."
+    wrong: ["I make gym three times a week.", "I do academy three times a week."]
+    tip: "'Fazer academia' = *go to the gym* ou *work out*. *Academy* é escola (de polícia, de artes...)."
+  - id: comparative-er
+    level: A2
+    pt: "Minha casa é maior que a sua."
+    right: "My house is bigger than yours."
+    wrong: ["My house is more big than yours.", "My house is bigger that yours."]
+    tip: "Adjetivo curto ganha *-er*: bigger, cheaper, older. *More* é para adjetivos longos. 'Que' é *than*."
+  - id: more-better
+    level: A2
+    pt: "Este é melhor."
+    right: "This one is better."
+    wrong: ["This one is more better.", "This one is more good."]
+    tip: "*Better* já é 'mais bom': nunca *more better*. O mesmo com *worse* (pior)."
+  - id: superlative-est
+    level: A2
+    pt: "Ela é a mais alta da turma."
+    right: "She's the tallest in the class."
+    wrong: ["She's the most tall in the class.", "She's the more tall in the class."]
+    tip: "Superlativo de adjetivo curto: *the* + *-est*: the tallest, the cheapest. Com grupo ou lugar, use *in*."
+  - id: the-life
+    level: A2
+    pt: "A vida é difícil."
+    right: "Life is hard."
+    wrong: ["The life is hard."]
+    tip: "Falando de algo em geral, não use *the*: Life is hard, Love is blind, Time is money."
+  - id: possessive-name
+    level: A2
+    pt: "A casa da Ana é grande."
+    right: "Ana's house is big."
+    wrong: ["The house of Ana is big.", "Ana house is big."]
+    tip: "Posse com pessoas usa *'s*: Ana's house, my mom's car. *The house of Ana* não se usa."
+  - id: possessive-father
+    level: A2
+    pt: "O carro do meu pai é novo."
+    right: "My father's car is new."
+    wrong: ["The car of my father is new.", "My father car is new."]
+    tip: "Posse de pessoa: dono + *'s* + coisa: my father's car. A ordem é a contrária do português."
+  - id: information-uncountable
+    level: A2
+    pt: "Preciso de mais informações."
+    right: "I need more information."
+    wrong: ["I need more informations."]
+    tip: "*Information* é incontável: não tem plural nem *an*. Uma informação: *a piece of information*."
+  - id: advice-uncountable
+    level: A2
+    pt: "Ela me deu um conselho."
+    right: "She gave me some advice."
+    wrong: ["She gave me an advice.", "She gave me a advice."]
+    tip: "*Advice* é incontável: some advice, a lot of advice. Um conselho: *a piece of advice*."
+  - id: say-tell
+    level: A2
+    pt: "Ela me disse a verdade."
+    right: "She told me the truth."
+    wrong: ["She said me the truth.", "She told to me the truth."]
+    tip: "*Tell* + pessoa: told me. *Say* sem pessoa (ou com *to*): she said it to me. Verdade e mentira: *tell*."
+  - id: look-at
+    level: A2
+    pt: "Olha isso!"
+    right: "Look at this!"
+    wrong: ["Look this!", "Watch at this!"]
+    tip: "*Look* pede *at* antes do que se olha: look at this, look at me."
+  - id: watch-movie
+    level: A2
+    pt: "Eu assisti um filme ontem."
+    right: "I watched a movie yesterday."
+    wrong: ["I assisted a movie yesterday.", "I looked a movie yesterday."]
+    tip: "Assistir TV, filme ou jogo é *watch*. *Assist* é ajudar!"
+  - id: hear-me
+    level: A2
+    pt: "Você está me ouvindo?"
+    right: "Can you hear me?"
+    wrong: ["Can you listen me?", "Can you hear to me?"]
+    tip: "*Hear* = ouvir (o som chega). *Listen to* = escutar com atenção. Numa ligação: *Can you hear me?*"
+  - id: ago
+    level: A2
+    pt: "Cheguei há dois dias."
+    right: "I arrived two days ago."
+    wrong: ["I arrived has two days.", "I arrived ago two days."]
+    tip: "'Há' (tempo passado) = *ago*, e vem depois do tempo: two days ago, a year ago."
+  - id: wont
+    level: A2
+    pt: "Eu não vou esquecer."
+    right: "I won't forget."
+    wrong: ["I don't will forget.", "I willn't forget."]
+    tip: "A negativa de *will* é *will not*, contraída para *won't*: I won't forget."
+  - id: going-to-plan
+    level: A2
+    pt: "Vou viajar para o Chile em julho."
+    right: "I'm going to travel to Chile in July."
+    wrong: ["I going to travel to Chile in July.", "I'm going travel to Chile in July."]
+    tip: "Plano já decidido: *be going to* + verbo. Não esqueça o *am/is/are* nem o *to*."
+  - id: have-to
+    level: A2
+    pt: "Eu tenho que ir."
+    right: "I have to go."
+    wrong: ["I have that go.", "I must to go."]
+    tip: "'Ter que' = *have to*. Com *must* não se usa *to*: I must go."
+  - id: should-no-to
+    level: A2
+    pt: "Você deveria descansar."
+    right: "You should rest."
+    wrong: ["You should to rest.", "You should resting."]
+    tip: "Depois de *should*, *can*, *must* e *will* o verbo vem direto, sem *to*."
+  - id: for-to-purpose
+    level: A2
+    pt: "Estou aqui para aprender."
+    right: "I'm here to learn."
+    wrong: ["I'm here for to learn.", "I'm here for learn."]
+    tip: "'Para' + verbo (finalidade) é só *to*: I'm here to learn. Nunca *for to*."
+  - id: proud-of
+    level: A2
+    pt: "Tenho orgulho de você."
+    right: "I'm proud of you."
+    wrong: ["I have proud of you.", "I'm proud with you."]
+    tip: "'Ter orgulho de' em inglês é *be proud of*: I'm proud of you."
+  - id: think-about
+    level: A2
+    pt: "Estou pensando em você."
+    right: "I'm thinking about you."
+    wrong: ["I'm thinking in you."]
+    tip: "'Pensar em' alguém ou algo = *think about* ou *think of*. Nunca *think in*."
+  - id: order-food
+    level: A2
+    pt: "Eu pedi uma pizza."
+    right: "I ordered a pizza."
+    wrong: ["I asked a pizza."]
+    tip: "Pedir comida (restaurante, delivery) é *order*. *Ask for* é pedir algo a alguém: ask for help."
+  - id: afraid-of
+    level: A2
+    pt: "Tenho medo de cachorro."
+    right: "I'm afraid of dogs."
+    wrong: ["I have afraid of dogs.", "I'm afraid from dogs."]
+    tip: "'Ter medo de' = *be afraid of* (ou *be scared of*). Nada de *have*."
+  - id: call-someone
+    level: A2
+    pt: "Eu te ligo amanhã."
+    right: "I'll call you tomorrow."
+    wrong: ["I'll call to you tomorrow.", "I'll phone to you tomorrow."]
+    tip: "'Ligar para alguém' = *call someone*, sem *to*: call me, call your mom."
+  - id: there-were-people
+    level: A2
+    pt: "Tinha muita gente na festa."
+    right: "There were a lot of people at the party."
+    wrong: ["Had a lot of people at the party.", "It had a lot of people at the party."]
+    tip: "'Tinha' (existia) no passado: *there was* (singular) / *there were* (plural). *People* é plural."
+  - id: double-negative-anyone
+    level: A2
+    pt: "Eu não conheço ninguém aqui."
+    right: "I don't know anyone here."
+    wrong: ["I don't know nobody here.", "I don't know no one here."]
+    tip: "Em inglês é uma negação só: *don't ... anyone* ou *know no one*. Nunca *don't ... nobody*."
+  - id: an-hour
+    level: A2
+    pt: "Esperei uma hora."
+    right: "I waited for an hour."
+    wrong: ["I waited for a hour.", "I waited for an hours."]
+    tip: "O *h* de *hour* é mudo, então o som começa com vogal: *an hour*. Mesmo caso: *an honest man*."
+  - id: very-tired
+    level: A2
+    pt: "Estou muito cansado."
+    right: "I'm very tired."
+    wrong: ["I'm too much tired.", "I'm tired very."]
+    tip: "'Muito' antes de adjetivo é *very* (ou *so*, *really*). *Too much* não vai antes de adjetivo."
+  - id: plural-adjective
+    level: A2
+    pt: "Eles são pessoas diferentes."
+    right: "They're different people."
+    wrong: ["They're differents people.", "They're people differents."]
+    tip: "Adjetivo em inglês nunca vai para o plural e vem antes do substantivo: different people, new cars."
+
+  # ---------------------------------------------------------------- B1
+  - id: since-year
+    level: B1
+    pt: "Trabalho aqui desde 2020."
+    right: "I've worked here since 2020."
+    wrong: ["I work here since 2020.", "I've worked here for 2020."]
+    tip: "Começou no passado e continua: *present perfect* + *since* (ponto de partida): since 2020, since Monday."
+  - id: for-period
+    level: B1
+    pt: "Moro aqui há dois anos."
+    right: "I've lived here for two years."
+    wrong: ["I live here for two years.", "I've lived here since two years."]
+    tip: "'Há 2 anos' (e continua) = *I've lived here for two years*. *For* + período; *since* + início."
+  - id: it-has-years
+    level: B1
+    pt: "Faz três anos que estudo inglês."
+    right: "I've been studying English for three years."
+    wrong: ["It has three years that I study English.", "I study English for three years."]
+    tip: "'Faz X tempo que...' vira *I've been ...ing for X*: I've been studying English for three years."
+  - id: how-long-have
+    level: B1
+    pt: "Há quanto tempo você mora aqui?"
+    right: "How long have you lived here?"
+    wrong: ["How long do you live here?", "How much time you live here?"]
+    tip: "Duração até agora: *How long have you...?*, com present perfect, não com o presente simples."
+  - id: been-to
+    level: B1
+    pt: "Você já foi a Paris?"
+    right: "Have you ever been to Paris?"
+    wrong: ["Have you ever went to Paris?", "Did you ever been to Paris?"]
+    tip: "Experiência de vida: *Have you ever been to...?* Já *Do you know Paris?* soa como 'você conhece bem Paris?'"
+  - id: past-yesterday
+    level: B1
+    pt: "Eu vi a Ana ontem."
+    right: "I saw Ana yesterday."
+    wrong: ["I have seen Ana yesterday.", "I've saw Ana yesterday."]
+    tip: "Com tempo passado definido (*yesterday*, *last week*, *in 2020*) use o *past simple*: I saw."
+  - id: past-last-year
+    level: B1
+    pt: "Fui ao Japão ano passado."
+    right: "I went to Japan last year."
+    wrong: ["I've been to Japan last year.", "I have went to Japan last year."]
+    tip: "*Last year* marca um momento que já acabou: past simple (*I went*). *I've been to Japan* é sem data."
+  - id: never-eaten
+    level: B1
+    pt: "Nunca comi sushi."
+    right: "I've never eaten sushi."
+    wrong: ["I have never eat sushi.", "I've never eating sushi."]
+    tip: "Experiência (sem data): *have* + particípio. O particípio de *eat* é *eaten*: I've never eaten..."
+  - id: explain-to-me
+    level: B1
+    pt: "Você pode me explicar isso?"
+    right: "Can you explain this to me?"
+    wrong: ["Can you explain me this?", "Can you explain me it?"]
+    tip: "*Explain* não aceita a pessoa logo depois: *explain something to someone*. O mesmo vale para *describe*."
+  - id: discuss-no-about
+    level: B1
+    pt: "Precisamos discutir o projeto."
+    right: "We need to discuss the project."
+    wrong: ["We need to discuss about the project.", "We need to discuss of the project."]
+    tip: "*Discuss* vai direto ao assunto, sem *about*: discuss the project. Mas: *talk about* the project."
+  - id: enter-no-in
+    level: B1
+    pt: "Ele entrou na sala."
+    right: "He entered the room."
+    wrong: ["He entered in the room.", "He entered to the room."]
+    tip: "*Enter* não leva preposição: enter the room. Mais natural ainda: *He came into the room*."
+  - id: used-to-habit
+    level: B1
+    pt: "Eu jogava futebol quando era criança."
+    right: "I used to play soccer as a kid."
+    wrong: ["I'm used to play soccer as a kid.", "I was used to play soccer as a kid."]
+    tip: "Hábito do passado que acabou: *used to* + verbo. *Be used to* é outra coisa: estar acostumado."
+  - id: remind-me
+    level: B1
+    pt: "Me lembra de ligar para ela."
+    right: "Remind me to call her."
+    wrong: ["Remember me to call her.", "Remind me of call her."]
+    tip: "*Remind* = fazer alguém lembrar. *Remember* = lembrar você mesmo. Remind me to..., I remember it."
+  - id: remember-name
+    level: B1
+    pt: "Não lembro o nome dele."
+    right: "I don't remember his name."
+    wrong: ["I don't remind his name.", "I don't remember of his name."]
+    tip: "Lembrar (você mesmo) = *remember*, sem *of*: I remember his name. *Remind* é lembrar outra pessoa."
+  - id: lend-me
+    level: B1
+    pt: "Você me empresta sua caneta?"
+    right: "Can you lend me your pen?"
+    wrong: ["Can you borrow me your pen?", "Can you lend to me your pen?"]
+    tip: "*Lend* = emprestar (dar). *Borrow* = pegar emprestado. Can you lend me...? / Can I borrow...?"
+  - id: borrow-car
+    level: B1
+    pt: "Posso pegar seu carro emprestado?"
+    right: "Can I borrow your car?"
+    wrong: ["Can I lend your car?", "Can I borrow to your car?"]
+    tip: "Quem pega emprestado usa *borrow*: Can I borrow your car? Quem empresta usa *lend*."
+  - id: beat-team
+    level: B1
+    pt: "O Brasil venceu a Argentina."
+    right: "Brazil beat Argentina."
+    wrong: ["Brazil won Argentina.", "Brazil won to Argentina."]
+    tip: "*Win* = ganhar o jogo, o prêmio: win the game. *Beat* = vencer o adversário: beat Argentina."
+  - id: win-lottery
+    level: B1
+    pt: "Ele ganhou na loteria."
+    right: "He won the lottery."
+    wrong: ["He gained the lottery.", "He earned the lottery."]
+    tip: "Prêmio, jogo ou sorteio: *win*. *Earn* é ganhar pelo trabalho; *gain* é ganhar peso, experiência."
+  - id: earn-money
+    level: B1
+    pt: "Ela ganha bem no emprego novo."
+    right: "She earns good money at her new job."
+    wrong: ["She wins good money at her new job.", "She gains good money at her new job."]
+    tip: "Salário usa *earn* (ou *make*): she earns good money. *Win* é para prêmios e jogos."
+  - id: rob-bank
+    level: B1
+    pt: "Assaltaram o banco."
+    right: "They robbed the bank."
+    wrong: ["They stole the bank.", "They assaulted the bank."]
+    tip: "*Rob* tem como objeto o lugar ou a pessoa: rob a bank. *Steal* é a coisa levada: steal money."
+  - id: indirect-question
+    level: B1
+    pt: "Você sabe onde fica a estação?"
+    right: "Do you know where the station is?"
+    wrong: ["Do you know where is the station?", "Do you know where stays the station?"]
+    tip: "Pergunta dentro de outra (Do you know..., Can you tell me...) usa a ordem normal: where the station *is*."
+  - id: what-like
+    level: B1
+    pt: "Como ela é? (personalidade)"
+    right: "What's she like?"
+    wrong: ["How is she like?", "How she is?"]
+    tip: "'Como é alguém/algo?' = *What's ... like?* *How is she?* pergunta como ela está (saúde, humor)."
+  - id: if-present
+    level: B1
+    pt: "Se chover, eu fico em casa."
+    right: "If it rains, I'll stay home."
+    wrong: ["If it will rain, I'll stay home.", "If rains, I'll stay home."]
+    tip: "Depois de *if* (condição real) use o presente, não *will*: If it rains, I'll stay home."
+  - id: make-someone-do
+    level: B1
+    pt: "Ele me fez esperar."
+    right: "He made me wait."
+    wrong: ["He made me to wait.", "He did me wait."]
+    tip: "*Make* + pessoa + verbo sem *to*: He made me wait. O mesmo com *let*: let me go."
+  - id: let-someone-do
+    level: B1
+    pt: "Minha mãe não me deixa sair."
+    right: "My mom doesn't let me go out."
+    wrong: ["My mom doesn't let me to go out.", "My mom doesn't leave me go out."]
+    tip: "'Deixar alguém fazer' = *let* + pessoa + verbo, sem *to*. *Leave* é deixar um lugar ou algo para trás."
+  - id: enough-position
+    level: B1
+    pt: "Ele não tem idade suficiente."
+    right: "He isn't old enough."
+    wrong: ["He isn't enough old.", "He isn't old sufficient."]
+    tip: "*Enough* vem depois do adjetivo (old enough, big enough) e antes do substantivo (enough money)."
+  - id: one-of-the
+    level: B1
+    pt: "Ela é uma das melhores alunas."
+    right: "She's one of the best students."
+    wrong: ["She's one of the best student.", "She's one of best students."]
+    tip: "*One of the* + substantivo no plural: one of the best students, one of my friends."
+  - id: same-as
+    level: B1
+    pt: "Meu celular é igual ao seu."
+    right: "My phone is the same as yours."
+    wrong: ["My phone is the same of yours.", "My phone is same that yours."]
+    tip: "'Igual a' = *the same as*. Sempre com *the*, e com *as*, não *of* nem *that*."
+  - id: a-university
+    level: B1
+    pt: "Ela estuda numa universidade."
+    right: "She studies at a university."
+    wrong: ["She studies at an university.", "She studies in an university."]
+    tip: "*A/an* depende do som: *university* começa com som de 'iu' (consoante), então é *a*."
+  - id: furniture-uncountable
+    level: B1
+    pt: "Compramos móveis novos."
+    right: "We bought new furniture."
+    wrong: ["We bought new furnitures.", "We bought a new furnitures."]
+    tip: "*Furniture* é incontável: sem plural. Um móvel: *a piece of furniture*."
+  - id: news-singular
+    level: B1
+    pt: "As notícias são boas."
+    right: "The news is good."
+    wrong: ["The news are good.", "The new is good."]
+    tip: "*News* termina em -s mas é singular e incontável: the news is. Uma notícia: *a piece of news*."
+  - id: luggage-uncountable
+    level: B1
+    pt: "Minha bagagem está no carro."
+    right: "My luggage is in the car."
+    wrong: ["My luggages are in the car.", "My luggages is in the car."]
+    tip: "*Luggage* (e *baggage*) é incontável: sem plural. Para contar, use *bags*: two bags."
+  - id: pay-for
+    level: B1
+    pt: "Eu paguei o jantar."
+    right: "I paid for dinner."
+    wrong: ["I paid the dinner.", "I paid to dinner."]
+    tip: "Pagar por algo = *pay for*: pay for dinner, pay for the tickets. Sem *for*, só conta ou valor: pay the bill."
+  - id: double-negative-anything
+    level: B1
+    pt: "Eu não fiz nada."
+    right: "I didn't do anything."
+    wrong: ["I didn't do nothing.", "I not did anything."]
+    tip: "Uma negação só: *didn't ... anything* ou *did nothing*. *Didn't do nothing* é erro no inglês padrão."
+  - id: either-negative
+    level: B1
+    pt: "Eu também não gosto disso."
+    right: "I don't like it either."
+    wrong: ["I don't like it too.", "I don't like it neither."]
+    tip: "'Também' em frase negativa é *either*, não *too*. Na resposta curta: *Me neither* / *Neither do I*."
+  - id: such-a
+    level: B1
+    pt: "Foi um dia tão bom."
+    right: "It was such a good day."
+    wrong: ["It was so good day.", "It was such good day."]
+    tip: "*Such a* + adjetivo + substantivo: such a good day. *So* + adjetivo sozinho: the day was so good."
+
+  # ---------------------------------------------------------------- B2
+  - id: suggest-that
+    level: B2
+    pt: "Ele sugeriu que a gente saísse cedo."
+    right: "He suggested that we leave early."
+    wrong: ["He suggested us to leave early.", "He suggested to leave early."]
+    tip: "*Suggest* não aceita pessoa + *to*. Use *suggest (that) we leave* ou *suggest leaving*."
+  - id: be-used-to
+    level: B2
+    pt: "Estou acostumado a acordar cedo."
+    right: "I'm used to waking up early."
+    wrong: ["I'm used to wake up early.", "I'm used of waking up early."]
+    tip: "*Be used to* = estar acostumado, e esse *to* é preposição: depois vem *-ing*. I'm used to waking up early."
+  - id: steal-phone
+    level: B2
+    pt: "Roubaram meu celular."
+    right: "Someone stole my phone."
+    wrong: ["Someone robbed my phone.", "Someone stealed my phone."]
+    tip: "A coisa roubada pede *steal* (stole, stolen). *Rob* é para a pessoa ou o lugar: They robbed me."
+  - id: worth-ing
+    level: B2
+    pt: "Vale a pena visitar."
+    right: "It's worth visiting."
+    wrong: ["It's worth to visit.", "Is worth visiting."]
+    tip: "*Worth* pede *-ing*: it's worth visiting, it's worth trying. E não esqueça o *it*."
+  - id: look-forward-ing
+    level: B2
+    pt: "Estou ansioso para te ver."
+    right: "I'm looking forward to seeing you."
+    wrong: ["I'm looking forward to see you.", "I'm looking forward for seeing you."]
+    tip: "Em *look forward to* o *to* é preposição, então vem *-ing*: looking forward to seeing you."
+  - id: would-rather
+    level: B2
+    pt: "Prefiro ficar em casa."
+    right: "I'd rather stay home."
+    wrong: ["I'd rather to stay home.", "I'd rather staying home."]
+    tip: "*I'd rather* + verbo sem *to*: I'd rather stay home. Com *prefer* muda: I'd prefer to stay home."
+  - id: if-i-were-you
+    level: B2
+    pt: "Se eu fosse você, eu aceitaria."
+    right: "If I were you, I'd accept it."
+    wrong: ["If I would be you, I'd accept it.", "If I am you, I'd accept it."]
+    tip: "Hipótese: *if* + passado; o *would* fica na outra parte. *If I were you* é a forma fixa dos conselhos."
+  - id: wish-past
+    level: B2
+    pt: "Queria ter mais tempo."
+    right: "I wish I had more time."
+    wrong: ["I wish I have more time.", "I wish I will have more time."]
+    tip: "Desejo sobre o presente: *I wish* + passado: I wish I had, I wish I were. Aqui 'queria' é desejo."
+  - id: mind-ing
+    level: B2
+    pt: "Você se importa de fechar a janela?"
+    right: "Would you mind closing the window?"
+    wrong: ["Would you mind to close the window?", "Would you mind close the window?"]
+    tip: "*Mind* pede *-ing*: Would you mind closing...? Para aceitar: *Not at all* / *No problem*."
+  - id: avoid-ing
+    level: B2
+    pt: "Eu evito comer tarde da noite."
+    right: "I avoid eating late at night."
+    wrong: ["I avoid to eat late at night.", "I avoid eat late at night."]
+    tip: "Alguns verbos pedem *-ing* depois: *avoid, enjoy, finish, mind*: I avoid eating late."
+  - id: stop-ing
+    level: B2
+    pt: "Ele parou de fumar."
+    right: "He stopped smoking."
+    wrong: ["He stopped to smoke.", "He stopped of smoking."]
+    tip: "*Stop* + -ing = parar de: stopped smoking. *Stop to* + verbo = parar *para*: stopped to smoke = parou para fumar."
+  - id: first-time-perfect
+    level: B2
+    pt: "É a primeira vez que venho aqui."
+    right: "It's the first time I've been here."
+    wrong: ["It's the first time I come here.", "Is the first time I come here."]
+    tip: "Depois de *It's the first time* vem present perfect: It's the first time I've been here."
+  - id: despite-no-of
+    level: B2
+    pt: "Apesar da chuva, saímos."
+    right: "Despite the rain, we went out."
+    wrong: ["Despite of the rain, we went out.", "In spite the rain, we went out."]
+    tip: "*Despite* não leva *of*; *in spite of* leva. Despite the rain = in spite of the rain."
+  - id: get-hair-cut
+    level: B2
+    pt: "Vou cortar o cabelo amanhã (no salão)."
+    right: "I'm getting my hair cut tomorrow."
+    wrong: ["I'm getting cut my hair tomorrow.", "I'm having my hair cutted tomorrow."]
+    tip: "Serviço feito por outra pessoa: *get/have* + coisa + particípio: get my hair cut. *I'm cutting my hair* = eu mesmo corto."
+  - id: had-better
+    level: B2
+    pt: "É melhor você ir agora."
+    right: "You'd better go now."
+    wrong: ["You'd better to go now.", "You better to go now."]
+    tip: "*You'd better* = é melhor você (conselho forte). Depois vem o verbo sem *to*: You'd better go."
+  - id: been-waiting
+    level: B2
+    pt: "Estou te esperando há uma hora."
+    right: "I've been waiting for you for an hour."
+    wrong: ["I'm waiting for you for an hour.", "I wait for you since an hour."]
+    tip: "Ação que começou no passado e continua: *have been* + *-ing* + *for*: I've been waiting for an hour."
+
+false_friends:
+  - id: actually
+    level: A2
+    word: actually
+    meaning: "na verdade"
+    trap: "atualmente"
+    other: "finalmente"
+    example: {en: "Actually, I live in Rio.", pt: "Na verdade, eu moro no Rio."}
+    tip: "*Actually* = na verdade. 'Atualmente' em inglês é *currently* ou *nowadays*."
+  - id: eventually
+    level: B1
+    word: eventually
+    meaning: "no fim das contas"
+    trap: "eventualmente"
+    other: "imediatamente"
+    example: {en: "Eventually, she found a job.", pt: "No fim das contas, ela arrumou um emprego."}
+    tip: "*Eventually* = no fim, depois de um tempo. 'Eventualmente' (de vez em quando) é *occasionally*."
+  - id: pretend
+    level: B1
+    word: pretend
+    meaning: "fingir"
+    trap: "pretender, planejar"
+    other: "prometer"
+    example: {en: "He pretended to be asleep.", pt: "Ele fingiu que estava dormindo."}
+    tip: "*Pretend* = fingir. 'Pretender' (ter a intenção) é *intend* ou *plan to*: I plan to travel."
+  - id: push
+    level: A1
+    word: push
+    meaning: "empurrar"
+    trap: "puxar"
+    other: "levantar"
+    example: {en: "Push the door to open it.", pt: "Empurre a porta para abrir."}
+    tip: "*Push* = empurrar. Puxar é *pull*. Nas portas: PUSH = empurre, PULL = puxe."
+  - id: pull
+    level: A1
+    word: pull
+    meaning: "puxar"
+    trap: "pular"
+    other: "empurrar"
+    example: {en: "Pull the door, don't push it.", pt: "Puxe a porta, não empurre."}
+    tip: "*Pull* = puxar. Pular é *jump*. Nas portas: PULL = puxe."
+  - id: parents
+    level: A1
+    word: parents
+    meaning: "pai e mãe"
+    trap: "parentes"
+    other: "avós"
+    example: {en: "My parents live in Recife.", pt: "Meus pais moram em Recife."}
+    tip: "*Parents* = pais (pai e mãe). Parentes em geral são *relatives*."
+  - id: library
+    level: A2
+    word: library
+    meaning: "biblioteca"
+    trap: "livraria"
+    other: "papelaria"
+    example: {en: "I study at the library.", pt: "Eu estudo na biblioteca."}
+    tip: "*Library* = biblioteca. Livraria (onde se compra livro) é *bookstore*."
+  - id: college
+    level: A2
+    word: college
+    meaning: "faculdade"
+    trap: "colégio"
+    other: "creche"
+    example: {en: "My sister is in college.", pt: "Minha irmã está na faculdade."}
+    tip: "Nos EUA, *college* = faculdade. Colégio (escola) é *school* ou *high school*."
+  - id: exquisite
+    level: B2
+    word: exquisite
+    meaning: "requintado"
+    trap: "esquisito"
+    other: "barato"
+    example: {en: "They served an exquisite dinner.", pt: "Eles serviram um jantar requintado."}
+    tip: "*Exquisite* = requintado, refinado, lindo. Esquisito (estranho) é *weird* ou *strange*."
+  - id: fabric
+    level: B1
+    word: fabric
+    meaning: "tecido"
+    trap: "fábrica"
+    other: "tapete"
+    example: {en: "This fabric is very soft.", pt: "Este tecido é bem macio."}
+    tip: "*Fabric* = tecido. Fábrica é *factory*."
+  - id: costume
+    level: B1
+    word: costume
+    meaning: "fantasia"
+    trap: "costume, hábito"
+    other: "uniforme"
+    example: {en: "I wore a pirate costume.", pt: "Eu usei uma fantasia de pirata."}
+    tip: "*Costume* = fantasia (de festa, de teatro). Costume (hábito) é *habit* ou *custom*."
+  - id: novel
+    level: B1
+    word: novel
+    meaning: "romance (livro)"
+    trap: "novela (de TV)"
+    other: "revista"
+    example: {en: "I'm reading a great novel.", pt: "Estou lendo um ótimo romance."}
+    tip: "*Novel* = romance, livro de ficção. Novela de TV é *soap opera*."
+  - id: lunch
+    level: A1
+    word: lunch
+    meaning: "almoço"
+    trap: "lanche"
+    other: "jantar"
+    example: {en: "Let's have lunch at noon.", pt: "Vamos almoçar ao meio-dia."}
+    tip: "*Lunch* = almoço. Lanche é *snack*."
+  - id: sensible
+    level: B1
+    word: sensible
+    meaning: "sensato"
+    trap: "sensível"
+    other: "engraçado"
+    example: {en: "That's a sensible decision.", pt: "É uma decisão sensata."}
+    tip: "*Sensible* = sensato, com bom senso. Sensível é *sensitive*."
+  - id: sympathetic
+    level: B2
+    word: sympathetic
+    meaning: "compreensivo"
+    trap: "simpático"
+    other: "tímido"
+    example: {en: "My boss was very sympathetic.", pt: "Meu chefe foi muito compreensivo."}
+    tip: "*Sympathetic* = compreensivo, solidário. Simpático é *nice* ou *friendly*."
+  - id: realize
+    level: B1
+    word: realize
+    meaning: "perceber"
+    trap: "realizar (um evento)"
+    other: "esquecer"
+    example: {en: "I didn't realize it was late.", pt: "Não percebi que já era tarde."}
+    tip: "*Realize* = perceber, se dar conta. Realizar um evento é *hold*; realizar uma tarefa é *carry out*."
+  - id: attend
+    level: B1
+    word: attend
+    meaning: "comparecer a"
+    trap: "atender (telefone)"
+    other: "adiar"
+    example: {en: "Did you attend the meeting?", pt: "Você foi à reunião?"}
+    tip: "*Attend* = comparecer, frequentar (aula, reunião, evento). Atender o telefone é *answer the phone*."
+  - id: assist
+    level: A2
+    word: assist
+    meaning: "ajudar"
+    trap: "assistir (TV)"
+    other: "insistir"
+    example: {en: "How can I assist you?", pt: "Como posso te ajudar?"}
+    tip: "*Assist* = ajudar (formal). Assistir TV ou filme é *watch*."
+  - id: resume
+    level: B2
+    word: resume
+    meaning: "retomar"
+    trap: "resumir"
+    other: "reservar"
+    example: {en: "We'll resume the meeting at 3.", pt: "Vamos retomar a reunião às 3."}
+    tip: "O verbo *resume* = retomar, continuar. Resumir é *summarize*. E *résumé* (substantivo) é currículo."
+  - id: injury
+    level: B1
+    word: injury
+    meaning: "lesão, ferimento"
+    trap: "injúria"
+    other: "doença"
+    example: {en: "He has a knee injury.", pt: "Ele tem uma lesão no joelho."}
+    tip: "*Injury* = lesão, ferimento. Injúria (ofensa) é *insult*."
+  - id: prejudice
+    level: B1
+    word: prejudice
+    meaning: "preconceito"
+    trap: "prejuízo financeiro"
+    other: "privilégio"
+    example: {en: "We must fight prejudice.", pt: "Precisamos combater o preconceito."}
+    tip: "*Prejudice* = preconceito. Prejuízo (perder dinheiro) é *loss*."
+  - id: policy
+    level: B1
+    word: policy
+    meaning: "política, regra"
+    trap: "polícia"
+    other: "polidez"
+    example: {en: "What's your return policy?", pt: "Qual é a política de trocas de vocês?"}
+    tip: "*Policy* = política, as regras de uma empresa ou governo. Polícia é *police*."
+  - id: data
+    level: A2
+    word: data
+    meaning: "dados"
+    trap: "data (dia do mês)"
+    other: "documento"
+    example: {en: "We need more data.", pt: "Precisamos de mais dados."}
+    tip: "*Data* = dados, informações. A data do calendário é *date*."
+  - id: mayor
+    level: B1
+    word: mayor
+    meaning: "prefeito"
+    trap: "maior"
+    other: "governador"
+    example: {en: "The mayor visited our school.", pt: "O prefeito visitou nossa escola."}
+    tip: "*Mayor* = prefeito. Maior é *bigger* (ou *the biggest*)."
+  - id: notice
+    level: B1
+    word: notice
+    meaning: "notar, perceber"
+    trap: "notícia"
+    other: "negar"
+    example: {en: "Did you notice her new haircut?", pt: "Você reparou no corte de cabelo novo dela?"}
+    tip: "*Notice* = notar, reparar (como substantivo: aviso). Notícia é *news*."
+  - id: exit
+    level: A2
+    word: exit
+    meaning: "saída"
+    trap: "êxito"
+    other: "entrada"
+    example: {en: "Where is the exit?", pt: "Onde fica a saída?"}
+    tip: "*Exit* = saída. Êxito (sucesso) é *success*."
+  - id: ingenious
+    level: B2
+    word: ingenious
+    meaning: "engenhoso"
+    trap: "ingênuo"
+    other: "preguiçoso"
+    example: {en: "What an ingenious idea!", pt: "Que ideia engenhosa!"}
+    tip: "*Ingenious* = engenhoso, criativo. Ingênuo é *naive*."
+  - id: comprehensive
+    level: B2
+    word: comprehensive
+    meaning: "abrangente, completo"
+    trap: "compreensivo"
+    other: "confuso"
+    example: {en: "It's a comprehensive guide.", pt: "É um guia completo."}
+    tip: "*Comprehensive* = abrangente, completo. Compreensivo é *understanding*."
+  - id: enroll
+    level: B1
+    word: enroll
+    meaning: "matricular-se"
+    trap: "enrolar"
+    other: "desistir"
+    example: {en: "I enrolled in a Spanish course.", pt: "Eu me matriculei num curso de espanhol."}
+    tip: "*Enroll* = matricular-se, inscrever-se. Enrolar (um papel, um tapete) é *roll up*."
+  - id: legend
+    level: B1
+    word: legend
+    meaning: "lenda"
+    trap: "legenda (de filme)"
+    other: "lembrança"
+    example: {en: "He's a living legend.", pt: "Ele é uma lenda viva."}
+    tip: "*Legend* = lenda. Legenda de filme é *subtitles*."
+  - id: deception
+    level: B2
+    word: deception
+    meaning: "enganação"
+    trap: "decepção"
+    other: "vingança"
+    example: {en: "The ad was pure deception.", pt: "O anúncio era pura enganação."}
+    tip: "*Deception* = enganação, fraude. Decepção é *disappointment*."
+  - id: physician
+    level: B2
+    word: physician
+    meaning: "médico"
+    trap: "físico"
+    other: "farmacêutico"
+    example: {en: "She's a physician in Boston.", pt: "Ela é médica em Boston."}
+    tip: "*Physician* = médico (mais formal que *doctor*). Físico (cientista) é *physicist*."
+  - id: record
+    level: A2
+    word: record
+    meaning: "gravar"
+    trap: "recordar (lembrar)"
+    other: "apagar"
+    example: {en: "Can I record this call?", pt: "Posso gravar esta ligação?"}
+    tip: "*Record* = gravar, registrar. Recordar (lembrar) é *remember*."
+  - id: expert
+    level: B1
+    word: expert
+    meaning: "especialista"
+    trap: "esperto"
+    other: "iniciante"
+    example: {en: "She's an expert in marketing.", pt: "Ela é especialista em marketing."}
+    tip: "*Expert* = especialista. Esperto é *smart* ou *clever*."
+  - id: balcony
+    level: A2
+    word: balcony
+    meaning: "sacada, varanda"
+    trap: "balcão (de loja)"
+    other: "porão"
+    example: {en: "Our room has a balcony.", pt: "Nosso quarto tem sacada."}
+    tip: "*Balcony* = sacada, varanda. Balcão de loja é *counter*."
+  - id: collar
+    level: B1
+    word: collar
+    meaning: "gola, coleira"
+    trap: "colar (joia)"
+    other: "cinto"
+    example: {en: "The dog has a red collar.", pt: "O cachorro tem uma coleira vermelha."}
+    tip: "*Collar* = gola de camisa ou coleira. Colar (joia) é *necklace*."
+  - id: grip
+    level: B1
+    word: grip
+    meaning: "agarrar, segurar"
+    trap: "gripe"
+    other: "gritar"
+    example: {en: "Grip the rope tightly.", pt: "Segure a corda com força."}
+    tip: "*Grip* = agarrar, segurar firme. Gripe é *flu*."
+  - id: pasta
+    level: A1
+    word: pasta
+    meaning: "massa, macarrão"
+    trap: "pasta (de papéis)"
+    other: "molho"
+    example: {en: "We had pasta for dinner.", pt: "Comemos macarrão no jantar."}
+    tip: "*Pasta* = massa, macarrão. Pasta de papéis é *folder*; pasta de dente é *toothpaste*."
+  - id: preservative
+    level: B1
+    word: preservative
+    meaning: "conservante"
+    trap: "preservativo"
+    other: "tempero"
+    example: {en: "This juice has no preservatives.", pt: "Este suco não tem conservantes."}
+    tip: "*Preservative* = conservante, o aditivo que faz o alimento durar mais. Não é 'preservativo'."
+  - id: large
+    level: A1
+    word: large
+    meaning: "grande"
+    trap: "largo"
+    other: "comprido"
+    example: {en: "A large coffee, please.", pt: "Um café grande, por favor."}
+    tip: "*Large* = grande. Largo é *wide*."
+  - id: hazard
+    level: B2
+    word: hazard
+    meaning: "perigo, risco"
+    trap: "azar"
+    other: "sorte"
+    example: {en: "Smoking is a health hazard.", pt: "Fumar é um risco para a saúde."}
+    tip: "*Hazard* = perigo, risco. Azar (má sorte) é *bad luck*."
+  - id: stranger
+    level: A2
+    word: stranger
+    meaning: "desconhecido"
+    trap: "estrangeiro"
+    other: "vizinho"
+    example: {en: "Don't talk to strangers.", pt: "Não fale com desconhecidos."}
+    tip: "*Stranger* = pessoa desconhecida. Estrangeiro é *foreigner*."
+  - id: casualty
+    level: B2
+    word: casualty
+    meaning: "vítima"
+    trap: "casualidade"
+    other: "culpado"
+    example: {en: "There were no casualties.", pt: "Não houve vítimas."}
+    tip: "*Casualty* = vítima (de acidente, guerra). Casualidade (acaso) é *chance* ou *coincidence*."
+  - id: compromise
+    level: B2
+    word: compromise
+    meaning: "meio-termo, acordo"
+    trap: "compromisso"
+    other: "promessa"
+    example: {en: "We reached a compromise.", pt: "Chegamos a um meio-termo."}
+    tip: "*Compromise* = acordo em que cada lado cede. Compromisso (na agenda) é *appointment*; (dever) é *commitment*."
+  - id: cigar
+    level: B1
+    word: cigar
+    meaning: "charuto"
+    trap: "cigarro"
+    other: "isqueiro"
+    example: {en: "My grandpa loved cigars.", pt: "Meu avô adorava charutos."}
+    tip: "*Cigar* = charuto. Cigarro é *cigarette*."
+  - id: lecture
+    level: B1
+    word: lecture
+    meaning: "palestra, aula"
+    trap: "leitura"
+    other: "reunião"
+    example: {en: "The lecture starts at 9.", pt: "A palestra começa às 9."}
+    tip: "*Lecture* = palestra, aula expositiva. Leitura é *reading*."
+  - id: appoint
+    level: B2
+    word: appoint
+    meaning: "nomear"
+    trap: "apontar"
+    other: "demitir"
+    example: {en: "They appointed a new manager.", pt: "Eles nomearam um novo gerente."}
+    tip: "*Appoint* = nomear para um cargo. Apontar é *point*. E *appointment* = consulta, horário marcado."
+  - id: alias
+    level: B2
+    word: alias
+    meaning: "nome falso"
+    trap: "aliás"
+    other: "endereço"
+    example: {en: "He traveled under an alias.", pt: "Ele viajou com um nome falso."}
+    tip: "*Alias* = nome falso, codinome. 'Aliás' é *by the way*."
+  - id: terrific
+    level: B1
+    word: terrific
+    meaning: "ótimo, incrível"
+    trap: "terrível"
+    other: "tranquilo"
+    example: {en: "You did a terrific job!", pt: "Você fez um trabalho incrível!"}
+    tip: "*Terrific* = ótimo, excelente. Terrível é *terrible*."
+  - id: reunion
+    level: B1
+    word: reunion
+    meaning: "reencontro"
+    trap: "reunião (trabalho)"
+    other: "despedida"
+    example: {en: "We had a class reunion.", pt: "Fizemos um reencontro da turma."}
+    tip: "*Reunion* = reencontro de pessoas que não se viam há tempo. Reunião de trabalho é *meeting*."
+  - id: carton
+    level: A2
+    word: carton
+    meaning: "caixa (de leite)"
+    trap: "cartão"
+    other: "garrafa"
+    example: {en: "Buy a carton of milk.", pt: "Compre uma caixa de leite."}
+    tip: "*Carton* = caixa, embalagem (de leite, suco, ovos). Cartão é *card*."
+  - id: outdoor
+    level: A2
+    word: outdoor
+    meaning: "ao ar livre"
+    trap: "placa de propaganda"
+    other: "coberto"
+    example: {en: "We had an outdoor party.", pt: "Fizemos uma festa ao ar livre."}
+    tip: "*Outdoor* = ao ar livre. O 'outdoor' de propaganda em inglês é *billboard*."
+  - id: shopping
+    level: A1
+    word: shopping
+    meaning: "compras"
+    trap: "o shopping (lugar)"
+    other: "mercado"
+    example: {en: "I went shopping yesterday.", pt: "Eu fui fazer compras ontem."}
+    tip: "*Shopping* = compras, o ato de comprar. O shopping (o lugar) é *mall*: I went to the mall."
+  - id: recipe
+    level: A2
+    word: recipe
+    meaning: "receita (culinária)"
+    trap: "recibo"
+    other: "cardápio"
+    example: {en: "Can you send me the recipe?", pt: "Você me manda a receita?"}
+    tip: "*Recipe* = receita de comida. Recibo é *receipt*. Receita médica é *prescription*."
+  - id: mascara
+    level: B1
+    word: mascara
+    meaning: "rímel"
+    trap: "máscara"
+    other: "batom"
+    example: {en: "She's wearing mascara.", pt: "Ela está usando rímel."}
+    tip: "*Mascara* = rímel. Máscara é *mask*."
+  - id: cafeteria
+    level: B1
+    word: cafeteria
+    meaning: "refeitório"
+    trap: "cafeteria"
+    other: "padaria"
+    example: {en: "Let's eat in the cafeteria.", pt: "Vamos comer no refeitório."}
+    tip: "*Cafeteria* = refeitório (de escola, empresa). A cafeteria brasileira é *café* ou *coffee shop*."
+  - id: genial
+    level: B2
+    word: genial
+    meaning: "cordial, afável"
+    trap: "genial (brilhante)"
+    other: "grosseiro"
+    example: {en: "Our host was very genial.", pt: "Nosso anfitrião foi muito cordial."}
+    tip: "*Genial* = cordial, simpático. Genial (brilhante) é *brilliant*."
+  - id: requirement
+    level: B2
+    word: requirement
+    meaning: "requisito"
+    trap: "requerimento"
+    other: "recompensa"
+    example: {en: "What are the job requirements?", pt: "Quais são os requisitos da vaga?"}
+    tip: "*Requirement* = requisito, exigência. Requerimento (pedido formal) é *application* ou *request*."
+
+minimal_pair_sounds:
+  th-t: "th x t (three x tree)"
+  th-s: "th x s (think x sink)"
+  th-f: "th x f (three x free)"
+  dh-d: "th vibrado x d (they x day)"
+  r-h: "r inicial x h (red x head)"
+  h-silent: "com h x sem h (hair x air)"
+  i-ih: "i longo x i curto (sheep x ship)"
+  ae-e: "a aberto x é (bad x bed)"
+  ae-uh: "a aberto x a curto (cat x cut)"
+  u-uh-oo: "u longo x u curto (pool x pull)"
+  m-n-final: "m x n no final (team x teen)"
+  n-ng: "n x ng no final (thin x thing)"
+  t-ch: "t x tch (tip x chip)"
+  d-j: "d x dj (deep x jeep)"
+  l-final: "l no final (goal x go)"
+  epenthesis: "sem 'e' no começo (state x estate)"
+  p-b: "p x b (pig x big)"
+  k-g: "k x g (coat x goat)"
+  v-b: "v x b (very x berry)"
+  w-v: "w x v (wine x vine)"
+
+minimal_pairs:
+  # th-t
+  - id: three-tree
+    sound: th-t
+    level: A1
+    words: [three, tree]
+    tip: "Em *three* a língua fica entre os dentes e sopra; em *tree* ela toca atrás dos dentes de cima."
+  - id: thin-tin
+    sound: th-t
+    level: A2
+    words: [thin, tin]
+    tip: "*Thin* (magro): ponta da língua entre os dentes, soprando. *Tin* (lata): t normal, sem soprar."
+  - id: thank-tank
+    sound: th-t
+    level: A1
+    words: [thank, tank]
+    tip: "*Thank* começa com a língua entre os dentes (som soprado); *tank* (tanque) começa com t seco."
+  - id: thought-taught
+    sound: th-t
+    level: B1
+    words: [thought, taught]
+    tip: "*Thought* (pensei): língua entre os dentes, soprando. *Taught* (ensinei): t seco. A vogal é a mesma nas duas."
+  - id: both-boat
+    sound: th-t
+    level: A2
+    words: [both, boat]
+    tip: "*Both* (ambos) termina com a língua entre os dentes, soprando; *boat* (barco) termina com t curto."
+  # th-s
+  - id: think-sink
+    sound: th-s
+    level: A1
+    words: [think, sink]
+    tip: "Em *think* a língua aparece entre os dentes; em *sink* (pia) ela fica atrás dos dentes, como no s de 'sapo'."
+  - id: thumb-sum
+    sound: th-s
+    level: B1
+    words: [thumb, sum]
+    tip: "*Thumb* (polegar) começa com a língua entre os dentes; *sum* (soma) com s normal. O b de *thumb* é mudo."
+  - id: mouth-mouse
+    sound: th-s
+    level: A1
+    words: [mouth, mouse]
+    tip: "*Mouth* (boca) termina com a língua entre os dentes; *mouse* (rato) termina com s, língua para dentro."
+  - id: path-pass
+    sound: th-s
+    level: B1
+    words: [path, pass]
+    tip: "No fim de *path* (trilha) a língua encosta nos dentes da frente; em *pass* ela fica atrás e faz 'sss'."
+  - id: faith-face
+    sound: th-s
+    level: B1
+    words: [faith, face]
+    tip: "*Faith* (fé) termina com a língua entre os dentes; *face* (rosto) termina com s comum."
+  - id: thick-sick
+    sound: th-s
+    level: A2
+    words: [thick, sick]
+    tip: "*Thick* (grosso): língua entre os dentes. *Sick* (doente): s normal. Trocar muda o sentido!"
+  # th-f
+  - id: three-free
+    sound: th-f
+    level: A1
+    words: [three, free]
+    tip: "Em *three* a língua toca os dentes de cima; em *free* são os dentes de cima que tocam o lábio de baixo."
+  - id: thought-fought
+    sound: th-f
+    level: B1
+    words: [thought, fought]
+    tip: "*Thought* (pensei): língua entre os dentes. *Fought* (lutou): dentes no lábio, como o f de 'faca'."
+  - id: thirst-first
+    sound: th-f
+    level: A2
+    words: [thirst, first]
+    tip: "*Thirst* (sede) começa com a língua entre os dentes; *first* (primeiro) começa com f, lábio nos dentes."
+  - id: thin-fin
+    sound: th-f
+    level: B1
+    words: [thin, fin]
+    tip: "*Thin* (magro): ponta da língua entre os dentes. *Fin* (barbatana): lábio de baixo nos dentes de cima."
+  # dh-d
+  - id: they-day
+    sound: dh-d
+    level: A1
+    words: [they, day]
+    tip: "Em *they* a língua vibra entre os dentes; em *day* ela bate atrás dos dentes, como no d de 'dado'."
+  - id: then-den
+    sound: dh-d
+    level: B1
+    words: [then, den]
+    tip: "*Then* (então): língua entre os dentes, vibrando. *Den* (toca, covil): d normal do português."
+  - id: those-doze
+    sound: dh-d
+    level: B1
+    words: [those, doze]
+    tip: "*Those* começa com a língua entre os dentes, vibrando; *doze* (cochilar) começa com d comum."
+  - id: though-dough
+    sound: dh-d
+    level: B1
+    words: [though, dough]
+    tip: "*Though* (embora): língua entre os dentes, vibrando. *Dough* (massa de pão): d normal."
+  - id: breathe-breed
+    sound: dh-d
+    level: B1
+    words: [breathe, breed]
+    tip: "*Breathe* (respirar) termina com a língua entre os dentes, vibrando; *breed* (raça) termina com d seco."
+  - id: there-dare
+    sound: dh-d
+    level: A2
+    words: [there, dare]
+    tip: "*There* (lá): língua entre os dentes, som vibrado. *Dare* (ousar): d comum, língua atrás dos dentes."
+  # r-h
+  - id: red-head
+    sound: r-h
+    level: A1
+    words: [red, head]
+    tip: "O r de *red* não é o r de 'rato': curve a língua para trás sem encostar. *Head* começa só com um sopro."
+  - id: rat-hat
+    sound: r-h
+    level: A1
+    words: [rat, hat]
+    tip: "*Rat* (rato) começa com a língua curvada para trás; *hat* (chapéu) é só um sopro, como quem embaça um vidro."
+  - id: rope-hope
+    sound: r-h
+    level: A2
+    words: [rope, hope]
+    tip: "*Rope* (corda): língua curvada para trás, sem vibrar. *Hope* (esperança): só um sopro leve de ar."
+  - id: ride-hide
+    sound: r-h
+    level: A2
+    words: [ride, hide]
+    tip: "*Ride* (andar de bike, de carro): r americano, língua para trás. *Hide* (esconder): sopro leve de ar."
+  - id: right-height
+    sound: r-h
+    level: B1
+    words: [right, height]
+    tip: "*Right* começa com a língua curvada, sem tocar o céu da boca; *height* (altura) começa com um sopro."
+  # h-silent
+  - id: hair-air
+    sound: h-silent
+    level: A1
+    words: [hair, air]
+    tip: "*Hair* (cabelo) começa com um sopro leve; *air* (ar) começa direto na vogal, sem ar antes."
+  - id: hold-old
+    sound: h-silent
+    level: A2
+    words: [hold, old]
+    tip: "*Hold* (segurar) tem um sopro no início; *old* (velho) começa direto no 'ou'."
+  - id: heat-eat
+    sound: h-silent
+    level: A2
+    words: [heat, eat]
+    tip: "*Heat* (calor) começa com um sopro, como quem embaça um vidro; *eat* (comer) começa direto no i longo."
+  - id: hill-ill
+    sound: h-silent
+    level: B1
+    words: [hill, ill]
+    tip: "*Hill* (morro) tem o h soprado; *ill* (doente) começa na vogal. Em inglês o h do começo quase sempre soa."
+  - id: harm-arm
+    sound: h-silent
+    level: B1
+    words: [harm, arm]
+    tip: "*Harm* (dano) começa com um sopro; *arm* (braço) começa direto na vogal. Não pule o h do inglês!"
+  - id: hear-ear
+    sound: h-silent
+    level: A2
+    words: [hear, ear]
+    tip: "*Hear* (ouvir) começa com um sopro; *ear* (orelha) não. Em português o h é mudo; em inglês, quase nunca."
+  # i-ih
+  - id: ship-sheep
+    sound: i-ih
+    level: A1
+    words: [ship, sheep]
+    tip: "Em *sheep* (ovelha) o i é longo e esticado; em *ship* (navio) é curto e relaxado, quase um 'ê'."
+  - id: feet-fit
+    sound: i-ih
+    level: A2
+    words: [feet, fit]
+    tip: "*Feet* (pés): i longo, lábios esticados como num sorriso. *Fit* (caber): i curto e relaxado."
+  - id: eat-it
+    sound: i-ih
+    level: A1
+    words: [eat, it]
+    tip: "*Eat* (comer) tem i longo; *it* tem i curto e relaxado. Estique bem o som em *eat*."
+  - id: feel-fill
+    sound: i-ih
+    level: A2
+    words: [feel, fill]
+    tip: "*Feel* (sentir): i longo. *Fill* (encher): i curto, com a boca mais relaxada."
+  - id: sleep-slip
+    sound: i-ih
+    level: A2
+    words: [sleep, slip]
+    tip: "*Sleep* (dormir): i longo e tenso. *Slip* (escorregar): i curto, quase 'ê'."
+  - id: reach-rich
+    sound: i-ih
+    level: B1
+    words: [reach, rich]
+    tip: "*Reach* (alcançar): i longo. *Rich* (rico): i curto e relaxado."
+  - id: seat-sit
+    sound: i-ih
+    level: A1
+    words: [seat, sit]
+    tip: "*Seat* (assento): i longo, lábios esticados. *Sit* (sentar): i curto, boca relaxada."
+  - id: green-grin
+    sound: i-ih
+    level: B1
+    words: [green, grin]
+    tip: "*Green* (verde): i longo. *Grin* (sorriso largo): i curto e rápido."
+  # ae-e
+  - id: bad-bed
+    sound: ae-e
+    level: A1
+    words: [bad, bed]
+    tip: "*Bad* (ruim): abra bem a boca, um som entre 'é' e 'a'. *Bed* (cama): 'é' normal, boca menos aberta."
+  - id: man-men
+    sound: ae-e
+    level: A1
+    words: [man, men]
+    tip: "*Man* (homem): boca bem aberta, quase 'a'. *Men* (homens): 'é' comum. Só a vogal muda o plural!"
+  - id: pan-pen
+    sound: ae-e
+    level: A2
+    words: [pan, pen]
+    tip: "*Pan* (panela): boca bem aberta, entre 'é' e 'a'. *Pen* (caneta): 'é' mais fechado."
+  - id: sad-said
+    sound: ae-e
+    level: A2
+    words: [sad, said]
+    tip: "*Sad* (triste): boca bem aberta. *Said* (disse) soa como 'séd', com 'é' curto."
+  - id: bag-beg
+    sound: ae-e
+    level: B1
+    words: [bag, beg]
+    tip: "*Bag* (bolsa): boca bem aberta, som entre 'é' e 'a'. *Beg* (implorar): 'é' normal."
+  # ae-uh
+  - id: cat-cut
+    sound: ae-uh
+    level: A1
+    words: [cat, cut]
+    tip: "*Cat* (gato): boca bem aberta, entre 'é' e 'a'. *Cut* (cortar): 'a' curto e fechado, como o 'a' final de 'casa'."
+  - id: cap-cup
+    sound: ae-uh
+    level: A1
+    words: [cap, cup]
+    tip: "*Cap* (boné): 'a' bem aberto. *Cup* (xícara): 'a' curto e fechado, como o 'a' final de 'casa'."
+  - id: bag-bug
+    sound: ae-uh
+    level: A2
+    words: [bag, bug]
+    tip: "*Bag* (bolsa): boca bem aberta. *Bug* (inseto): 'a' curto, como o 'a' final de 'casa'."
+  - id: ran-run
+    sound: ae-uh
+    level: A2
+    words: [ran, run]
+    tip: "*Ran* (correu): 'a' bem aberto. *Run* (correr): 'a' curto e fechado, boca quase parada."
+  - id: fan-fun
+    sound: ae-uh
+    level: A2
+    words: [fan, fun]
+    tip: "*Fan* (ventilador, fã): boca bem aberta. *Fun* (diversão): 'a' curto, como o 'a' final de 'casa'."
+  # u-uh-oo
+  - id: pool-pull
+    sound: u-uh-oo
+    level: A2
+    words: [pool, pull]
+    tip: "*Pool* (piscina): u longo, lábios em bico. *Pull* (puxar): u curto e relaxado, entre 'u' e 'ô'."
+  - id: fool-full
+    sound: u-uh-oo
+    level: B1
+    words: [fool, full]
+    tip: "*Fool* (bobo): u longo e esticado. *Full* (cheio): u curto, com os lábios relaxados."
+  # m-n-final
+  - id: team-teen
+    sound: m-n-final
+    level: A2
+    words: [team, teen]
+    tip: "*Team* (time): feche os lábios no final. *Teen* (adolescente): a língua toca atrás dos dentes, boca aberta."
+  - id: seem-seen
+    sound: m-n-final
+    level: B1
+    words: [seem, seen]
+    tip: "*Seem* (parecer) termina com os lábios fechados; *seen* (visto) termina com a língua atrás dos dentes."
+  - id: some-sun
+    sound: m-n-final
+    level: A1
+    words: [some, sun]
+    tip: "*Some* (algum): termine fechando os lábios. *Sun* (sol): termine com a ponta da língua atrás dos dentes."
+  - id: comb-cone
+    sound: m-n-final
+    level: B1
+    words: [comb, cone]
+    tip: "*Comb* (pente): lábios fechados no final, o b é mudo. *Cone*: língua atrás dos dentes no final."
+  - id: gum-gun
+    sound: m-n-final
+    level: A2
+    words: [gum, gun]
+    tip: "*Gum* (chiclete): feche os lábios no fim. *Gun* (arma): língua atrás dos dentes, lábios abertos."
+  # n-ng
+  - id: thin-thing
+    sound: n-ng
+    level: A2
+    words: [thin, thing]
+    tip: "*Thin* (magro): ponta da língua atrás dos dentes. *Thing* (coisa): fundo da língua no céu da boca, sem soltar o g."
+  - id: ran-rang
+    sound: n-ng
+    level: B1
+    words: [ran, rang]
+    tip: "*Ran* (correu): n com a ponta da língua. *Rang* (tocou): som nasal no fundo da boca, como o 'n' de 'manga'."
+  - id: win-wing
+    sound: n-ng
+    level: A2
+    words: [win, wing]
+    tip: "*Win* (ganhar): ponta da língua nos dentes. *Wing* (asa): fundo da língua, como o 'n' de 'manga', sem 'gui'."
+  - id: sun-sung
+    sound: n-ng
+    level: B1
+    words: [sun, sung]
+    tip: "*Sun* (sol): ponta da língua atrás dos dentes. *Sung* (cantado): fundo da língua no céu da boca."
+  - id: sin-sing
+    sound: n-ng
+    level: A2
+    words: [sin, sing]
+    tip: "*Sin* (pecado): n com a ponta da língua. *Sing* (cantar): som nasal no fundo, sem falar 'singui'."
+  # t-ch
+  - id: tip-chip
+    sound: t-ch
+    level: A2
+    words: [tip, chip]
+    tip: "No Brasil 'ti' costuma virar 'tchi'; em inglês não! *Tip* (gorjeta) é t seco. *Chip* é que tem o 'tch'."
+  - id: tin-chin
+    sound: t-ch
+    level: B1
+    words: [tin, chin]
+    tip: "*Tin* (lata): t seco, nada de 'tchin'. *Chin* (queixo): esse sim começa com 'tch'."
+  - id: till-chill
+    sound: t-ch
+    level: B1
+    words: [till, chill]
+    tip: "*Till* (até): t seco, sem 'tch'. *Chill* (friozinho, relaxar): começa com 'tch'."
+  - id: tease-cheese
+    sound: t-ch
+    level: B1
+    words: [tease, cheese]
+    tip: "*Tease* (provocar): t seco antes do i. *Cheese* (queijo): 'tch'. Segure o impulso de dizer 'tchi'."
+  # d-j
+  - id: deep-jeep
+    sound: d-j
+    level: A2
+    words: [deep, jeep]
+    tip: "No Brasil 'di' costuma virar 'dji'; em inglês não! *Deep* (fundo) é d seco. *Jeep* começa com 'dj'."
+  - id: dim-gym
+    sound: d-j
+    level: B1
+    words: [dim, gym]
+    tip: "*Dim* (fraco, pouca luz): d seco, sem 'dji'. *Gym* (academia): esse começa com 'dj'."
+  # l-final
+  - id: goal-go
+    sound: l-final
+    level: A1
+    words: [goal, go]
+    tip: "Em *goal* a ponta da língua encosta atrás dos dentes no final. Se virar 'u' ('gou'), soa como *go*."
+  - id: tool-two
+    sound: l-final
+    level: A2
+    words: [tool, two]
+    tip: "*Tool* (ferramenta): termine com a língua atrás dos dentes (l). Sem o l, vira *two* (dois)."
+  - id: mile-my
+    sound: l-final
+    level: A2
+    words: [mile, my]
+    tip: "*Mile* (milha) termina com l, língua nos dentes de cima. Se virar 'maiu', soa como *my*."
+  - id: feel-fee
+    sound: l-final
+    level: B1
+    words: [feel, fee]
+    tip: "*Feel* (sentir) termina com a língua encostada atrás dos dentes. Sem esse l vira *fee* (taxa)."
+  - id: sale-say
+    sound: l-final
+    level: A2
+    words: [sale, say]
+    tip: "*Sale* (liquidação) termina com um l de verdade; se virar 'u', parece *say* (dizer)."
+  # epenthesis
+  - id: state-estate
+    sound: epenthesis
+    level: B1
+    words: [state, estate]
+    tip: "*State* (estado) começa direto no s, sem 'e' antes. Com 'e' vira *estate* (propriedade)."
+  - id: steam-esteem
+    sound: epenthesis
+    level: B2
+    words: [steam, esteem]
+    tip: "*Steam* (vapor) começa direto no s, sem 'i' antes. Com vogal no início vira *esteem* (estima)."
+  # p-b
+  - id: pie-buy
+    sound: p-b
+    level: A2
+    words: [pie, buy]
+    tip: "*Pie* (torta): p com um sopro forte depois. *Buy* (comprar): b com as cordas vocais vibrando."
+  - id: pack-back
+    sound: p-b
+    level: A2
+    words: [pack, back]
+    tip: "*Pack* (fazer a mala): p seco, com sopro. *Back* (costas, voltar): b vibrado."
+  - id: pig-big
+    sound: p-b
+    level: A1
+    words: [pig, big]
+    tip: "*Pig* (porco): p soprado. *Big* (grande): b vibrado. Ponha a mão na frente da boca e sinta o ar do p."
+  - id: pear-bear
+    sound: p-b
+    level: A2
+    words: [pear, bear]
+    tip: "*Pear* (pera): p com ar. *Bear* (urso): b sem sopro, com vibração."
+  # k-g
+  - id: coat-goat
+    sound: k-g
+    level: A2
+    words: [coat, goat]
+    tip: "*Coat* (casaco): k com sopro. *Goat* (bode): g vibrado, sem sopro."
+  - id: cold-gold
+    sound: k-g
+    level: A1
+    words: [cold, gold]
+    tip: "*Cold* (frio): k soprado. *Gold* (ouro): g com vibração na garganta."
+  - id: curl-girl
+    sound: k-g
+    level: B1
+    words: [curl, girl]
+    tip: "*Curl* (cacho): k com ar. *Girl* (menina): g vibrado. O resto da palavra é igual."
+  - id: class-glass
+    sound: k-g
+    level: A1
+    words: [class, glass]
+    tip: "*Class* (turma, aula): k soprado. *Glass* (copo, vidro): g vibrado."
+  # v-b
+  - id: vest-best
+    sound: v-b
+    level: A2
+    words: [vest, best]
+    tip: "*Vest* (colete): dentes de cima no lábio de baixo. *Best* (melhor): os dois lábios se fecham."
+  - id: very-berry
+    sound: v-b
+    level: A2
+    words: [very, berry]
+    tip: "*Very* (muito): dentes no lábio, som vibrando. *Berry* (frutinha): lábios juntos, como o b de 'bola'."
+  - id: van-ban
+    sound: v-b
+    level: B1
+    words: [van, ban]
+    tip: "*Van*: dentes de cima tocam o lábio de baixo. *Ban* (proibir): lábios fechados que abrem de uma vez."
+  - id: vote-boat
+    sound: v-b
+    level: A2
+    words: [vote, boat]
+    tip: "*Vote* (votar): v com os dentes no lábio. *Boat* (barco): b com os dois lábios."
+  # w-v
+  - id: wine-vine
+    sound: w-v
+    level: A2
+    words: [wine, vine]
+    tip: "*Wine* (vinho): lábios em bico, como em 'uai'. *Vine* (videira): dentes de cima no lábio de baixo."
+  - id: west-vest
+    sound: w-v
+    level: B1
+    words: [west, vest]
+    tip: "*West* (oeste): comece com os lábios em bico, som de 'u'. *Vest* (colete): dentes no lábio."
+  - id: wet-vet
+    sound: w-v
+    level: A2
+    words: [wet, vet]
+    tip: "*Wet* (molhado): lábios arredondados, 'uét'. *Vet* (veterinário): dentes de cima no lábio de baixo."
+
+chats:
+  # ---------------------------------------------------------------- A1
+  - id: cafe-order
+    level: A1
+    context: "Numa cafeteria"
+    them: ["Hi! What can I get you?"]
+    options: ["A coffee, please.", "I'm fine, thanks.", "Yes, I can."]
+    tip: "Para pedir algo: *A ..., please* ou *Can I have ...?*"
+  - id: greeting-how-are-you
+    level: A1
+    context: "Encontrando um colega de manhã"
+    them: ["Hi! How are you?"]
+    options: ["Good, thanks. You?", "I'm 25 years old.", "Yes, I am."]
+    tip: "Resposta curta e simpática: *Good, thanks. And you?* ou *I'm fine, thanks.* E devolva a pergunta."
+  - id: whats-your-name
+    level: A1
+    context: "Conhecendo alguém numa festa"
+    them: ["Hi, I'm Sarah. What's your name?"]
+    options: ["Hi! I'm Pedro.", "I'm fine, and you?", "My name's is Pedro."]
+    tip: "Para se apresentar: *I'm Pedro* ou *My name's Pedro*. Nunca *name's is*: o 's já é o *is*."
+  - id: where-are-you-from
+    level: A1
+    context: "Conversa num hostel"
+    them: ["Where are you from?"]
+    options: ["I'm from Brazil.", "I'm Brazil.", "Yes, from Brazil."]
+    tip: "Origem: *I'm from* + país (I'm from Brazil) ou a nacionalidade: *I'm Brazilian*."
+  - id: how-old-reply
+    level: A1
+    context: "Conversa com um novo amigo"
+    them: ["How old are you?"]
+    options: ["I'm 30.", "I have 30 years.", "I'm fine, thanks."]
+    tip: "Idade usa *be*: I'm 30 (years old). *How old* pergunta a idade; *How are you* pergunta como você está."
+  - id: job-reply
+    level: A1
+    context: "Conhecendo alguém num evento"
+    them: ["So, what do you do?"]
+    options: ["I'm a nurse.", "I'm doing fine.", "Yes, I do."]
+    tip: "*What do you do?* pergunta a profissão. Responda com *I'm a/an...* ou *I work in/at...*"
+  - id: shop-change
+    level: A1
+    context: "Pagando numa loja"
+    them: ["Here's your change."]
+    options: ["Thank you!", "You're welcome!", "Me too!"]
+    tip: "Quando alguém te entrega algo: *Thank you!* ou *Thanks!* *You're welcome* é a resposta a um obrigado."
+  - id: youre-welcome
+    level: A1
+    context: "Você ajudou um turista na rua"
+    them: ["Thanks for your help!"]
+    options: ["You're welcome!", "Excuse me!", "Yes, please."]
+    tip: "Resposta a *thanks*: *You're welcome!*, *No problem!* ou *My pleasure!*"
+  - id: friend-late
+    level: A1
+    context: "Um amigo chega atrasado"
+    them: ["Sorry I'm late!"]
+    options: ["That's OK!", "You're welcome!", "Thank you!"]
+    tip: "Para aceitar desculpas: *That's OK*, *No problem* ou *Don't worry*. *You're welcome* é só para agradecimentos."
+  - id: hotel-reservation
+    level: A1
+    context: "Na recepção do hotel"
+    them: ["Good evening! Do you have a reservation?"]
+    options: ["Yes, under Silva.", "Yes, I am.", "I'm fine, thanks."]
+    tip: "Reserva no nome de alguém: *under* + nome. E pergunta com *do* se responde com *do*: Yes, I do."
+  - id: where-bank
+    level: A1
+    context: "Na rua, alguém te pede informação"
+    them: ["Excuse me, where's the bank?"]
+    options: ["It's on the left.", "Yes, there is.", "It's 3 o'clock."]
+    tip: "Direções simples: *It's on the left/right*, *It's next to...*, *Go straight ahead*."
+  - id: just-looking
+    level: A1
+    context: "Numa loja de roupas"
+    them: ["Hi! Can I help you?"]
+    options: ["I'm just looking.", "You're welcome.", "Yes, I help."]
+    tip: "Para dizer que só está olhando: *I'm just looking, thanks*. Se precisar de ajuda: *Yes, I'm looking for...*"
+  - id: drink-order
+    level: A1
+    context: "No restaurante"
+    them: ["What would you like to drink?"]
+    options: ["Water, please.", "Yes, I'd like.", "Yes, I would."]
+    tip: "Pergunta com *What* pede uma coisa, não *yes/no*: *Water, please* / *I'd like a juice*."
+  - id: what-time
+    level: A1
+    context: "Na rua"
+    them: ["Excuse me, what time is it?"]
+    options: ["It's ten past two.", "It's Tuesday.", "Yes, it is."]
+    tip: "Horas: *It's ten past two* (2h10) ou simplesmente *It's two ten*."
+  - id: like-soccer
+    level: A1
+    context: "Conversando com um colega"
+    them: ["Do you like soccer?"]
+    options: ["Yes, I love it!", "Yes, I like.", "Yes, I'm like it."]
+    tip: "*Like* e *love* precisam de objeto: *I like it*, *I love it*. Resposta curta: *Yes, I do*."
+  - id: can-you-swim
+    level: A1
+    context: "Na praia com amigos"
+    them: ["Can you swim?"]
+    options: ["Yes, I can.", "Yes, I know.", "Yes, I do."]
+    tip: "Pergunta com *can* → resposta com *can*: Yes, I can / No, I can't. 'Sei nadar' é *I can swim*."
+  - id: phone-whos-calling
+    level: A1
+    context: "Você liga para um escritório"
+    them: ["Hello, who's calling, please?"]
+    options: ["This is Ana.", "I'm calling.", "Yes, it's me."]
+    tip: "Ao telefone, para dizer quem fala: *This is Ana* ou *It's Ana*."
+  - id: brothers-sisters
+    level: A1
+    context: "Conhecendo alguém"
+    them: ["Do you have any brothers or sisters?"]
+    options: ["Yes, one sister.", "Yes, I am.", "No, I'm not."]
+    tip: "Pergunta com *do* → *Yes, I do* / *No, I don't*. Ou direto ao ponto: *Yes, one sister.*"
+  - id: are-you-hungry
+    level: A1
+    context: "Na casa de um amigo"
+    them: ["Are you hungry?"]
+    options: ["Yes, I am!", "Yes, I have!", "Yes, I do!"]
+    tip: "Fome em inglês é com *be*: I'm hungry. Pergunta com *are* → resposta com *am*: Yes, I am."
+  - id: where-do-you-live
+    level: A1
+    context: "Conhecendo alguém"
+    them: ["Where do you live?"]
+    options: ["In Curitiba.", "Yes, I do.", "I live good."]
+    tip: "Pergunta com *Where* pede um lugar, não *yes/no*: *In Curitiba* / *I live in Curitiba*."
+  - id: taxi-where-to
+    level: A1
+    context: "No táxi"
+    them: ["Hi! Where to?"]
+    options: ["The airport, please.", "Yes, to airport.", "In the airport."]
+    tip: "Para o taxista: *To the airport, please* ou só *The airport, please*."
+  - id: need-a-bag
+    level: A1
+    context: "No caixa do supermercado"
+    them: ["Do you need a bag?"]
+    options: ["No, thanks.", "No, I'm not.", "Yes, I am."]
+    tip: "Pergunta com *do* → *Yes, I do* / *No, I don't*. Para recusar algo com educação: *No, thanks*."
+  - id: cash-or-card
+    level: A1
+    context: "No caixa de uma loja"
+    them: ["Cash or card?"]
+    options: ["Card, please.", "Yes, please.", "No, thank you."]
+    tip: "Pergunta de escolha (*A or B?*) não se responde com *yes/no*: escolha uma opção: *Card, please*."
+  - id: birthday-gift
+    level: A1
+    context: "No seu aniversário"
+    them: ["This is for you. Happy birthday!"]
+    options: ["Thank you so much!", "You're welcome!", "Happy birthday too!"]
+    tip: "Ao receber um presente: *Thank you so much!* ou *Oh, thank you! That's so nice.*"
+  - id: table-for-how-many
+    level: A1
+    context: "Na entrada do restaurante"
+    them: ["Hi! Table for how many?"]
+    options: ["For two, please.", "Two tables, please.", "Yes, two."]
+    tip: "'Mesa para quantos?' → *For two, please* / *A table for two, please*."
+  - id: nice-to-meet-you
+    level: A1
+    context: "Sendo apresentado a alguém"
+    them: ["Nice to meet you!"]
+    options: ["You too!", "Me neither!", "You're welcome!"]
+    tip: "Resposta a *Nice to meet you*: *You too!* ou *Nice to meet you too!*"
+
+  # ---------------------------------------------------------------- A2
+  - id: how-was-weekend
+    level: A2
+    context: "Segunda-feira no trabalho"
+    them: ["Hi! How was your weekend?"]
+    options: ["Great, thanks!", "It's Monday.", "Yes, it was."]
+    tip: "*How was...?* pede uma opinião: *Great!*, *Pretty good*, *Relaxing*. Não responda com *yes/no*."
+  - id: weekend-plans
+    level: A2
+    context: "Sexta-feira no trabalho"
+    them: ["Any plans for the weekend?"]
+    options: ["I'm visiting my mom.", "I visited my mom.", "Yes, I'm plan."]
+    tip: "Plano já combinado: presente contínuo: *I'm visiting my mom*. O passado (*visited*) é para o que já aconteceu."
+  - id: lunch-invite
+    level: A2
+    context: "Um colega te chama para almoçar"
+    them: ["Do you want to grab lunch?"]
+    options: ["Sure, I'd love to!", "Yes, I'd love.", "Yes, I grab it."]
+    tip: "Para aceitar: *Sure!* / *I'd love to!* Na resposta curta, *I'd love to* precisa do *to* no fim."
+  - id: party-decline
+    level: A2
+    context: "Um amigo te convida para uma festa"
+    them: ["Want to come to my party on Friday?"]
+    options: ["Sorry, I can't.", "No, I don't want.", "Yes, I can't."]
+    tip: "Para recusar com educação: *Sorry, I can't* / *I'd love to, but I can't*. Dê o motivo se quiser: I'm working."
+  - id: doctor-problem
+    level: A2
+    context: "No médico"
+    them: ["What seems to be the problem?"]
+    options: ["I have a headache.", "I'm with headache.", "I'm headache."]
+    tip: "Sintomas usam *have*: I have a headache, a fever, a cold. Nada de *I'm with*."
+  - id: check-please
+    level: A2
+    context: "No restaurante, depois de comer"
+    them: ["Would you like anything else?"]
+    options: ["The check, please.", "The account, please.", "The count, please."]
+    tip: "Para pedir a conta nos EUA: *The check, please* (no Reino Unido, *the bill*). *Account* é conta bancária."
+  - id: bags-to-check
+    level: A2
+    context: "No check-in do aeroporto"
+    them: ["Any bags to check?"]
+    options: ["Yes, just one.", "Yes, I am.", "Yes, I check."]
+    tip: "*To check a bag* = despachar uma mala. Resposta simples: *Yes, just one* / *No, just this carry-on*."
+  - id: purpose-of-visit
+    level: A2
+    context: "Na imigração"
+    them: ["What's the purpose of your visit?"]
+    options: ["I'm on vacation.", "For two weeks.", "Yes, I'm visit."]
+    tip: "*Purpose* = motivo. Respostas: *I'm on vacation*, *Tourism*, *Business*, *Visiting family*."
+  - id: how-long-staying
+    level: A2
+    context: "Na imigração"
+    them: ["How long are you staying?"]
+    options: ["For two weeks.", "Since two weeks.", "Two weeks ago."]
+    tip: "Duração é com *for*: for two weeks. *Since* marca o início; *ago* é para o passado."
+  - id: phone-not-here
+    level: A2
+    context: "Ligando para uma empresa"
+    them: ["Sorry, she's not here right now."]
+    options: ["OK, I'll call back.", "You're welcome.", "Yes, she is."]
+    tip: "*Call back* = ligar de novo. Também dá para pedir: *Can I leave a message?*"
+  - id: me-neither
+    level: A2
+    context: "Conversando com um amigo"
+    them: ["I don't like horror movies."]
+    options: ["Me neither.", "Me too not.", "I neither."]
+    tip: "Para concordar com frase negativa: *Me neither* (ou *Neither do I*). *Me too* é para frase afirmativa."
+  - id: me-too
+    level: A2
+    context: "Conversando com um amigo"
+    them: ["I love Italian food."]
+    options: ["Me too!", "Me neither.", "So I love."]
+    tip: "Para concordar com frase afirmativa: *Me too!* ou *So do I*. *Me neither* é só para frase negativa."
+  - id: help-with-report
+    level: A2
+    context: "No trabalho"
+    them: ["Could you help me with this report?"]
+    options: ["Sure, no problem.", "Yes, you could.", "You're welcome."]
+    tip: "Para aceitar um pedido: *Sure!*, *No problem* ou *Of course*. *You're welcome* só depois de um *thank you*."
+  - id: directions-station
+    level: A2
+    context: "Um turista te para na rua"
+    them: ["Excuse me, how do I get to the station?"]
+    options: ["Go straight ahead.", "By the station.", "Yes, you get."]
+    tip: "Para indicar o caminho: *Go straight ahead*, *Turn left/right*, *It's on the corner*."
+  - id: clothes-size
+    level: A2
+    context: "Numa loja de roupas"
+    them: ["What size are you?"]
+    options: ["Medium, I think.", "Yes, I am.", "I'm 30 years."]
+    tip: "Tamanho de roupa: *small*, *medium*, *large*. *I'm a medium* também funciona."
+  - id: try-it-on
+    level: A2
+    context: "Numa loja de roupas"
+    them: ["Would you like to try it on?"]
+    options: ["Yes, please.", "Yes, I'd like.", "Yes, I try."]
+    tip: "*Try on* = experimentar roupa. Para aceitar: *Yes, please*. 'Sim, gostaria' = *Yes, I'd like to*."
+  - id: forgot-to-call
+    level: A2
+    context: "Um amigo pede desculpas"
+    them: ["Sorry, I forgot to call you."]
+    options: ["Don't worry!", "You're welcome!", "Excuse me!"]
+    tip: "Para aceitar um pedido de desculpas: *Don't worry*, *No problem*, *That's OK*."
+  - id: whats-wrong
+    level: A2
+    context: "Um colega percebe que você está preocupado"
+    them: ["You look worried. What's wrong?"]
+    options: ["I lost my keys.", "Yes, I'm worried.", "No, I'm right."]
+    tip: "*What's wrong?* = o que houve? Responda dizendo o problema, não com *yes/no*."
+  - id: more-cake
+    level: A2
+    context: "Jantar na casa de amigos"
+    them: ["Would you like some more cake?"]
+    options: ["I'm full, thanks.", "I'm complete.", "Yes, I'm full."]
+    tip: "'Estou satisfeito' (comi bastante) = *I'm full*. *Complete* não se usa para comida."
+  - id: got-the-job
+    level: A2
+    context: "Uma amiga te conta uma novidade"
+    them: ["I got the job!"]
+    options: ["Congratulations!", "I'm sorry.", "Get well soon!"]
+    tip: "Boa notícia: *Congratulations!* ou *That's great!* *I'm sorry* é para notícia ruim."
+  - id: not-feeling-well
+    level: A2
+    context: "Um colega no trabalho"
+    them: ["I'm not feeling well today."]
+    options: ["Get well soon!", "Congratulations!", "Have fun!"]
+    tip: "Para quem está doente: *Get well soon!* ou *I hope you feel better!*"
+  - id: steak-how
+    level: A2
+    context: "No restaurante"
+    them: ["How would you like your steak?"]
+    options: ["Medium, please.", "With a fork.", "Yes, I would."]
+    tip: "Ponto da carne: *rare* (mal passada), *medium* (ao ponto), *well-done* (bem passada)."
+  - id: whats-up
+    level: A2
+    context: "Encontrando um amigo"
+    them: ["Hey, what's up?"]
+    options: ["Not much. You?", "I'm up, thanks.", "Yes, it is."]
+    tip: "*What's up?* = e aí, quais as novidades? Respostas comuns: *Not much* / *Nothing much*."
+  - id: enjoy-movie
+    level: A2
+    context: "Saindo do cinema"
+    them: ["Did you enjoy the movie?"]
+    options: ["Yes, it was great!", "Yes, I enjoyed.", "Yes, I was."]
+    tip: "*Enjoy* precisa de objeto: *I enjoyed it*. Pergunta com *did* → *Yes, I did*."
+  - id: compliment-jacket
+    level: A2
+    context: "Uma colega te elogia"
+    them: ["I love your jacket!"]
+    options: ["Thanks! It's new.", "You're welcome!", "Yes, I love."]
+    tip: "Para receber um elogio: *Thanks!* ou *Thank you!* *You're welcome* é para quando te agradecem."
+
+  # ---------------------------------------------------------------- B1
+  - id: interview-strengths
+    level: B1
+    context: "Entrevista de emprego"
+    them: ["What are your main strengths?"]
+    options: ["I'm very organized.", "I have 5 years.", "Yes, I'm strong."]
+    tip: "*Strengths* = pontos fortes. Diga uma qualidade e dê um exemplo: I'm very organized. I plan everything."
+  - id: interview-experience
+    level: B1
+    context: "Entrevista de emprego"
+    them: ["How long have you worked in sales?"]
+    options: ["For about 5 years.", "Since 5 years.", "I work 5 years."]
+    tip: "Período até hoje: *for* + tempo (for 5 years) ou *since* + início (since 2020)."
+  - id: new-colleague
+    level: B1
+    context: "Primeiro dia no emprego novo"
+    them: ["Hi, you must be the new designer!"]
+    options: ["That's me! I'm Ana.", "Yes, I must.", "Yes, I'm must."]
+    tip: "*You must be...* = você deve ser... (dedução). Para confirmar: *That's me!* ou *Yes, I am*."
+  - id: move-meeting
+    level: B1
+    context: "No trabalho"
+    them: ["Can we move the meeting to Thursday?"]
+    options: ["Sure, what time?", "Yes, we move.", "Yes, it's Thursday."]
+    tip: "*Move a meeting* = remarcar. Para aceitar: *Sure* / *That works for me*, e confirme o horário."
+  - id: hotel-problem
+    level: B1
+    context: "Na recepção do hotel"
+    them: ["Good morning! How can I help you?"]
+    options: ["The TV doesn't work.", "The TV isn't work.", "Yes, you can help."]
+    tip: "Para relatar um problema: *The TV doesn't work* ou *isn't working*. Nunca *isn't work*."
+  - id: doctor-cough
+    level: B1
+    context: "No médico"
+    them: ["How long have you had this cough?"]
+    options: ["Since Monday.", "Since three days.", "For Monday."]
+    tip: "*Since* + ponto de início (since Monday); *for* + duração (for three days)."
+  - id: dinner-invite
+    level: B1
+    context: "Colegas de trabalho te chamam"
+    them: ["Want to join us for dinner tonight?"]
+    options: ["Sounds great!", "Yes, I join.", "Yes, I'd join us."]
+    tip: "Para aceitar um convite informal: *Sounds great!*, *Sure, I'm in!*, *I'd love to!*"
+  - id: lovely-day
+    level: B1
+    context: "Conversa com um vizinho"
+    them: ["Lovely day, isn't it?"]
+    options: ["Yes, it's beautiful!", "Yes, it isn't.", "No, it is."]
+    tip: "Para concordar com *..., isn't it?*: *Yes, it is!* ou *Yes, it's beautiful!* O *isn't it* só pede confirmação."
+  - id: ask-to-repeat
+    level: B1
+    context: "Ligação ruim: você não entendeu"
+    them: ["The code is 4-7-9-2."]
+    options: ["Can you repeat that?", "Can you repeat me?", "Can you say me it?"]
+    tip: "Para pedir que repitam: *Can you repeat that?* / *Sorry, could you say that again?*"
+  - id: meal-complaint
+    level: B1
+    context: "No restaurante"
+    them: ["Is everything OK with your meal?"]
+    options: ["It's a bit cold.", "Yes, it's a meal.", "I'm cold, thanks."]
+    tip: "Para reclamar com educação: *It's a bit cold* / *Actually, it's a little cold*. *A bit* suaviza a crítica."
+  - id: why-work-here
+    level: B1
+    context: "Entrevista de emprego"
+    them: ["Why do you want to work here?"]
+    options: ["I admire your work.", "Because yes.", "Yes, I want."]
+    tip: "'Porque sim' não existe em inglês. Dê um motivo: *I admire your work* / *I want to grow in this area*."
+  - id: laptop-crashed
+    level: B1
+    context: "No trabalho"
+    them: ["You look stressed. Is everything OK?"]
+    options: ["My laptop crashed.", "Yes, I look.", "Yes, I'm look."]
+    tip: "*Crash* = travar, pifar (computador, sistema). Também se diz: *My laptop froze* (congelou)."
+  - id: how-long-learning
+    level: B1
+    context: "Conversa com um estrangeiro"
+    them: ["How long have you been learning English?"]
+    options: ["For about a year.", "Since a year.", "In a year."]
+    tip: "*How long have you been...?* pede duração: *For about a year*. *Since* só com ponto de início: since 2024."
+  - id: send-report-now
+    level: B1
+    context: "No trabalho, com o chefe"
+    them: ["The client is still waiting for the report."]
+    options: ["I'll send it now.", "I send it now.", "I'll to send it."]
+    tip: "Decisão tomada na hora = *will*: I'll send it now. Depois de *will*, verbo sem *to*."
+  - id: bad-news
+    level: B1
+    context: "Um amigo te conta uma notícia"
+    them: ["I didn't get the job."]
+    options: ["Oh no, I'm sorry.", "Congratulations!", "You're welcome."]
+    tip: "Para notícia ruim: *I'm sorry* / *I'm sorry to hear that*. Aqui *sorry* é 'sinto muito', não pedido de desculpas."
+  - id: ever-been
+    level: B1
+    context: "Conversa com um colega"
+    them: ["Have you ever been to New York?"]
+    options: ["No, I haven't.", "No, I don't.", "No, I'm not."]
+    tip: "Pergunta com *have* → resposta com *have*: *Yes, I have* / *No, I haven't*."
+  - id: when-available
+    level: B1
+    context: "Marcando uma reunião"
+    them: ["When are you available for a call?"]
+    options: ["Tomorrow at 10?", "Yes, I'm available.", "In the call."]
+    tip: "*When* pede um horário: *Tomorrow at 10?* / *Any time after 2*. *Yes/no* não responde *when*."
+  - id: send-file-friday
+    level: B1
+    context: "No trabalho"
+    them: ["Could you send me the file by Friday?"]
+    options: ["Sure, will do.", "Yes, I send.", "You're welcome."]
+    tip: "*Will do* = pode deixar, vou fazer. Muito usado no trabalho para aceitar uma tarefa."
+  - id: phone-hold-on
+    level: B1
+    context: "Você atende uma ligação para o Sr. Lee"
+    them: ["Hi, can I speak to Mr. Lee, please?"]
+    options: ["One moment, please.", "I'm speaking.", "Yes, you can speak."]
+    tip: "Para pedir que a pessoa espere: *One moment, please* / *Hold on, please*. Se fosse você: *Speaking!*"

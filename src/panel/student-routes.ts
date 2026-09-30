@@ -2,6 +2,7 @@
  * WhatsApp message loads them into the conversation (graph/runner.ts preferences()). */
 import type { Context, Hono } from "hono";
 import { hashPassword, passwordProblem, verifyPassword } from "../accounts/passwords.js";
+import { SqlCourseRepository } from "../adapters/course/sql.js";
 import {
   DAILY_GOALS,
   GOOD_SCORE,
@@ -99,6 +100,7 @@ export function studentRoutes(app: Hono, p: Panel): void {
       },
       rank: position >= 0 ? { position: position + 1, ...ranking[position] } : null,
       ranked: ranking.length,
+      course: await new SqlCourseRepository(p.deps.db).stats(s.id, new Date()),
     });
   });
 

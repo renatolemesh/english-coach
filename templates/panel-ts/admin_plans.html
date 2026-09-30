@@ -3,7 +3,7 @@
 {% block title %}Planos{% endblock %}
 {% block content %}
 <h1>Planos</h1>
-<p class="muted">Mensagens por dia e duração vazias = sem limite. Todas as vozes e velocidades marcadas = tudo liberado. Um plano com duração pode passar para outro ao terminar (o teste de 30 dias vira o Grátis); sem próximo plano, o aluno fica bloqueado ao fim do prazo. Quem se cadastra pelo site entra no plano definido em Configurações.</p>
+<p class="muted">Mensagens por dia, aulas por dia (/aula no WhatsApp) e duração vazias = sem limite. Todas as vozes e velocidades marcadas = tudo liberado. Um plano com duração pode passar para outro ao terminar (o teste de 30 dias vira o Grátis); sem próximo plano, o aluno fica bloqueado ao fim do prazo. Quem se cadastra pelo site entra no plano definido em Configurações.</p>
 {% for p in plans %}
 <section class="card">
   {% if session.isAdmin %}
@@ -12,6 +12,7 @@
     <label>Nome<input name="name" value="{{ p.name }}" maxlength="60" required></label>
     <label>Mensagens/dia<input name="messages_per_day" type="number" min="1" value="{{ p.messagesPerDay or '' }}"></label>
     <label>Duração (dias)<input name="duration_days" type="number" min="1" value="{{ p.durationDays or '' }}"></label>
+    <label>Aulas/dia<input name="lessons_per_day" type="number" min="1" value="{{ p.lessonsPerDay or '' }}"></label>
     <label class="wide">Descrição<input name="description" value="{{ p.description }}" maxlength="300"></label>
     <fieldset class="wide picks"><legend>Vozes</legend>{% for t in tutors %}<label class="check"><input type="checkbox" name="tutor_{{ t.key }}" {% if not p.tutors or t.value in p.tutors %}checked{% endif %}> {{ t.label }}</label>{% endfor %}</fieldset>
     <fieldset class="wide picks"><legend>Velocidades</legend>{% for v in speeds %}<label class="check"><input type="checkbox" name="speed_{{ v.key }}" {% if not p.speeds or v.value in p.speeds %}checked{% endif %}> {{ v.label }}</label>{% endfor %}</fieldset>
@@ -20,7 +21,7 @@
     <button>Salvar</button>
   </form>
   {% else %}
-  <h2>{{ p.name }}</h2><p>{{ limit(p) }}{% if p.durationDays %} · {{ p.durationDays }} dias{% endif %}{% if p.tutors or p.speeds %} · vozes e velocidades limitadas{% endif %} · {{ p.description }}</p>
+  <h2>{{ p.name }}</h2><p>{{ limit(p) }}{% if p.durationDays %} · {{ p.durationDays }} dias{% endif %}{% if p.lessonsPerDay %} · {{ p.lessonsPerDay }} aula(s)/dia{% endif %}{% if p.tutors or p.speeds %} · vozes e velocidades limitadas{% endif %} · {{ p.description }}</p>
   {% endif %}
 </section>
 {% endfor %}
@@ -32,6 +33,7 @@
     <label>Nome<input name="name" maxlength="60" required></label>
     <label>Mensagens/dia<input name="messages_per_day" type="number" min="1"></label>
     <label>Duração (dias)<input name="duration_days" type="number" min="1"></label>
+    <label>Aulas/dia<input name="lessons_per_day" type="number" min="1"></label>
     <label class="wide">Descrição<input name="description" maxlength="300"></label>
     <fieldset class="wide picks"><legend>Vozes</legend>{% for t in tutors %}<label class="check"><input type="checkbox" name="tutor_{{ t.key }}" checked> {{ t.label }}</label>{% endfor %}</fieldset>
     <fieldset class="wide picks"><legend>Velocidades</legend>{% for v in speeds %}<label class="check"><input type="checkbox" name="speed_{{ v.key }}" checked> {{ v.label }}</label>{% endfor %}</fieldset>

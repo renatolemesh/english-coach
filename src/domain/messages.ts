@@ -53,6 +53,8 @@ export const Transcript = z.object({
   avg_logprob: z.number().default(0.0),
   no_speech_prob: z.number().default(0.0),
   duration_s: z.number().default(0.0),
+  // words with Whisper's probability (lowest of their tokens): which words came through clearly
+  words: z.array(z.object({ text: z.string(), p: z.number() })).default([]),
 });
 export type Transcript = z.infer<typeof Transcript>;
 

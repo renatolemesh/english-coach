@@ -1,0 +1,22 @@
+{"id": "house.n", "word": "house", "pos": "noun", "level": "A1", "rank": 1, "gloss": "casa", "alt": ["lar"], "conf": 0.9, "forms": ["house", "houses"], "examples": ["s1", "s7"]}
+{"id": "dog.n", "word": "dog", "pos": "noun", "level": "A1", "rank": 2, "gloss": "cachorro", "alt": ["cão"], "conf": 0.9, "forms": ["dog", "dogs"], "examples": ["s2"]}
+{"id": "cat.n", "word": "cat", "pos": "noun", "level": "A1", "rank": 3, "gloss": "gato", "alt": [], "conf": 0.9, "forms": ["cat", "cats"], "examples": ["s3"]}
+{"id": "car.n", "word": "car", "pos": "noun", "level": "A1", "rank": 4, "gloss": "carro", "alt": [], "conf": 0.9, "forms": ["car", "cars"], "examples": ["s4"]}
+{"id": "book.n", "word": "book", "pos": "noun", "level": "A1", "rank": 5, "gloss": "livro", "alt": [], "conf": 0.9, "forms": ["book", "books"], "examples": ["s5"]}
+{"id": "water.n", "word": "water", "pos": "noun", "level": "A1", "rank": 6, "gloss": "água", "alt": [], "conf": 0.9, "forms": ["water"], "examples": ["s6"]}
+{"id": "friend.n", "word": "friend", "pos": "noun", "level": "A1", "rank": 7, "gloss": "amigo", "alt": ["amiga"], "conf": 0.9, "forms": ["friend", "friends"], "examples": ["s8"]}
+{"id": "school.n", "word": "school", "pos": "noun", "level": "A1", "rank": 8, "gloss": "escola", "alt": [], "conf": 0.9, "forms": ["school", "schools"], "examples": ["s9"]}
+{"id": "bed.n", "word": "bed", "pos": "noun", "level": "A1", "rank": 9, "gloss": "cama", "alt": [], "conf": 0.9, "forms": ["bed", "beds"], "examples": []}
+{"id": "bad.adj", "word": "bad", "pos": "adjective", "level": "A1", "rank": 10, "gloss": "ruim", "alt": ["mau"], "conf": 0.9, "forms": ["bad"], "examples": []}
+{"id": "big.adj", "word": "big", "pos": "adjective", "level": "A1", "rank": 11, "gloss": "grande", "alt": [], "conf": 0.9, "forms": ["big", "bigger"], "examples": ["s1"]}
+{"id": "happy.adj", "word": "happy", "pos": "adjective", "level": "A1", "rank": 12, "gloss": "feliz", "alt": [], "conf": 0.9, "forms": ["happy"], "examples": ["s10"]}
+{"id": "small.adj", "word": "small", "pos": "adjective", "level": "A1", "rank": 13, "gloss": "pequeno", "alt": [], "conf": 0.9, "forms": ["small"], "examples": []}
+{"id": "red.adj", "word": "red", "pos": "adjective", "level": "A1", "rank": 14, "gloss": "vermelho", "alt": [], "conf": 0.9, "forms": ["red"], "examples": []}
+{"id": "like.v", "word": "like", "pos": "verb", "level": "A1", "rank": 15, "gloss": "gostar", "alt": [], "conf": 0.9, "forms": ["like", "likes", "liked", "liking"], "examples": ["s2"]}
+{"id": "read.v", "word": "read", "pos": "verb", "level": "A1", "rank": 16, "gloss": "ler", "alt": [], "conf": 0.9, "forms": ["read", "reads", "reading"], "examples": ["s5"]}
+{"id": "drink.v", "word": "drink", "pos": "verb", "level": "A1", "rank": 17, "gloss": "beber", "alt": ["tomar"], "conf": 0.9, "forms": ["drink", "drinks", "drank", "drinking"], "examples": ["s6"]}
+{"id": "live.v", "word": "live", "pos": "verb", "level": "A1", "rank": 18, "gloss": "morar", "alt": ["viver"], "conf": 0.9, "forms": ["live", "lives", "lived", "living"], "examples": ["s7"]}
+{"id": "go.v", "word": "go", "pos": "verb", "level": "A1", "rank": 19, "gloss": "ir", "alt": [], "conf": 0.9, "forms": ["go", "goes", "went", "going"], "examples": ["s9"]}
+{"id": "eat.v", "word": "eat", "pos": "verb", "level": "A1", "rank": 20, "gloss": "comer", "alt": [], "conf": 0.9, "forms": ["eat", "eats", "ate", "eating"], "examples": []}
+{"id": "cheap.adj", "word": "cheap", "pos": "adjective", "level": "A2", "rank": 21, "gloss": "barato", "alt": [], "conf": 0.9, "forms": ["cheap"], "examples": []}
+{"id": "borrow.v", "word": "borrow", "pos": "verb", "level": "A2", "rank": 22, "gloss": "pegar emprestado", "alt": [], "conf": 0.9, "forms": ["borrow", "borrowed"], "examples": []}

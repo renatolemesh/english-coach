@@ -57,10 +57,12 @@ export interface Practice {
   day: string; // YYYY-MM-DD, local
   score: number | null;
   audio: boolean;
+  points?: number; // a finished lesson (/aula): its own points (right answers + bonus)
 }
 
-/** 5 + up to 10 for the score (0-100) + 3 for a voice answer. */
+/** 5 + up to 10 for the score (0-100) + 3 for a voice answer; a lesson brings its points. */
 export function practicePoints(p: Practice): number {
+  if (p.points !== undefined) return p.points;
   return POINTS.practice + Math.round((p.score ?? 0) / 10) + (p.audio ? POINTS.audio : 0);
 }
 

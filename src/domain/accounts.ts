@@ -9,6 +9,7 @@ export const StudentAccess = z.object({
   status: z.string().default("active"), // active | blocked
   plan_name: z.string().nullable().default(null),
   messages_per_day: z.number().int().nullable().default(null), // null: unlimited
+  lessons_per_day: z.number().int().nullable().default(null), // course lessons; null: unlimited
   plan_ends_at: optionalDate,
   tutors: z.array(z.string()).nullable().default(null), // the plan's voices; null: all
   speeds: z.array(z.number()).nullable().default(null), // the plan's speeds; null: all

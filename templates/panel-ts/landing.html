@@ -24,6 +24,7 @@
     <a class="brand" href="/">{{ logo() }}<span>say<b>best</b></span></a>
     <nav aria-label="Seções">
       <a href="#como-funciona">Como funciona</a>
+      <a href="#aulas">Aulas</a>
       <a href="#recursos">Recursos</a>
       <a href="#planos">Planos</a>
       <a href="#duvidas">Dúvidas</a>
@@ -93,6 +94,20 @@
   </div>
 </section>
 
+<section id="aulas" class="section alt">
+  <div class="wrap">
+    <div class="head"><span class="kicker">Aulas rápidas</span><h2>Exercícios de 5 minutos, direto no chat</h2><p>Mande /aula e faça 10 exercícios tocando nos botões, escrevendo ou falando. O que você erra volta na hora certa para você não esquecer.</p></div>
+    <div class="grid">
+      <article class="feat">{{ icon("translate") }}<h3>Palavras novas</h3><p>Significado, tradução e a palavra numa frase de verdade, com o nível certo para você.</p></article>
+      <article class="feat">{{ icon("mic") }}<h3>Ouvir e repetir</h3><p>Ouça a frase na voz do tutor, repita por áudio e veja quais palavras treinar.</p></article>
+      <article class="feat">{{ icon("chat") }}<h3>Complete o diálogo</h3><p>Escolha a melhor resposta em situações do dia a dia: café, trabalho, viagem.</p></article>
+      <article class="feat">{{ icon("alert") }}<h3>Pegadinhas de brasileiro</h3><p>"I have 20 years", falsos cognatos como <i>actually</i> e <i>pretend</i>: os erros que todo brasileiro comete.</p></article>
+      <article class="feat">{{ icon("target") }}<h3>Monte e escreva frases</h3><p>Ordene as palavras, complete lacunas e escreva o que ouviu.</p></article>
+      <article class="feat">{{ icon("sparkle") }}<h3>Seus próprios erros</h3><p>Os erros que você comete na conversa viram exercícios de revisão só seus.</p></article>
+    </div>
+  </div>
+</section>
+
 <section id="recursos" class="section">
   <div class="wrap">
     <div class="head"><span class="kicker">Recursos</span><h2>Feito para você praticar de verdade</h2></div>
@@ -120,7 +135,7 @@
         <h3>Teste Ilimitado</h3>
         <p class="price"><b>R$ 0</b> por 30 dias</p>
         <ul>
-          <li>{{ icon("check") }} Mensagens ilimitadas</li>
+          <li>{{ icon("check") }} Mensagens e aulas ilimitadas</li>
           <li>{{ icon("check") }} Todos os tutores e sotaques</li>
           <li>{{ icon("check") }} Todas as velocidades</li>
           <li>{{ icon("check") }} Painel, metas e ranking</li>
@@ -133,6 +148,7 @@
         <p class="price"><b>R$ 0</b> para sempre</p>
         <ul>
           <li>{{ icon("check") }} 15 mensagens por dia</li>
+          <li>{{ icon("check") }} 1 aula rápida por dia</li>
           <li>{{ icon("check") }} Tutora Sarah (sotaque americano)</li>
           <li>{{ icon("check") }} Velocidade normal e um pouco mais lenta</li>
           <li>{{ icon("check") }} Painel, metas e ranking</li>
@@ -179,7 +195,7 @@
 <footer class="foot">
   <div class="wrap foot-in">
     <a class="brand" href="/">{{ logo() }}<span>say<b>best</b></span></a>
-    <nav aria-label="Rodapé"><a href="/panel/signup">Criar conta</a><a href="/panel/login">Entrar</a><a href="#duvidas">Dúvidas</a></nav>
+    <nav aria-label="Rodapé"><a href="/panel/signup">Criar conta</a><a href="/panel/login">Entrar</a><a href="#duvidas">Dúvidas</a><a href="/panel/creditos">Créditos</a></nav>
     <small>© {{ year }} saybest</small>
   </div>
 </footer>

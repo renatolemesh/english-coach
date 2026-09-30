@@ -61,6 +61,7 @@ describe("templates", () => {
     tutors: ["sarah"],
     speeds: [1, 0.9],
     nextPlanId: null,
+    lessonsPerDay: 1,
   };
   const student: Student = {
     id: 7,

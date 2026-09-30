@@ -125,9 +125,28 @@ velocidades oferecidas e o plano seguinte quando o prazo acaba (ainda sem pagame
 limite diário vai uma vez por dia. Números desconhecidos recebem o link de cadastro (política
 editável no painel).
 
-Metas (`src/domain/progress.ts`): meta diária de 3, 5 ou 10 práticas (`/meta`), subida de nível
+Metas (`src/domain/progress.ts`): meta diária de 1 a 30 práticas (`/meta`), subida de nível
 CEFR após N respostas com nota 75+ no nível atual, e pontos semanais para o ranking (segunda a
 domingo, só primeiro nome e inicial; o aluno pode sair nas configurações).
+
+## Aulas (`/aula`)
+
+Modo curso dentro do WhatsApp (`src/course/`): aulas de ~10 exercícios, uma mensagem por
+exercício (o retorno da resposta vai junto com a próxima pergunta).
+
+- **Tipos:** significado (EN→PT), palavra (PT→EN), ouvir e escolher, completar a frase, escrever
+  a palavra, montar a frase com peças numeradas, ditado, traduzir, ouvir e repetir (áudio),
+  dizer em inglês (áudio), pegadinhas de gramática, falsos cognatos, pares de sons, completar o
+  diálogo e os erros do próprio aluno na conversa.
+- **Correção sem LLM:** botões/número/texto da opção, texto com tolerância a erros de digitação,
+  fala pelo whisper (palavras e a probabilidade de cada uma).
+- **Revisão espaçada:** FSRS (`ts-fsrs`), um cartão por item em `course_cards`; `/revisar` só
+  revisões. Plano por aula em `src/course/planner.ts`.
+- **Limite:** `plans.lessons_per_day` (Grátis: 1). Uma aula concluída conta na meta diária e dá
+  pontos no ranking (acertos + 5).
+- **Conteúdo** em `data/course/`: `words.jsonl` e `sentences.jsonl` gerados por
+  `npx tsx scripts/build-course.ts` (CEFR-J + Wiktionary + Tatoeba; licenças em
+  `data/course/LICENSE.md` e na página `/panel/creditos`), e `traps.yaml` escrito à mão.
 
 ## Testes e qualidade
 

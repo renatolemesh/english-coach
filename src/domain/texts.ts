@@ -150,6 +150,7 @@ export const EN: Texts = makeTexts({
     "Hi! Welcome to *saybest*. You'll practice English conversation with {tutor}.\n\n" +
     "Send a *voice message in English* (or text) and I'll reply with an image with your " +
     "corrections and a voice note to keep the conversation going.\n\n" +
+    "For quick lessons with exercises, send /aula. " +
     "To change the topic, level, voice or speed, send /menu at any time.\n\n" +
     "🇧🇷 Prefere as mensagens em português? Mande /idioma pt.",
   welcomeBack:
@@ -160,6 +161,8 @@ export const EN: Texts = makeTexts({
     "Record a voice message in English answering the question. You get an image with what " +
     "was right, what to fix and a score from 0 to 100, and a voice note to continue.\n\n" +
     "*Commands*\n" +
+    "/aula - a quick lesson with exercises (words, listening, speaking)\n" +
+    "/revisar - review what you learned\n" +
     "/topic - see the topics\n/topic 2 or /topic travel - change the topic\n" +
     `/level B1 - set your level (${LEVELS.join(", ")})\n` +
     "/voice - choose who talks to you (accent and voice)\n" +
@@ -262,6 +265,7 @@ export const EN: Texts = makeTexts({
   menuBody: "What would you like to do?",
   menuButton: "Open menu",
   menuRows: {
+    aula: ["📚 Quick lesson", "10 exercises: words, listening and speaking"],
     tema: ["🔄 Change topic", "Pick another subject to talk about"],
     nivel: ["📶 Change level", "Make the conversation easier or harder"],
     voz: ["🗣️ Change voice", "British or American accent, female or male voice"],
@@ -271,7 +275,7 @@ export const EN: Texts = makeTexts({
     reset: ["🆕 Start over", "Restart the conversation from scratch"],
   },
   menuFallback:
-    "*Menu*\n/topic - change the topic\n/level - change the level\n/voice - change the " +
+    "*Menu*\n/aula - quick lesson\n/topic - change the topic\n/level - change the level\n/voice - change the " +
     "voice\n/speed - speaking speed\n/goal - daily goal\n/language - English or Portuguese\n" +
     "/reset - start over" +
     "\n/help - how it works",
@@ -323,6 +327,7 @@ export const PT: Texts = makeTexts({
     "Olá! Bem-vindo ao *saybest*. Quem vai conversar com você em inglês é {tutor}.\n\n" +
     "Mande um *áudio em inglês* (ou texto) e eu respondo com uma imagem com suas correções " +
     "e um áudio continuando a conversa.\n\n" +
+    "Para aulas rápidas com exercícios, mande /aula. " +
     "Para trocar de tema, nível, voz ou velocidade, mande /menu a qualquer momento.\n\n" +
     "🇬🇧 Dica: com as mensagens em inglês você pratica ainda mais. Mande /idioma en.",
   welcomeBack:
@@ -333,6 +338,8 @@ export const PT: Texts = makeTexts({
     "Grave um áudio em inglês respondendo à pergunta. Você recebe uma imagem com o que " +
     "estava certo, o que corrigir e uma nota de 0 a 100, e um áudio para continuar.\n\n" +
     "*Comandos*\n" +
+    "/aula - uma aula rápida com exercícios (palavras, escuta, fala)\n" +
+    "/revisar - revisar o que você aprendeu\n" +
     "/tema - ver os temas\n/tema 2 ou /tema travel - trocar de tema\n" +
     `/nivel B1 - ajustar o nível (${LEVELS.join(", ")})\n` +
     "/voz - escolher quem fala com você (sotaque e voz)\n" +
@@ -435,6 +442,7 @@ export const PT: Texts = makeTexts({
   menuBody: "O que você quer fazer?",
   menuButton: "Abrir menu",
   menuRows: {
+    aula: ["📚 Aula rápida", "10 exercícios: palavras, escuta e fala"],
     tema: ["🔄 Trocar tema", "Escolher outro assunto para conversar"],
     nivel: ["📶 Mudar nível", "Deixar a conversa mais fácil ou mais difícil"],
     voz: ["🗣️ Trocar voz", "Sotaque britânico ou americano, voz feminina ou masculina"],
@@ -444,7 +452,7 @@ export const PT: Texts = makeTexts({
     reset: ["🆕 Recomeçar", "Começar a conversa do zero"],
   },
   menuFallback:
-    "*Menu*\n/tema - trocar de tema\n/nivel - mudar o nível\n/voz - trocar a voz\n" +
+    "*Menu*\n/aula - aula rápida\n/tema - trocar de tema\n/nivel - mudar o nível\n/voz - trocar a voz\n" +
     "/velocidade - velocidade da fala\n/meta - meta diária\n/idioma - inglês ou português\n" +
     "/reset - recomeçar a conversa\n/ajuda - como funciona",
   topicBody:

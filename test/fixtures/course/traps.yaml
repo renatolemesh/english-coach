@@ -1,0 +1,31 @@
+grammar:
+  - id: age-be
+    level: A1
+    pt: "Eu tenho 20 anos."
+    right: "I'm 20 years old."
+    wrong: ["I have 20 years.", "I have 20 years old."]
+    tip: "Idade em inglês usa o verbo *be*."
+false_friends:
+  - id: actually
+    level: A1
+    word: actually
+    meaning: "na verdade"
+    trap: "atualmente"
+    other: "finalmente"
+    example: {en: "Actually, I live in Rio.", pt: "Na verdade, eu moro no Rio."}
+    tip: "*Actually* = na verdade."
+minimal_pair_sounds:
+  i-ih: "i longo x i curto"
+minimal_pairs:
+  - id: ship-sheep
+    sound: i-ih
+    level: A1
+    words: [ship, sheep]
+    tip: "Em *sheep* o i é longo."
+chats:
+  - id: cafe-order
+    level: A1
+    context: "Numa cafeteria"
+    them: "Hi! What can I get you?"
+    options: ["A coffee, please.", "I'm fine, thanks.", "Yes, I can."]
+    tip: "Para pedir: *A ..., please*."

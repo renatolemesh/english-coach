@@ -43,6 +43,13 @@
     <p class="muted small">{% if ranked %}{{ ranked }} {{ 'aluno' if ranked == 1 else 'alunos' }} pontuando nesta semana.{% else %}Ninguém pontuou nesta semana ainda.{% endif %} Ver ranking {{ icon("arrow") }}</p>
   </a>
 </div>
+{% if course %}
+<section class="card course">
+  <span class="stat-ic violet">{{ icon("book") }}</span>
+  <div class="course-text"><strong>Aulas no WhatsApp</strong><span class="muted small">{{ course.lessons }} {{ 'aula concluída' if course.lessons == 1 else 'aulas concluídas' }} · {{ course.words }} {{ 'palavra' if course.words == 1 else 'palavras' }} no seu vocabulário · {{ course.due }} {{ 'revisão' if course.due == 1 else 'revisões' }} para hoje</span></div>
+  {% if whatsapp %}<a class="button" href="https://wa.me/{{ whatsapp }}?text=%2Faula" target="_blank" rel="noopener noreferrer">{{ icon("book") }} Fazer uma aula</a>{% endif %}
+</section>
+{% endif %}
 <div class="stats">
   {{ stat(progress.avgScore if progress.avgScore is not null else '—', "nota média geral", "target", "indigo") }}
   {{ stat(progress.practices, "práticas no total", "chat", "violet") }}

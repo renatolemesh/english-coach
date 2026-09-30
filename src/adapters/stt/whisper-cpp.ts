@@ -158,6 +158,7 @@ export function toTranscript(segments: Segment[], language: string, duration: nu
       avg_logprob: -10,
       no_speech_prob: 1,
       duration_s: round(duration, 2),
+      words: [],
     };
   const total = scored.reduce((n, seg) => n + seg.weight, 0);
   const avg = scored.reduce((n, seg) => n + seg.avg * seg.weight, 0) / total;
@@ -170,7 +171,34 @@ export function toTranscript(segments: Segment[], language: string, duration: nu
     avg_logprob: round(avg, 4),
     no_speech_prob: 0, // whisper-cli does not report it; the VAD drops silence instead
     duration_s: round(duration, 2),
+    words: wordsOf(segments),
   };
+}
+
+/** Tokens -> words: a token starting with a space starts a word (an opening quote or other
+ * punctuation in between does not); a word's probability is its lowest token's, punctuation
+ * tokens do not count. */
+export function wordsOf(segments: Segment[]): { text: string; p: number }[] {
+  const words: { text: string; p: number }[] = [];
+  let startNew = true;
+  for (const seg of segments) {
+    for (const tok of seg.tokens ?? []) {
+      if (!tok.text || tok.text.startsWith("[_") || tok.text.startsWith("<|")) continue;
+      if (tok.text.startsWith(" ")) startNew = true;
+      const last = words.at(-1);
+      if (!/[\p{L}\p{N}]/u.test(tok.text)) {
+        if (last && !startNew) last.text += tok.text.trim(); // "house" + "."
+        continue;
+      }
+      if (startNew || !last) words.push({ text: tok.text.trim(), p: round(tok.p, 3) });
+      else {
+        last.text += tok.text.trim();
+        last.p = Math.min(last.p, round(tok.p, 3));
+      }
+      startNew = false;
+    }
+  }
+  return words.filter((w) => w.text);
 }
 
 const round = (n: number, digits: number) => Math.round(n * 10 ** digits) / 10 ** digits;

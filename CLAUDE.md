@@ -12,10 +12,12 @@ src/rag/             ingestão e busca híbrida (pgvector)   src/prompts/     Pr
 src/api/             Hono: webhooks, API de admin          src/panel/       Hono + Nunjucks (templates/panel-ts)
 src/worker/          BullMQ                                src/connections/ conexões WhatsApp (credenciais cifradas)
 src/db/              Drizzle (schema, client, migrate)     src/container.ts escolhe as implementações
+src/course/          aulas /aula: conteúdo, exercícios, correção, FSRS, motor
 test/                Vitest, espelha src/; fixtures em test/fixtures; evals em test/*-eval.yaml
 scripts/             migrate, ingest, create-admin, eval-conversations, download-models
 drizzle/  migrações   prompts/  prompts JSON versionados   schemas/  JSON Schemas dos prompts
-data/     temas + gramática (RAG)   templates/  evaluation.njk (card), fonts/ (Inter, OFL), panel-ts/
+data/     temas + gramática (RAG); course/ (palavras, frases, pegadinhas)
+templates/  evaluation.njk (card), fonts/ (Inter, OFL), panel-ts/ (painel, landing.html)
 ```
 
 ## Comandos
@@ -48,6 +50,10 @@ data/     temas + gramática (RAG)   templates/  evaluation.njk (card), fonts/ (
   `out/panel_password.txt` (modo 600) e não a mostra.
 - As regras de limpeza em `src/domain/evaluation.ts` têm a última palavra sobre o que o modelo
   devolve. Antes de mudá-las, adicione aos testes o caso real que falha.
+- Aulas: a correção é por código (sem LLM). Conteúdo de `data/course/words.jsonl` e
+  `sentences.jsonl` vem do `scripts/build-course.ts`: não edite à mão, mude o script.
+  `traps.yaml` é escrito à mão: resposta certa sem ambiguidade, erradas claramente erradas.
+- A Meta cobra cada mensagem enviada (desde 1º/10/2026): evite mensagens extras por turno.
 - whisper.cpp: faixas de confiança `STT_MIN_CONFIDENCE=-2.0` (abaixo disso pede para repetir) e
   `STT_SURE_CONFIDENCE=-1.05` (acima disso avalia sem ressalva).
 - Modelos (whisper.cpp, Kokoro, bge-small) ficam em `/opt/models` na imagem do worker

@@ -246,7 +246,8 @@ export function adminRoutes(app: Hono, p: Panel): void {
     const planId = optionalInt(form, "id");
     const messagesPerDay = optionalInt(form, "messages_per_day");
     const durationDays = optionalInt(form, "duration_days");
-    if (messagesPerDay === 0 || durationDays === 0) {
+    const lessonsPerDay = optionalInt(form, "lessons_per_day");
+    if (messagesPerDay === 0 || durationDays === 0 || lessonsPerDay === 0) {
       // 0 would block every message while the panel shows "ilimitado"
       return plansPage(c, session, 400, "Use 1 ou mais (vazio = sem limite).");
     }
@@ -266,6 +267,7 @@ export function adminRoutes(app: Hono, p: Panel): void {
       tutors: tutors.length && tutors.length < Object.keys(TUTORS).length ? tutors : null,
       speeds: speeds.length && speeds.length < SPEEDS.size ? speeds : null,
       nextPlanId: durationDays ? nextPlanId : null,
+      lessonsPerDay,
     };
     let plan: Awaited<ReturnType<typeof p.queries.savePlan>>;
     try {
@@ -283,6 +285,7 @@ export function adminRoutes(app: Hono, p: Panel): void {
       tutors: values.tutors,
       speeds: values.speeds,
       next_plan_id: values.nextPlanId,
+      lessons_per_day: values.lessonsPerDay,
     });
     return go(c, "/plans", "saved");
   });

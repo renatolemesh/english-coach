@@ -6,6 +6,7 @@ import type { PastTurn, TurnLog, TurnRepository } from "../../ports/repository.j
 
 export interface MemoryPlan {
   messages_per_day?: number | null;
+  lessons_per_day?: number | null;
   duration_days?: number | null;
   tutors?: string[] | null;
   speeds?: number[] | null;
@@ -59,6 +60,7 @@ export class MemoryRepository implements TurnRepository {
     return {
       plan_name: planName,
       messages_per_day: plan?.messages_per_day ?? null,
+      lessons_per_day: plan?.lessons_per_day ?? null,
       tutors: plan?.tutors ?? null,
       speeds: plan?.speeds ?? null,
       plan_ends_at: days ? new Date(start.getTime() + days * 86_400_000) : null,

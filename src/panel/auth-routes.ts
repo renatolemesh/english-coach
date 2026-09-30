@@ -49,6 +49,7 @@ export function authRoutes(app: Hono, p: Panel): void {
 
   // --- students: login -----------------------------------------------------------------------
   app.get("/login", (c) => anon(c, "login.html", { phone: "" }));
+  app.get("/creditos", (c) => p.views.render(c, "credits.html")); // data licences (course)
 
   app.post("/login", async (c) => {
     const form = await posted(c, null);

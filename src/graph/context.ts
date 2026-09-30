@@ -2,6 +2,7 @@
 import type { AccountGate } from "../accounts/gate.js";
 import type { RuntimeConfig } from "../accounts/runtime.js";
 import type { Settings } from "../config.js";
+import type { CourseEngine } from "../course/engine.js";
 import type { UsageLimits } from "../guardrails/limits.js";
 import type { WhatsAppChannel } from "../ports/channel.js";
 import type { LLMClient } from "../ports/llm.js";
@@ -23,6 +24,7 @@ export interface GraphContext {
   limits: UsageLimits;
   gate: AccountGate;
   config: RuntimeConfig; // panel settings, per message
+  course?: CourseEngine; // lessons (/aula); absent: conversation only
 }
 
 /** What a node receives as its second argument. */

@@ -65,6 +65,15 @@ export class ConversationRunner {
     const admission = await ctx.gate.admit(message, connectionId, ctx.channel, ctx.config);
     if (!admission.access) return {}; // refused or a verification code: already answered
     const access = admission.access;
+    if (ctx.course && !admission.start) {
+      // lessons (/aula) and their answers; everything else goes on to the conversation
+      const course = ctx.course;
+      const handled = await withContext(
+        { user_id: access.user_id, connection_id: connectionId },
+        () => course.handle({ msg: message, access, channel: ctx.channel, config: ctx.config }),
+      );
+      if (handled) return {};
+    }
     const msg = admission.start ? { ...message, type: "text" as const, text: "/start" } : message; // just signed up
     const tid = threadId(connectionId, phone);
     return withContext(

@@ -2,7 +2,7 @@
 import { and, count, desc, eq, gte, inArray, isNotNull, ne, sql } from "drizzle-orm";
 import type { Db } from "../../db/client.js";
 import { advanceEndedPlan } from "../../db/plan-changes.js";
-import { mistakes, plans, students, turns } from "../../db/schema.js";
+import { courseLessons, mistakes, plans, students, turns } from "../../db/schema.js";
 import {
   type Preferences,
   type StudentAccess,
@@ -19,6 +19,7 @@ export function toAccess(student: StudentRow, plan: PlanRow | null): StudentAcce
     status: student.status,
     plan_name: plan?.name ?? null,
     messages_per_day: plan?.messagesPerDay ?? null,
+    lessons_per_day: plan?.lessonsPerDay ?? null,
     plan_ends_at: student.planEndsAt,
     tutors: plan?.tutors ?? null,
     speeds: plan?.speeds ?? null,
@@ -217,6 +218,17 @@ export class SqlRepository implements TurnRepository {
       .select({ n: count() })
       .from(turns)
       .where(and(evaluated, eq(turns.level, level), gte(turns.score, minScore)));
-    return { today: today?.n ?? 0, goodAtLevel: good?.n ?? 0 };
+    const [lessons] = await this.db
+      .select({ n: count() })
+      .from(courseLessons)
+      .where(
+        and(
+          eq(courseLessons.studentId, userId),
+          eq(courseLessons.status, "done"),
+          gte(courseLessons.finishedAt, since),
+        ),
+      );
+    // a finished lesson (/aula) counts as a practice for the daily goal
+    return { today: (today?.n ?? 0) + (lessons?.n ?? 0), goodAtLevel: good?.n ?? 0 };
   }
 }

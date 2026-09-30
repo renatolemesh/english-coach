@@ -19,7 +19,7 @@ export const ROW_DESCRIPTION_CHARS = 72;
 // biome-ignore format: one line
 export const OPTION_COMMANDS = [
   "transcrever", "traduzir", "menu", "reset", "tema", "nivel", "voz", "velocidade", "idioma",
-  "meta",
+  "meta", "aula", "revisar", "sair", "ex",
 ] as const;
 const OPTION_RE = new RegExp(`^(${OPTION_COMMANDS.join("|")})(?::([A-Za-z0-9]{1,8}))?$`);
 

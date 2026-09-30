@@ -14,4 +14,4 @@ function envValue(name: string): string {
 export const TEST_DATABASE_URL = envValue("DATABASE_URL").replace(/\/coach$/, "/coach_test");
 export const TEST_REDIS_URL = "redis://127.0.0.1:6380/15";
 export const TRUNCATE =
-  "TRUNCATE students, admin_users, web_sessions, app_settings, audit_log, turns, mistakes RESTART IDENTITY CASCADE";
+  "TRUNCATE students, admin_users, web_sessions, app_settings, audit_log, turns, mistakes, course_cards, course_lessons, course_attempts RESTART IDENTITY CASCADE";

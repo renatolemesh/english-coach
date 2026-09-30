@@ -29,6 +29,13 @@
       "when": 1790605079030,
       "tag": "0003_plan_features_goals",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790795516149,
+      "tag": "0004_course",
+      "breakpoints": true
     }
   ]
 }

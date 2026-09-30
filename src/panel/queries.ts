@@ -18,7 +18,15 @@ import {
 import { digits, variants } from "../accounts/phones.js";
 import type { Db } from "../db/client.js";
 import { advanceEndedPlan } from "../db/plan-changes.js";
-import { adminUsers, auditLog, mistakes, plans, students, turns } from "../db/schema.js";
+import {
+  adminUsers,
+  auditLog,
+  courseLessons,
+  mistakes,
+  plans,
+  students,
+  turns,
+} from "../db/schema.js";
 import { GOOD_SCORE, goalOf, type Practice, rankingName, weekPoints } from "../domain/progress.js";
 import type { AdminUser, Student } from "./security.js";
 import { isoDay, localMidnight, previousDay, safeZone, weekStart } from "./zones.js";
@@ -82,6 +90,7 @@ export interface PlanValues {
   tutors: string[] | null;
   speeds: number[] | null;
   nextPlanId: number | null;
+  lessonsPerDay: number | null;
 }
 
 export interface RankRow {
@@ -351,6 +360,15 @@ export class PanelQueries {
           .groupBy(localDay)
       ).map((r) => [r.day, r.n]),
     );
+    // a finished lesson (/aula) is a practice too (daily goal, streak)
+    const lessonDay = sql`(timezone(${zone}, ${courseLessons.finishedAt}))::date`;
+    for (const r of await this.db
+      .select({ day: sql<string>`${lessonDay}::text`, n: count() })
+      .from(courseLessons)
+      .where(and(eq(courseLessons.studentId, studentId), eq(courseLessons.status, "done")))
+      .groupBy(lessonDay)) {
+      perDay.set(r.day, (perDay.get(r.day) ?? 0) + r.n);
+    }
     const [good] = await this.db
       .select({ n: count() })
       .from(turns)
@@ -421,6 +439,35 @@ export class PanelQueries {
         practices: [],
       };
       entry.practices.push({ day: r.day, score: r.score, audio: r.kind === "audio" });
+      byStudent.set(r.studentId, entry);
+    }
+    const lessons = await this.db
+      .select({
+        studentId: courseLessons.studentId,
+        name: students.name,
+        goal: students.dailyGoal,
+        day: sql<string>`((timezone(${zone}, ${courseLessons.finishedAt}))::date)::text`,
+        points: courseLessons.points,
+      })
+      .from(courseLessons)
+      .innerJoin(students, eq(students.id, courseLessons.studentId))
+      .where(
+        and(
+          eq(courseLessons.status, "done"),
+          gte(courseLessons.finishedAt, weekStart(this.tz, now)),
+          eq(students.inRanking, true),
+          eq(students.status, "active"),
+          ne(students.connectionId, "eval"),
+        ),
+      )
+      .orderBy(asc(courseLessons.id));
+    for (const r of lessons) {
+      const entry = byStudent.get(r.studentId) ?? {
+        name: rankingName(r.name, r.studentId),
+        goal: r.goal,
+        practices: [],
+      };
+      entry.practices.push({ day: r.day, score: null, audio: false, points: r.points });
       byStudent.set(r.studentId, entry);
     }
     return [...byStudent]

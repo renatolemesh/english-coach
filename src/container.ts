@@ -9,6 +9,8 @@ import { defaultRuntimeConfig } from "./accounts/runtime.js";
 import { RuntimeConfigStore } from "./accounts/runtime-store.js";
 import { MemoryCache } from "./adapters/cache/memory.js";
 import { RedisCache } from "./adapters/cache/redis.js";
+import { MemoryCourseRepository } from "./adapters/course/memory.js";
+import { SqlCourseRepository } from "./adapters/course/sql.js";
 import { FakeImageRenderer } from "./adapters/image/fake.js";
 import { FakeLLM } from "./adapters/llm/fake.js";
 import { modelSetup, OpenRouterLLM, OpenRouterTransport } from "./adapters/llm/openrouter.js";
@@ -17,11 +19,14 @@ import { SqlRepository } from "./adapters/repo/sql.js";
 import { FakeSTT } from "./adapters/stt/fake.js";
 import { FakeTTS } from "./adapters/tts/fake.js";
 import { fallbackModels, PROJECT_ROOT, type Settings } from "./config.js";
+import { CourseContent } from "./course/content.js";
+import { CourseEngine } from "./course/engine.js";
 import { connect, type Database } from "./db/client.js";
 import type { GraphContext } from "./graph/context.js";
 import { UsageLimits } from "./guardrails/limits.js";
 import type { Cache } from "./ports/cache.js";
 import type { WhatsAppChannel } from "./ports/channel.js";
+import type { CourseRepository } from "./ports/course.js";
 import type { LLMClient } from "./ports/llm.js";
 import type { ImageRenderer, SpeechToText, TextToSpeech } from "./ports/media.js";
 import type { TurnRepository } from "./ports/repository.js";
@@ -50,7 +55,15 @@ export class Container {
     readonly limits: UsageLimits,
     public media: Media | null,
     readonly database: Database | null,
+    public courseRepo: CourseRepository = database
+      ? new SqlCourseRepository(database.db)
+      : new MemoryCourseRepository(),
   ) {}
+
+  /** The course content (data/course), loaded on first use. */
+  get courseContent(): CourseContent {
+    return CourseContent.load(path.join(this.settings.dataDir, "course"));
+  }
 
   /** Panel settings (app_settings); defaults without a database. */
   get runtime(): RuntimeConfigStore {
@@ -82,6 +95,14 @@ export class Container {
       limits: this.limits,
       gate: new AccountGate(this.repo, this.cache, panelUrl),
       config,
+      course: new CourseEngine({
+        repo: this.courseRepo,
+        content: this.courseContent,
+        tts: media.tts,
+        stt: media.stt,
+        settings: this.settings,
+        limits: this.limits,
+      }),
     };
   }
 
