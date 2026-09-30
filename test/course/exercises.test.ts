@@ -5,6 +5,7 @@ import {
   EXERCISE_TYPES,
   type Exercise,
   type GenContext,
+  hasName,
   makeExercise,
   type Step,
   tilesOf,
@@ -82,6 +83,10 @@ describe("exercises", () => {
   it("word tiles keep I and names, drop the full stop", () => {
     expect(tilesOf("I live in a big house.")).toEqual(["I", "live", "in", "a", "big", "house"]);
     expect(tilesOf("The cat is small.")).toEqual(["the", "cat", "is", "small"]);
+    const known = (w: string) => ["the", "took"].includes(w);
+    expect(tilesOf("Lucas took Ana with him.", known)[0]).toBe("Lucas"); // a name keeps its capital
+    expect(hasName("Lucas had Ana do it.")).toBe(true);
+    expect(hasName("I think I'm right.")).toBe(false);
     const ex = makeExercise({ type: "order", item: null, sentence: "s1" }, g(2)) as Exercise;
     expect(ex.tiles.join(" ")).not.toBe("I live in a big house");
     expect(ex.body).toContain("1️⃣");

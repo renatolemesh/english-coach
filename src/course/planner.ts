@@ -14,6 +14,7 @@ import {
   AUDIO_TYPES,
   cardKey,
   type ExerciseType,
+  hasName,
   type MistakeData,
   pick,
   type Step,
@@ -114,7 +115,12 @@ function newTrap(input: PlanInput): Step | null {
   return null;
 }
 
-function sentence(input: PlanInput, maxWords: number, taken: Set<string>): Sentence | null {
+function sentence(
+  input: PlanInput,
+  maxWords: number,
+  taken: Set<string>,
+  noNames = false,
+): Sentence | null {
   const { content, known } = input;
   const pool = content.poolLevel(input.level);
   const candidates: Sentence[] = [];
@@ -122,6 +128,7 @@ function sentence(input: PlanInput, maxWords: number, taken: Set<string>): Sente
     const group = content.sentencesByLevel.get(["A1", "A2", "B1", "B2", "C1", "C2"][level] ?? "");
     for (const s of shuffle(group ?? [], input.rng).slice(0, 400)) {
       const n = s.en.split(/\s+/).length;
+      if (noNames && hasName(s.en)) continue;
       if (n >= 4 && n <= maxWords && !input.usedSentences.has(s.id) && !taken.has(s.id)) {
         candidates.push(s);
       }
@@ -167,10 +174,10 @@ export function planLesson(input: PlanInput): Step[] {
     if (trap) extras.push(trap);
   }
   const practice = (["order", "dictation", "translate"] as const)[input.lessonsDone % 3] ?? "order";
-  const s1 = sentence(input, practice === "order" ? 8 : 10, taken);
+  const s1 = sentence(input, practice === "order" ? 8 : 10, taken, practice === "dictation");
   if (s1) extras.push({ type: practice, item: null, sentence: s1.id });
   const speaking = (["repeat", "say"] as const)[input.lessonsDone % 2] ?? "repeat";
-  const s2 = sentence(input, 9, taken);
+  const s2 = sentence(input, 9, taken, true);
   if (s2) extras.push({ type: speaking, item: null, sentence: s2.id });
 
   let fresh = backlog > 12 ? 1 : backlog > 6 ? 2 : 3;

@@ -306,21 +306,27 @@ function typeWord(w: Word, g: GenContext, item: string): Exercise {
 
 // --- sentences ----------------------------------------------------------------------------
 
-/** "This is my house." -> ["this", "is", "my", "house"] (keeps "I" and names capitalised). */
-export function tilesOf(en: string): string[] {
+/** "This is my house." -> ["this", "is", "my", "house"]: the first word loses its capital
+ * unless it is "I" or a name (not in the word bank: "Lucas took Ana with him."). */
+export function tilesOf(en: string, isWord: (w: string) => boolean = () => true): string[] {
   const words = en
     .replace(/[.!?]+$/, "")
     .split(/\s+/)
     .filter(Boolean);
   return words.map((w, i) => {
     const bare = w.replace(/[,;:]$/, "");
-    if (i > 0 || bare === "I" || bare.startsWith("I'")) return bare;
-    return bare.charAt(0).toLowerCase() + bare.slice(1);
+    const lower = bare.charAt(0).toLowerCase() + bare.slice(1);
+    if (i > 0 || bare === "I" || bare.startsWith("I'") || !isWord(lower)) return bare;
+    return lower;
   });
 }
 
+/** A name in the sentence (a capital after the first word, "I" aside): Whisper spells names
+ * its own way (Ana -> Anna), so spoken and dictation exercises avoid them. */
+export const hasName = (en: string) => /\s(?!I\b|I')[A-Z]/.test(en);
+
 function order(s: Sentence, g: GenContext): Exercise | null {
-  const right = tilesOf(s.en);
+  const right = tilesOf(s.en, (w) => g.content.isWord(w));
   if (right.length < 4 || right.length > MAX_TILES) return null; // 3 tiles is a giveaway
   let tiles = shuffle(right, g.rng);
   for (let i = 0; i < 5 && tiles.join(" ") === right.join(" "); i++) tiles = shuffle(right, g.rng);

@@ -157,6 +157,14 @@ export class CourseContent {
     );
   }
 
+  /** A word or inflected form of the bank ("lucas" is not; "took" is). */
+  isWord(text: string): boolean {
+    this.forms ??= new Set(this.wordList.flatMap((w) => [w.word.toLowerCase(), ...w.forms]));
+    return this.forms.has(text.replace(/'.*$/, "").toLowerCase());
+  }
+
+  private forms: Set<string> | undefined;
+
   get empty(): boolean {
     return this.words.size === 0;
   }
