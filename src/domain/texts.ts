@@ -86,6 +86,16 @@ export interface TextsData {
   readonly levelUp: string; // {previous} {level} {need} {cmd}
   readonly cmdGoal: string;
   readonly cmdLevel: string;
+  // --- reminders (worker/reminders.ts): one nudge before WhatsApp's 24 h window closes ---
+  readonly reminder: string; // {name} {done} {goal} {extra}
+  readonly reminderStreak: string; // {n}
+  readonly reminderDue: string; // {n}
+  readonly reminderButtons: readonly [string, string, string]; // practice, lesson, stop (<= 20)
+  readonly remindersShow: string; // {state}
+  readonly remindersState: readonly [string, string]; // on, off
+  readonly remindersOn: string;
+  readonly remindersOff: string;
+  readonly remindersButtons: readonly [string, string]; // turn on, turn off (<= 20)
   // --- menus (see domain/choices.ts) ---
   readonly voiceHelpBody: string;
   readonly voiceHelpTitles: readonly [string, string, string]; // transcribe, translate, menu (<= 20)
@@ -171,6 +181,7 @@ export const EN: Texts = makeTexts({
     "/translate - translate the last voice note into Portuguese\n" +
     "/language - messages in English or Portuguese\n" +
     "/goal - your daily goal and the way to the next level\n" +
+    "/reminders - turn the daily goal reminder on or off\n" +
     "/menu - all options\n" +
     "/reset - start over",
   topicList: `*Suggested topics*\n${numbered(SUGGESTED_TOPICS)}\n\nSend /topic 2 or /topic <any topic>.`,
@@ -259,6 +270,20 @@ export const EN: Texts = makeTexts({
     "The questions get a little harder. To go back: {cmd} {previous}",
   cmdGoal: "/goal",
   cmdLevel: "/level",
+  reminder:
+    "⏰ Hi{name}! Today's goal isn't done yet: {done} of {goal} practices.{extra}\n" +
+    "A quick lesson or one voice message already counts 🙂",
+  reminderStreak: " Keep your {n}-day streak going 🔥",
+  reminderDue: " {n} reviews are waiting for you.",
+  reminderButtons: ["🎙️ Practice now", "📚 Quick lesson", "🔕 No reminders"],
+  remindersShow:
+    "🔔 Reminders are *{state}*.\nWhen your daily goal isn't done, I nudge you once, around " +
+    "the time you usually practise (WhatsApp only lets me write within 24 h of your last " +
+    "message).",
+  remindersState: ["on", "off"],
+  remindersOn: "🔔 Reminders on. If your daily goal isn't done, I'll nudge you once.",
+  remindersOff: "🔕 Reminders off. To turn them back on: /reminders on",
+  remindersButtons: ["🔔 Turn on", "🔕 Turn off"],
   voiceHelpBody: "Need help with the audio?",
   voiceHelpTitles: ["📝 Transcribe", "🇧🇷 Translate", "☰ Menu"],
   voiceHelpFallback: "Need help with the audio? Send /transcribe or /translate. Menu: /menu",
@@ -348,6 +373,7 @@ export const PT: Texts = makeTexts({
     "/traduzir - traduzir o último áudio\n" +
     "/idioma - mensagens em inglês ou português\n" +
     "/meta - sua meta diária e o caminho para o próximo nível\n" +
+    "/lembretes - liga ou desliga o lembrete da meta diária\n" +
     "/menu - todas as opções\n" +
     "/reset - começar do zero",
   topicList: `*Temas sugeridos*\n${numbered(SUGGESTED_TOPICS)}\n\nUse /tema 2 ou /tema <qualquer tema>.`,
@@ -435,6 +461,20 @@ export const PT: Texts = makeTexts({
     "As perguntas ficam um pouco mais difíceis. Para voltar: {cmd} {previous}",
   cmdGoal: "/meta",
   cmdLevel: "/nivel",
+  reminder:
+    "⏰ Oi{name}! Sua meta de hoje ainda não saiu: {done} de {goal} práticas.{extra}\n" +
+    "Uma aula rápida ou um áudio já contam 🙂",
+  reminderStreak: " Não perca sua sequência de {n} dias 🔥",
+  reminderDue: " Você tem {n} revisões esperando.",
+  reminderButtons: ["🎙️ Praticar agora", "📚 Aula rápida", "🔕 Sem lembretes"],
+  remindersShow:
+    "🔔 Lembretes *{state}*.\nQuando a meta do dia não sai, eu te chamo uma vez, perto do " +
+    "horário em que você costuma praticar (o WhatsApp só me deixa escrever até 24 h depois da " +
+    "sua última mensagem).",
+  remindersState: ["ligados", "desligados"],
+  remindersOn: "🔔 Lembretes ligados. Se a meta do dia não sair, eu te chamo uma vez.",
+  remindersOff: "🔕 Lembretes desligados. Para ligar de novo: /lembretes on",
+  remindersButtons: ["🔔 Ligar", "🔕 Desligar"],
   voiceHelpBody: "Precisa de ajuda com o áudio?",
   voiceHelpTitles: ["📝 Transcrever", "🇧🇷 Traduzir", "☰ Menu"],
   voiceHelpFallback:

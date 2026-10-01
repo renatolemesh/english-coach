@@ -2,7 +2,7 @@
 import { Queue } from "bullmq";
 
 export const QUEUE_NAME = "process_message";
-export type JobName = "process_message" | "ping";
+export type JobName = "process_message" | "ping" | "reminders";
 
 /** One inbound message to run through the graph (the webhook_events row is `event_id`). */
 export interface ProcessMessageJob {

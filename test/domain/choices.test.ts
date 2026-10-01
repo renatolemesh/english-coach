@@ -36,6 +36,8 @@ describe("menus", () => {
     }
     expect(commandForOption("tema:2")).toBe("/tema 2");
     expect(commandForOption("reset")).toBe("/reset");
+    expect(commandForOption("lembretes:off")).toBe("/lembretes off"); // the reminder's buttons
+    expect(commandForOption("resume")).toBe("/resume");
     expect(commandForOption("velocidade:80")).toBe("/velocidade 80");
     for (const bad of ["", "evil", "tema:", "tema:1 x", "tema:../../x", "/reset"]) {
       expect(commandForOption(bad)).toBeNull();

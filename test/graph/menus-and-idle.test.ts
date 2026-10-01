@@ -198,4 +198,20 @@ describe("menus and idle", () => {
     await h.send(textMsg("/language english", 5));
     expect(h.texts()).toEqual([EN.languageSet]);
   });
+
+  it("/lembretes shows the switch and turns the daily reminder off and on", async () => {
+    const h = await Harness.create();
+    await started(h);
+    const userId = 1;
+    expect(h.repo.lastMessage.get(userId)).toBeInstanceOf(Date); // every message: the 24 h window
+    await h.send(textMsg("/lembretes", 1));
+    expect(h.kinds()).toEqual(["choice"]);
+    expect(h.channel.sent[0]?.text ?? "").toContain("lembretes:on lembretes:off");
+    await h.send(textMsg("/lembretes off", 2));
+    expect(h.texts()).toEqual([EN.remindersOff]);
+    expect(h.repo.access.get(userId)?.reminders).toBe(false);
+    await h.send(textMsg("/reminders on", 3));
+    expect(h.texts()).toEqual([EN.remindersOn]);
+    expect(h.repo.access.get(userId)?.reminders).toBe(true);
+  });
 });

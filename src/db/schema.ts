@@ -90,6 +90,8 @@ export const students = pgTable(
     lastMessageAt: tz("last_message_at"),
     dailyGoal: integer("daily_goal").notNull().default(5), // practices a day (panel, /meta)
     inRanking: boolean("in_ranking").notNull().default(true),
+    reminders: boolean().notNull().default(true), // a nudge before the 24 h window closes
+    remindedAt: tz("reminded_at"),
   },
   (t) => [
     index("ix_students_connection_id").on(t.connectionId),

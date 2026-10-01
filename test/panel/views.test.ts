@@ -84,6 +84,8 @@ describe("templates", () => {
     lastMessageAt: null,
     dailyGoal: 5,
     inRanking: true,
+    reminders: true,
+    remindedAt: null,
   };
   const turn: Turn = {
     id: 1,
@@ -272,6 +274,8 @@ describe("templates", () => {
       mine: null,
       myId: 7,
       inRanking: true,
+      reminders: true,
+      remindedAt: null,
       points: POINTS,
       maxPerDay: MAX_PRACTICES_A_DAY,
     });

@@ -45,6 +45,7 @@ export const StateAnnotation = Annotation.Root({
   offered_tutors: Annotation<string[] | null>, // the plan's voices, null: all (runner input)
   offered_speeds: Annotation<number[] | null>, // the plan's speeds, null: all (runner input)
   daily_goal: Annotation<number>, // practices a day the student aims for (/meta, panel)
+  reminders: Annotation<boolean>, // a nudge before the 24 h window closes (/lembretes, panel)
 
   // per turn (reset by ingest, cleared by persist)
   kind: Annotation<Kind | null>,

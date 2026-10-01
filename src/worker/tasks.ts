@@ -12,8 +12,10 @@ import type { Container } from "../container.js";
 import { IncomingMessage } from "../domain/messages.js";
 import { type ConversationRunner, threadId } from "../graph/runner.js";
 import { getLogger } from "../logging.js";
+import { PanelQueries } from "../panel/queries.js";
 import { LockTimeoutError } from "../ports/cache.js";
 import type { JobName, ProcessMessageJob, TaskQueue } from "./queue.js";
+import { type ReminderDeps, sendReminders } from "./reminders.js";
 
 const log = getLogger("coach.worker.tasks");
 export const MAX_LOCK_ATTEMPTS = 10; // x THREAD_LOCK_WAIT_S: how long a message may wait for its thread
@@ -100,9 +102,26 @@ export async function processMessage(
   return "processed";
 }
 
+/** What the reminders need, from the worker's runtime. */
+export async function reminderDeps(rt: WorkerRuntime): Promise<ReminderDeps> {
+  const { container } = rt;
+  const config = await container.runtime.get();
+  const database = container.database;
+  const queries = database ? new PanelQueries(database.db, config.timezone) : null;
+  return {
+    repo: container.repo,
+    config,
+    channelFor: async (id) => (await rt.pool.get(id))?.[1] ?? null,
+    streakOf: async (userId, goal, level) =>
+      queries ? (await queries.progress(userId, goal, level)).streak : 0,
+    dueReviews: async (userId, now) => (await container.courseRepo.stats(userId, now)).due,
+  };
+}
+
 /** The queue's processor: job name -> task. */
 export async function handleJob(rt: WorkerRuntime, name: JobName, data: unknown): Promise<string> {
   if (name === "ping") return ping();
+  if (name === "reminders") return `sent ${await sendReminders(await reminderDeps(rt))}`;
   const job = data as ProcessMessageJob;
   return processMessage(rt, job.connection_id, job.message, job.event_id, job.attempt ?? 0);
 }

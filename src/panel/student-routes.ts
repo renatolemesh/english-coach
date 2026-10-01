@@ -192,6 +192,7 @@ export function studentRoutes(app: Hono, p: Panel): void {
       topic,
       dailyGoal: goal,
       inRanking: form.in_ranking === "on",
+      reminders: form.reminders === "on",
     });
     return c.redirect(target("/me/settings?m=saved"), 303);
   });

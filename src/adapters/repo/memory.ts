@@ -2,7 +2,12 @@
  * unless a test adds it to `access` (or sets `known = false` to try unknown numbers). Plans a
  * test puts in `plans` are applied by createStudent and advancePlan. */
 import { type StudentAccess, StudentAccess as StudentAccessSchema } from "../../domain/accounts.js";
-import type { PastTurn, TurnLog, TurnRepository } from "../../ports/repository.js";
+import type {
+  PastTurn,
+  ReminderCandidate,
+  TurnLog,
+  TurnRepository,
+} from "../../ports/repository.js";
 
 export interface MemoryPlan {
   messages_per_day?: number | null;
@@ -20,6 +25,8 @@ export class MemoryRepository implements TurnRepository {
   readonly turnTimes: number[] = []; // epoch seconds, parallel to `turns`
   readonly access = new Map<number, StudentAccess>();
   readonly passwords = new Map<number, string>();
+  readonly lastMessage = new Map<number, Date>();
+  readonly reminded = new Map<number, Date>();
   known = true;
 
   async getOrCreateStudent(connectionId: string, phone: string): Promise<number> {
@@ -124,5 +131,27 @@ export class MemoryRepository implements TurnRepository {
       if (log.level === level && score >= minScore) goodAtLevel += 1;
     });
     return { today, goodAtLevel };
+  }
+
+  async touch(userId: number, at: Date): Promise<void> {
+    this.lastMessage.set(userId, at);
+  }
+
+  async reminderCandidates(from: Date, to: Date): Promise<ReminderCandidate[]> {
+    const out: ReminderCandidate[] = [];
+    for (const [key, userId] of this.students) {
+      const last = this.lastMessage.get(userId);
+      const access = this.access.get(userId);
+      const reminded = this.reminded.get(userId);
+      if (!last || !access || access.status !== "active" || !access.reminders) continue;
+      if (last < from || last >= to || (reminded && reminded >= last)) continue;
+      const [connectionId = "", phone = ""] = key.split("|");
+      out.push({ access, connectionId, phone });
+    }
+    return out;
+  }
+
+  async markReminded(userId: number, at: Date): Promise<void> {
+    this.reminded.set(userId, at);
   }
 }

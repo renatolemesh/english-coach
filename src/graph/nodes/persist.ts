@@ -151,6 +151,7 @@ function turnLog(
       tutor: state.tutor ?? null,
       speed: state.speed ?? null,
       daily_goal: state.daily_goal ?? null,
+      reminders: state.reminders ?? null,
     },
   };
 }

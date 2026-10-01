@@ -14,7 +14,7 @@ async function finishLesson(wrongAt = -1): Promise<number> {
   let answered = 0;
   while (h.lesson?.status === "active" && answered < 20) {
     const [text, audio] =
-      answered === wrongAt ? ["/ex " + h.current.nonce + "0", undefined] : h.rightAnswer();
+      answered === wrongAt ? [`/ex ${h.current.nonce}0`, undefined] : h.rightAnswer();
     await h.send(text, audio);
     answered++;
   }

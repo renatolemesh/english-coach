@@ -1,10 +1,11 @@
 /** Worker process: builds the runtime once, then consumes `process_message` jobs from BullMQ.
  * Concurrency 2 (3 CPUs; Whisper/Kokoro are CPU bound). SIGTERM: finish the running jobs and
  * close everything. */
-import { Worker } from "bullmq";
+import { Queue, Worker } from "bullmq";
 import { getSettings } from "../config.js";
 import { configureLogging, getLogger } from "../logging.js";
 import { type JobName, QUEUE_NAME } from "./queue.js";
+import { REMINDERS_EVERY_MS } from "./reminders.js";
 import { buildRuntime } from "./runtime.js";
 import { handleJob } from "./tasks.js";
 
@@ -23,6 +24,16 @@ async function main(): Promise<void> {
       concurrency: CONCURRENCY,
     },
   );
+  // one scheduler for all workers (BullMQ keeps a single repeatable job under this id)
+  const scheduler = new Queue(QUEUE_NAME, {
+    connection: { url: settings.redisUrl, maxRetriesPerRequest: null },
+  });
+  await scheduler.upsertJobScheduler(
+    "reminders",
+    { every: REMINDERS_EVERY_MS },
+    { name: "reminders", data: {}, opts: { removeOnComplete: 100, removeOnFail: 100 } },
+  );
+  await scheduler.close();
   worker.on("failed", (job, err) =>
     log.error("job_failed", { job_id: job?.id, name: job?.name, error: String(err) }),
   );

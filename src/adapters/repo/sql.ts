@@ -1,5 +1,5 @@
 /** TurnRepository on Postgres (Drizzle). */
-import { and, count, desc, eq, gte, inArray, isNotNull, ne, sql } from "drizzle-orm";
+import { and, count, desc, eq, gte, inArray, isNotNull, isNull, lt, ne, or } from "drizzle-orm";
 import type { Db } from "../../db/client.js";
 import { advanceEndedPlan } from "../../db/plan-changes.js";
 import { courseLessons, mistakes, plans, students, turns } from "../../db/schema.js";
@@ -8,7 +8,12 @@ import {
   type StudentAccess,
   StudentAccess as StudentAccessSchema,
 } from "../../domain/accounts.js";
-import type { PastTurn, TurnLog, TurnRepository } from "../../ports/repository.js";
+import type {
+  PastTurn,
+  ReminderCandidate,
+  TurnLog,
+  TurnRepository,
+} from "../../ports/repository.js";
 
 type StudentRow = typeof students.$inferSelect;
 type PlanRow = typeof plans.$inferSelect;
@@ -30,6 +35,7 @@ export function toAccess(student: StudentRow, plan: PlanRow | null): StudentAcce
     tutor: student.tutor,
     speed: student.speed,
     daily_goal: student.dailyGoal,
+    reminders: student.reminders,
   });
 }
 
@@ -142,9 +148,11 @@ export class SqlRepository implements TurnRepository {
       if (prefs.tutor) changes.tutor = prefs.tutor;
       if (prefs.speed !== null && prefs.speed !== undefined) changes.speed = prefs.speed;
       if (prefs.daily_goal) changes.dailyGoal = prefs.daily_goal;
+      if (prefs.reminders !== null && prefs.reminders !== undefined)
+        changes.reminders = prefs.reminders;
       await tx
         .update(students)
-        .set({ ...changes, lastMessageAt: sql`now()` })
+        .set(changes) // lastMessageAt: touch(), when the message arrives
         .where(eq(students.id, userId));
       const [turn] = await tx
         .insert(turns)
@@ -232,5 +240,34 @@ export class SqlRepository implements TurnRepository {
       );
     // a finished lesson (/aula) counts as a practice for the daily goal
     return { today: (today?.n ?? 0) + (lessons?.n ?? 0), goodAtLevel: good?.n ?? 0 };
+  }
+
+  async touch(userId: number, at: Date): Promise<void> {
+    await this.db.update(students).set({ lastMessageAt: at }).where(eq(students.id, userId));
+  }
+
+  async reminderCandidates(from: Date, to: Date): Promise<ReminderCandidate[]> {
+    const rows = await this.db
+      .select({ student: students, plan: plans })
+      .from(students)
+      .leftJoin(plans, eq(plans.id, students.planId))
+      .where(
+        and(
+          eq(students.status, "active"),
+          eq(students.reminders, true),
+          gte(students.lastMessageAt, from),
+          lt(students.lastMessageAt, to),
+          or(isNull(students.remindedAt), lt(students.remindedAt, students.lastMessageAt)),
+        ),
+      );
+    return rows.map(({ student, plan }) => ({
+      access: toAccess(student, plan),
+      connectionId: student.connectionId,
+      phone: student.phone,
+    }));
+  }
+
+  async markReminded(userId: number, at: Date): Promise<void> {
+    await this.db.update(students).set({ remindedAt: at }).where(eq(students.id, userId));
   }
 }

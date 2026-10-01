@@ -36,6 +36,13 @@
       "when": 1790795516149,
       "tag": "0004_course",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790871716592,
+      "tag": "0005_reminders",
+      "breakpoints": true
     }
   ]
 }

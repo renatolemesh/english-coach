@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canonical, isFree } from "../../src/domain/commands.js";
+import { canonical, isFree, parseToggle } from "../../src/domain/commands.js";
 
 describe("commands", () => {
   it("maps aliases in both languages", () => {
@@ -21,5 +21,17 @@ describe("commands", () => {
     expect(isFree("voz", "george")).toBe(false); // runs TTS
     expect(isFree("velocidade", "80")).toBe(false);
     expect(isFree("reset", "")).toBe(false);
+  });
+  it("reminders: on/off words in both languages", () => {
+    expect(canonical("lembretes")).toBe("reminders");
+    expect(isFree("lembretes", "off")).toBe(true);
+    expect(["on", "Ligar", "sim"].map(parseToggle)).toEqual([true, true, true]);
+    expect(["off", "desligar", "não", "parar"].map(parseToggle)).toEqual([
+      false,
+      false,
+      false,
+      false,
+    ]);
+    expect(parseToggle("talvez")).toBeNull();
   });
 });

@@ -3,10 +3,12 @@ import { type BaseCheckpointSaver, MemorySaver } from "@langchain/langgraph";
 import type { RuntimeConfig } from "../accounts/runtime.js";
 import { type StudentAccess, uiLangOf } from "../domain/accounts.js";
 import type { IncomingMessage } from "../domain/messages.js";
-import { withContext } from "../logging.js";
+import { getLogger, withContext } from "../logging.js";
 import { buildGraph, type CompiledConversation } from "./builder.js";
 import type { GraphContext } from "./context.js";
 import { type ConversationState, PER_TURN_CLEARED, type Update } from "./state.js";
+
+const log = getLogger("coach.graph.runner");
 
 export const threadId = (connectionId: string, phone: string) => `${connectionId}:${phone}`;
 
@@ -37,6 +39,7 @@ export function preferences(access: StudentAccess, config: RuntimeConfig): Updat
     tutor: access.tutor || config.default_tutor,
     speed: access.speed ?? undefined,
     daily_goal: access.daily_goal ?? undefined,
+    reminders: access.reminders,
   };
   return Object.fromEntries(
     Object.entries(values).filter(([, v]) => v !== undefined && v !== null),
@@ -65,6 +68,13 @@ export class ConversationRunner {
     const admission = await ctx.gate.admit(message, connectionId, ctx.channel, ctx.config);
     if (!admission.access) return {}; // refused or a verification code: already answered
     const access = admission.access;
+    try {
+      // WhatsApp's 24 h window for free-form messages starts at the student's message
+      const sent = message.timestamp.getTime() <= Date.now() ? message.timestamp : new Date();
+      await ctx.repo.touch(access.user_id, sent);
+    } catch (exc) {
+      log.warning("touch_failed", { error: String(exc) }); // only reminders depend on it
+    }
     if (ctx.course && !admission.start) {
       // lessons (/aula) and their answers; everything else goes on to the conversation
       const course = ctx.course;

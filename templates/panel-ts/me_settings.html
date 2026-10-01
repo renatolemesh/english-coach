@@ -33,6 +33,7 @@
       <small class="muted">Escolha de 1 a {{ maxGoal }}. Sugestões: {{ goals | join(", ") }}.</small>
     </label>
     <label class="check"><input type="checkbox" name="in_ranking" {% if student.inRanking %}checked{% endif %}> Aparecer no ranking da semana (só primeiro nome e inicial)</label>
+    <label class="check"><input type="checkbox" name="reminders" {% if student.reminders %}checked{% endif %}> Lembrete no WhatsApp quando a meta do dia ainda não saiu (uma vez, perto do horário em que você costuma praticar)</label>
     <label>Mensagens de ajuda e correção em
       <select name="ui_lang"><option value="" {% if not student.uiLang %}selected{% endif %}>Automático: português no básico (A1/A2), inglês a partir do B1</option><option value="en" {% if student.uiLang == 'en' %}selected{% endif %}>Inglês (mais prática)</option><option value="pt" {% if student.uiLang == 'pt' %}selected{% endif %}>Português</option></select>
     </label>

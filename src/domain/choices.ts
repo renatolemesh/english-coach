@@ -19,7 +19,7 @@ export const ROW_DESCRIPTION_CHARS = 72;
 // biome-ignore format: one line
 export const OPTION_COMMANDS = [
   "transcrever", "traduzir", "menu", "reset", "tema", "nivel", "voz", "velocidade", "idioma",
-  "meta", "aula", "revisar", "sair", "ex",
+  "meta", "aula", "revisar", "sair", "ex", "lembretes", "resume",
 ] as const;
 const OPTION_RE = new RegExp(`^(${OPTION_COMMANDS.join("|")})(?::([A-Za-z0-9]{1,8}))?$`);
 
@@ -136,6 +136,19 @@ export function speedMenu(
     button: t.speedButton,
     options: speeds.map(([key, v]) => option(`velocidade:${key}`, t.speedLabel(v), name(key, v))),
     fallbackText: `${body}\n${rows}`,
+  };
+}
+
+export function remindersMenu(t: Texts, on: boolean): Choice {
+  const body = formatText(t.remindersShow, { state: t.remindersState[on ? 0 : 1] });
+  return {
+    body,
+    button: "",
+    options: [
+      option("lembretes:on", t.remindersButtons[0]),
+      option("lembretes:off", t.remindersButtons[1]),
+    ],
+    fallbackText: `${body}\n/lembretes on · /lembretes off`,
   };
 }
 

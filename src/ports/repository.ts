@@ -22,6 +22,13 @@ export interface TurnLog {
   prefs: Preferences | null; // saved on the student (the panel shows and edits them)
 }
 
+/** A student who may get a reminder: last wrote a while ago, reminders on, not reminded since. */
+export interface ReminderCandidate {
+  access: StudentAccess;
+  connectionId: string;
+  phone: string;
+}
+
 /** A past exchange, to rebuild the conversation memory when the thread has none. */
 export interface PastTurn {
   student: string; // transcript ("" for a command such as the first opener)
@@ -61,4 +68,10 @@ export interface TurnRepository {
     level: string,
     minScore: number,
   ): Promise<{ today: number; goodAtLevel: number }>;
+  /** The student wrote (any message): WhatsApp's 24 h window for free-form messages restarts. */
+  touch(userId: number, at: Date): Promise<void>;
+  /** Active students with reminders on whose last message is in [from, to) and who were not
+   * reminded since that message. */
+  reminderCandidates(from: Date, to: Date): Promise<ReminderCandidate[]>;
+  markReminded(userId: number, at: Date): Promise<void>;
 }

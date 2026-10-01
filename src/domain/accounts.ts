@@ -21,6 +21,7 @@ export const StudentAccess = z.object({
   tutor: z.string().nullable().default(null),
   speed: z.number().nullable().default(null),
   daily_goal: z.number().int().nullable().default(null),
+  reminders: z.boolean().default(true), // a nudge before WhatsApp's 24 h window closes
 });
 export type StudentAccess = z.infer<typeof StudentAccess>;
 
@@ -52,5 +53,6 @@ export const Preferences = z.object({
   tutor: z.string().nullable().default(null),
   speed: z.number().nullable().default(null),
   daily_goal: z.number().int().nullable().default(null),
+  reminders: z.boolean().nullable().default(null),
 });
 export type Preferences = z.infer<typeof Preferences>;

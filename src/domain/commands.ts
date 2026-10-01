@@ -17,6 +17,7 @@ export const ALIASES: Readonly<Record<string, string>> = {
   idioma: "language", language: "language", lang: "language", lingua: "language",
   "língua": "language",
   meta: "goal", metas: "goal", goal: "goal", progresso: "goal", progress: "goal",
+  lembrete: "reminders", lembretes: "reminders", reminder: "reminders", reminders: "reminders",
 };
 
 // No LLM call: menus and fixed texts. They do not count against the per-minute rate limit,
@@ -28,7 +29,16 @@ export const FREE_COMMANDS: ReadonlySet<string> = new Set([
   "transcribe",
   "language",
   "goal", // counts in the database, no LLM
+  "reminders",
 ]);
+
+/** "/lembretes off" -> false; null when the argument is not an on/off word. */
+export function parseToggle(arg: string): boolean | null {
+  const word = arg.trim().toLowerCase();
+  if (/^(on|ligar|ligado|ligados|sim|yes|ativar)$/.test(word)) return true;
+  if (/^(off|desligar|desligado|desligados|n[aã]o|no|parar|desativar)$/.test(word)) return false;
+  return null;
+}
 
 export function canonical(name: string): string {
   const key = name.toLowerCase();

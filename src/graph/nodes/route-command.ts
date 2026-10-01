@@ -8,11 +8,12 @@ import {
   languageMenu,
   levelMenu,
   mainMenu,
+  remindersMenu,
   speedMenu,
   topicMenu,
   tutorMenu,
 } from "../../domain/choices.js";
-import { canonical } from "../../domain/commands.js";
+import { canonical, parseToggle } from "../../domain/commands.js";
 import { pickOpener } from "../../domain/openers.js";
 import {
   GOOD_SCORE,
@@ -130,6 +131,11 @@ export async function routeCommand(state: ConversationState, config: NodeConfig)
     if (goal !== null)
       return { daily_goal: goal, outbound_texts: [formatText(t.goalSet, { goal })] };
     return { outbound_texts: [await goalStatus(state, ctx)] };
+  }
+  if (command === "reminders") {
+    const on = parseToggle(arg);
+    if (on === null) return { outbound_choices: [remindersMenu(t, state.reminders ?? true)] };
+    return { reminders: on, outbound_texts: [on ? t.remindersOn : t.remindersOff] };
   }
   if (command === "level") {
     if (!arg) {
