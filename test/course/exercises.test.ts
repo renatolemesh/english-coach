@@ -1,5 +1,6 @@
 import { createEmptyCard } from "ts-fsrs";
 import { describe, expect, it } from "vitest";
+import { CourseContent } from "../../src/course/content.js";
 import {
   AUDIO_TYPES,
   EXERCISE_TYPES,
@@ -78,6 +79,20 @@ describe("exercises", () => {
     expect(ex.body).toContain("My dog ___ water.");
     expect(ex.options[ex.answer]).toBe("likes");
     for (const o of ex.options) expect(o.endsWith("s")).toBe(true);
+  });
+
+  it("cloze skips examples with a loose translation (it shows the translation)", () => {
+    const base = content();
+    const loose = [...base.sentences.values()].map((s) => ({ ...s, fit: 0.5 }));
+    const traps = {
+      grammar: [...base.grammar.values()],
+      false_friends: [...base.falseFriends.values()],
+      minimal_pair_sounds: { ...base.sounds },
+      minimal_pairs: [...base.pairs.values()],
+      chats: [...base.chats.values()],
+    };
+    const c = new CourseContent([...base.wordList], loose, traps);
+    expect(makeExercise({ type: "cloze", item: "w:like.v" }, { ...g(3), content: c })).toBeNull();
   });
 
   it("word tiles keep I and names, drop the full stop", () => {

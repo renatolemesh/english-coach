@@ -4,3 +4,4 @@ dist/
 models/
 out/
 connections.yaml
+.claude/

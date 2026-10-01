@@ -87,6 +87,12 @@ const Traps = z.object({
   chats: z.array(Chat).default([]),
 });
 
+// Exercises that show the Portuguese and expect its English (order, translate, say, the cloze's
+// "Tradução:") need a faithful pair: a looser one ("Às vezes não consigo me segurar ao mostrar
+// minhas emoções" for "Sometimes I can't help showing emotions") asks for words the student
+// cannot guess. `fit` comes from scripts/build-course.ts.
+export const GOOD_FIT = 0.75;
+
 /** 'A1' -> 0 ... 'C2' -> 5 (unknown: A1). */
 export function levelIndex(level: string): number {
   return Math.max(0, (LEVELS as readonly string[]).indexOf(level));

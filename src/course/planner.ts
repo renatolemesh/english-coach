@@ -10,7 +10,7 @@
  */
 import type { Card } from "ts-fsrs";
 import { LEVELS } from "../domain/topics.js";
-import { type CourseContent, levelIndex, type Sentence, type Word } from "./content.js";
+import { type CourseContent, GOOD_FIT, levelIndex, type Sentence, type Word } from "./content.js";
 import {
   AUDIO_TYPES,
   cardKey,
@@ -26,10 +26,9 @@ import { relearning } from "./srs.js";
 export const LESSON_SIZE = 10;
 const RETEST_GAP = 4; // a new word comes back this many exercises later
 const MIN_CONF = 0.5; // gloss confidence below this is not taught
-// order, translate and say show the Portuguese and expect its English: a looser translation
-// ("Às vezes não consigo me segurar ao mostrar minhas emoções" for "Sometimes I can't help
-// showing emotions") asks for words the student cannot guess
-export const GOOD_FIT = 0.75;
+
+export { GOOD_FIT };
+
 type SentenceType = "order" | "dictation" | "translate" | "repeat" | "say";
 const SHOWS_PT: ReadonlySet<SentenceType> = new Set(["order", "translate", "say"]);
 // Content words are taught as vocabulary; pronouns, prepositions, auxiliaries and the like are

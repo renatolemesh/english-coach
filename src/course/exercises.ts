@@ -7,7 +7,7 @@
  * (WhatsApp reply buttons, and the psychometric sweet spot).
  */
 import { formatText } from "../domain/texts.js";
-import { type CourseContent, levelIndex, type Sentence, type Word } from "./content.js";
+import { type CourseContent, GOOD_FIT, levelIndex, type Sentence, type Word } from "./content.js";
 import { levenshtein, normalize } from "./grading.js";
 import type { CourseTexts } from "./texts.js";
 
@@ -270,7 +270,7 @@ function cloze(w: Word, g: GenContext, item: string): Exercise | null {
   const forms = [...new Set([w.word, ...w.forms])].sort((a, b) => b.length - a.length);
   for (const id of w.examples) {
     const s = g.content.sentences.get(id);
-    if (!s) continue;
+    if (!s || s.fit < GOOD_FIT) continue; // the translation is shown under the gap
     for (const form of forms) {
       const re = new RegExp(`(^|[^\\p{L}'])(${escapeRe(form)})(?=$|[^\\p{L}'])`, "iu");
       const m = re.exec(s.en);
