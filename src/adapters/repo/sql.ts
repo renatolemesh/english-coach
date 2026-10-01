@@ -63,6 +63,7 @@ export class SqlRepository implements TurnRepository {
     planName: string | null,
     name = "",
     passwordHash = "",
+    uiLang: string | null = null,
   ) {
     const now = new Date();
     return this.db.transaction(async (tx) => {
@@ -92,6 +93,7 @@ export class SqlRepository implements TurnRepository {
       const changes: Partial<StudentRow> = { verifiedAt: student.verifiedAt ?? now };
       if (name) changes.name = name;
       if (passwordHash) changes.passwordHash = passwordHash;
+      if (uiLang) changes.uiLang = uiLang;
       [student] = await tx
         .update(students)
         .set(changes)

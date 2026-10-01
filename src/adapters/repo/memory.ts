@@ -42,11 +42,13 @@ export class MemoryRepository implements TurnRepository {
     planName: string | null,
     name = "",
     passwordHash = "",
+    uiLang: string | null = null,
   ) {
     const userId = await this.getOrCreateStudent(connectionId, phone);
     const access = StudentAccessSchema.parse({
       user_id: userId,
       name: name || null,
+      ui_lang: uiLang ?? this.access.get(userId)?.ui_lang ?? null,
       ...this.planFields(planName, new Date()),
     });
     this.access.set(userId, access);

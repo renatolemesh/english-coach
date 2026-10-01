@@ -163,7 +163,7 @@ export function studentRoutes(app: Hono, p: Panel): void {
     if (
       !(LEVELS as readonly string[]).includes(level) ||
       !Object.hasOwn(TUTORS, tutor) ||
-      !["en", "pt"].includes(lang) ||
+      !["", "en", "pt"].includes(lang) || // "": automatic, by level
       ![...SPEEDS.values()].includes(speed) ||
       goal === null ||
       !topic
@@ -187,7 +187,7 @@ export function studentRoutes(app: Hono, p: Panel): void {
       name: text(form, "name", 120) || me(session).name,
       level,
       tutor,
-      uiLang: lang,
+      uiLang: lang || null,
       speed,
       topic,
       dailyGoal: goal,

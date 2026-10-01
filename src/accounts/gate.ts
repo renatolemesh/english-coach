@@ -11,7 +11,7 @@
  * Fixed answers go out at most once a day per number (REPLY_ONCE_S), so a loop or a flood
  * never gets a stream of replies.
  */
-import { expired, type StudentAccess } from "../domain/accounts.js";
+import { expired, type StudentAccess, uiLangOf } from "../domain/accounts.js";
 import type { IncomingMessage } from "../domain/messages.js";
 import { formatText, type Texts, textsFor } from "../domain/texts.js";
 import { getLogger } from "../logging.js";
@@ -47,7 +47,7 @@ export class AccountGate {
   ): Promise<Admission> {
     const phone = msg.from;
     let access = await this.repo.studentAccess(connectionId, phone);
-    const texts = access ? textsFor(access.ui_lang) : textsFor(config.default_ui_lang);
+    const texts = textsFor(uiLangOf(access?.ui_lang, access?.level, config.default_ui_lang));
     const code = msg.type === "text" ? verification.parse(msg.text ?? "") : null;
     if (code) return this.code(code, msg, connectionId, channel, config, texts, access);
     if (access === null) {
@@ -123,6 +123,7 @@ export class AccountGate {
       access === null ? config.trial_plan : null,
       pending.name,
       pending.password_hash,
+      pending.lang === "en" || pending.lang === "pt" ? pending.lang : null, // "auto": by level
     );
     await verification.setStatus(this.cache, pending.token, {
       status: "done",

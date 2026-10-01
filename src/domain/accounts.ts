@@ -24,6 +24,22 @@ export const StudentAccess = z.object({
 });
 export type StudentAccess = z.infer<typeof StudentAccess>;
 
+/** Levels whose fixed messages are in Portuguese unless the student chose a language. */
+export const PORTUGUESE_LEVELS: ReadonlySet<string> = new Set(["A1", "A2"]);
+
+/** The language of the fixed messages: the student's choice (/idioma, panel, signup); without
+ * one, Portuguese for beginners (instructions in English lose them) and the panel's default
+ * from B1 up. */
+export function uiLangOf(
+  chosen: string | null | undefined,
+  level: string | null | undefined,
+  fallback: string,
+): string {
+  if (chosen) return chosen;
+  if (level && PORTUGUESE_LEVELS.has(level)) return "pt";
+  return fallback;
+}
+
 export function expired(access: StudentAccess, now: Date = new Date()): boolean {
   return access.plan_ends_at !== null && access.plan_ends_at.getTime() <= now.getTime();
 }

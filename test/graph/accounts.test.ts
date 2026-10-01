@@ -126,4 +126,45 @@ describe("accounts through the graph", () => {
     await h.send(textMsg("/voz sarah", 2)); // and WhatsApp changes go back to the student
     expect(repo.access.get(access.user_id)?.tutor).toBe("sarah");
   });
+
+  it("beginners without a language choice get Portuguese; a choice wins", async () => {
+    const repo = h.repo;
+    const { user_id } = await repo.createStudent(CONN, PHONE, "Ilimitado");
+    const set = (fields: Partial<StudentAccess>) =>
+      repo.access.set(user_id, StudentAccess.parse({ user_id, ...fields }));
+    set({ level: "A2" });
+    await h.send(textMsg("/ajuda", 1));
+    expect(h.texts()).toEqual([PT.help]);
+    await h.send(textMsg("/tema", 2)); // an ordinary turn does not turn the default into a choice
+    expect(repo.access.get(user_id)?.ui_lang).toBeNull();
+    set({ level: "B1" });
+    await h.send(textMsg("/ajuda", 3));
+    expect(h.texts()).toEqual([EN.help]);
+    set({ level: "A1", ui_lang: "en" });
+    await h.send(textMsg("/ajuda", 4));
+    expect(h.texts()).toEqual([EN.help]);
+    set({ level: "A1" });
+    await h.send(textMsg("/idioma english", 5)); // chosen on WhatsApp: saved
+    expect(repo.access.get(user_id)?.ui_lang).toBe("en");
+  });
+
+  it("the language chosen at signup is saved; automatic leaves it to the level", async () => {
+    for (const [n, lang, saved] of [
+      [1, "pt", "pt"],
+      [2, "auto", null],
+    ] as const) {
+      h.repo.access.clear();
+      const pending = {
+        kind: "signup" as const,
+        token: verification.newToken(),
+        phone: PHONE,
+        name: "Ana",
+        lang,
+        password_hash: await hashPassword("secret123"),
+      };
+      const code = await verification.start(h.container.cache, pending);
+      const state = await h.send(textMsg(`ATIVAR ${code}`, n));
+      expect(h.repo.access.get(state.user_id as number)?.ui_lang ?? null).toBe(saved);
+    }
+  });
 });

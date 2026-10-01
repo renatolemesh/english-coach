@@ -24,7 +24,8 @@
     <label>Repita a senha<input name="password2" type="password" minlength="8" autocomplete="new-password" required></label>
     <label>Mensagens de ajuda e correção em
       <select name="lang">
-        <option value="en" {% if lang == 'en' %}selected{% endif %}>Inglês (recomendado: mais prática)</option>
+        <option value="auto" {% if lang == 'auto' %}selected{% endif %}>Automático: português no básico (A1/A2), inglês a partir do B1</option>
+        <option value="en" {% if lang == 'en' %}selected{% endif %}>Inglês (mais prática)</option>
         <option value="pt" {% if lang == 'pt' %}selected{% endif %}>Português</option>
       </select>
     </label>

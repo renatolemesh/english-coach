@@ -89,7 +89,7 @@ export function authRoutes(app: Hono, p: Panel): void {
       enabled: config.signup_enabled,
       name: "",
       phone: "",
-      lang: "en",
+      lang: "auto",
     });
   });
 
@@ -99,7 +99,7 @@ export function authRoutes(app: Hono, p: Panel): void {
     const name = text(form, "name", 120);
     const typed = text(form, "phone", 30);
     const phone = fromForm(typed) ?? "";
-    const lang = form.lang === "pt" ? "pt" : "en";
+    const lang = form.lang === "pt" || form.lang === "en" ? form.lang : "auto"; // auto: by level
     const ctx = { enabled: config.signup_enabled, name, phone: phone || typed, lang };
     if (!config.signup_enabled) return anon(c, "signup.html", { statusCode: 403, ...ctx });
     let error = "";

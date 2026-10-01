@@ -34,7 +34,7 @@
     </label>
     <label class="check"><input type="checkbox" name="in_ranking" {% if student.inRanking %}checked{% endif %}> Aparecer no ranking da semana (só primeiro nome e inicial)</label>
     <label>Mensagens de ajuda e correção em
-      <select name="ui_lang"><option value="en" {% if (student.uiLang or 'en') == 'en' %}selected{% endif %}>Inglês (recomendado)</option><option value="pt" {% if student.uiLang == 'pt' %}selected{% endif %}>Português</option></select>
+      <select name="ui_lang"><option value="" {% if not student.uiLang %}selected{% endif %}>Automático: português no básico (A1/A2), inglês a partir do B1</option><option value="en" {% if student.uiLang == 'en' %}selected{% endif %}>Inglês (mais prática)</option><option value="pt" {% if student.uiLang == 'pt' %}selected{% endif %}>Português</option></select>
     </label>
     <button>Salvar</button>
   </form>

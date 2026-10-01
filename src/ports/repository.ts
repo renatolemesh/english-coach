@@ -43,6 +43,7 @@ export interface TurnRepository {
     planName: string | null,
     name?: string,
     passwordHash?: string,
+    uiLang?: string | null, // the language chosen at signup; null: by level (uiLangOf)
   ): Promise<StudentAccess>;
   /** When the student's plan ended and has a next plan, move there: the new access and the
    * name of the plan that ended. Null when nothing changed. */

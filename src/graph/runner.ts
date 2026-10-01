@@ -1,7 +1,7 @@
 /** Runs one incoming message through the graph for its conversation thread. */
 import { type BaseCheckpointSaver, MemorySaver } from "@langchain/langgraph";
 import type { RuntimeConfig } from "../accounts/runtime.js";
-import type { StudentAccess } from "../domain/accounts.js";
+import { type StudentAccess, uiLangOf } from "../domain/accounts.js";
 import type { IncomingMessage } from "../domain/messages.js";
 import { withContext } from "../logging.js";
 import { buildGraph, type CompiledConversation } from "./builder.js";
@@ -28,12 +28,12 @@ export function memorySaver(): MemorySaver {
 }
 
 /** The student's saved preferences (the panel may have changed them) over the thread's
- * values; defaults from the panel for the language and the tutor. */
+ * values; defaults from the panel for the tutor, and for the language by level (uiLangOf). */
 export function preferences(access: StudentAccess, config: RuntimeConfig): Update {
   const values: Update = {
     level: access.level ?? undefined,
     topic: access.topic ?? undefined,
-    ui_lang: access.ui_lang || config.default_ui_lang,
+    ui_lang: uiLangOf(access.ui_lang, access.level, config.default_ui_lang),
     tutor: access.tutor || config.default_tutor,
     speed: access.speed ?? undefined,
     daily_goal: access.daily_goal ?? undefined,

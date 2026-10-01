@@ -1,10 +1,13 @@
 /** Deferred final node: budget, turn log (Postgres), rolling history, and state cleanup. */
+
+import { canonical } from "../../domain/commands.js";
 import {
   KEEP_AFTER_SUMMARY,
   MAX_RECENT_TURNS,
   MAX_UNSUMMARIZED_TURNS,
 } from "../../domain/conversation.js";
 import { HistorySummary } from "../../domain/reply.js";
+import { parseLang } from "../../domain/texts.js";
 import { getLogger } from "../../logging.js";
 import { addUsage, emptyUsage, type Usage } from "../../ports/llm.js";
 import type { TurnLog } from "../../ports/repository.js";
@@ -112,6 +115,12 @@ async function updateHistory(
   return [{ recent_turns: keep, history_summary: cut(newSummary, 1200) }, result.usage];
 }
 
+/** This turn was "/idioma pt" (or its button): the language is now the student's choice. */
+const languageChosen = (s: ConversationState) =>
+  s.kind === "command" &&
+  canonical(s.command ?? "") === "language" &&
+  parseLang(s.command_arg ?? "") !== null;
+
 function turnLog(
   state: ConversationState,
   usage: Usage,
@@ -137,7 +146,8 @@ function turnLog(
     prefs: {
       level: state.level ?? null,
       topic: state.topic ?? null,
-      ui_lang: state.ui_lang ?? null,
+      // only a choice (/idioma pt): the default by level must not become a choice
+      ui_lang: languageChosen(state) ? (state.ui_lang ?? null) : null,
       tutor: state.tutor ?? null,
       speed: state.speed ?? null,
       daily_goal: state.daily_goal ?? null,
