@@ -1,7 +1,8 @@
 # Course data: sources and licences
 
 `words.jsonl` and `sentences.jsonl` are generated offline by `scripts/build-course.ts` from the
-three sources below. Do not edit them by hand; change the script and rebuild.
+three sources below (levels A1 to B2), with the hand corrections in `overrides.yaml` applied to
+the glosses. Do not edit them by hand; change the script or `overrides.yaml` and rebuild.
 
 ## CEFR-J Wordlist 1.5 (headwords, parts of speech, levels)
 
@@ -17,8 +18,9 @@ Sentences and their Portuguese translations come from Tatoeba (https://tatoeba.o
 under CC BY 2.0 FR (https://creativecommons.org/licenses/by/2.0/fr/). Every record keeps its
 Tatoeba ids in `src` (`tatoeba:<English id>-<Portuguese id>`); authors are credited on each
 sentence page, `https://tatoeba.org/sentences/show/<id>`. `alt_en` holds other English sentences
-linked to the same Portuguese one. Changes: selection and filtering, and the names "Tom" and
-"Mary" replaced by other first names in both languages.
+linked to the same Portuguese one. Changes: selection and filtering (when an English sentence
+has several Portuguese translations, the most literal one is kept; `fit` scores how literal it
+is), and the names "Tom" and "Mary" replaced by other first names in both languages.
 
 ## Portuguese Wiktionary via Wiktextract (glosses)
 
@@ -31,5 +33,5 @@ derived word list (`words.jsonl`) is therefore offered under CC BY-SA 4.0 as wel
 ## Scope
 
 These licences cover only the data files in this directory. The TypeScript code (including
-`scripts/build-course.ts`) is not affected. `traps.yaml` is original content written for this
-project and does not come from these sources.
+`scripts/build-course.ts`) is not affected. `traps.yaml` and `overrides.yaml` are original
+content written for this project and do not come from these sources.

@@ -53,6 +53,8 @@ templates/  evaluation.njk (card), fonts/ (Inter, OFL), panel-ts/ (painel, landi
   devolve. Antes de mudá-las, adicione aos testes o caso real que falha.
 - Aulas: a correção é por código (sem LLM). Conteúdo de `data/course/words.jsonl` e
   `sentences.jsonl` vem do `scripts/build-course.ts`: não edite à mão, mude o script.
+  Tradução de palavra errada se corrige em `overrides.yaml` (escrito à mão; o build aplica e
+  falha se um id não existir) e rodando o build de novo, com `nice -n 10` (uns 5 min, 1,6 GB).
   `traps.yaml` é escrito à mão: resposta certa sem ambiguidade, erradas claramente erradas.
 - A Meta cobra cada mensagem enviada (desde 1º/10/2026): evite mensagens extras por turno.
 - whisper.cpp: faixas de confiança `STT_MIN_CONFIDENCE=-2.0` (abaixo disso pede para repetir) e

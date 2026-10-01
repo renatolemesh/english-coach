@@ -1,0 +1,785 @@
+# Correções à mão das traduções do banco de palavras (data/course/words.jsonl).
+#
+# O scripts/build-course.ts escolhe a tradução de cada palavra por estatística (Wiktionary +
+# Tatoeba) e aplica este arquivo por cima; o build falha se um id daqui não existir no CEFR-J.
+# Formato: id da palavra (como em words.jsonl) -> um destes:
+#   {gloss: tradução, alt: [outras]}  tradução principal e a lista inteira de alternativas
+#                                    (sem alt, ficam as calculadas; alt: [] esvazia a lista)
+#   {alt: [outras]}                  só troca as alternativas
+#   {drop: motivo}                   a palavra sai do banco (continua contando para o nível)
+# A tradução aparece como o significado da palavra e é a resposta certa da múltipla escolha; as
+# erradas são traduções de outras palavras. Português do Brasil, forma de dicionário (masculino
+# singular, verbo no infinitivo), o sentido mais comum para a classe gramatical do id.
+
+# Wiktionary só tem o grau em latim ("artium magister")
+a.m..adv: {gloss: da manhã, alt: [de manhã, manhã]}
+p.m..adv: {gloss: da tarde, alt: [da noite, tarde, noite]}
+# o Tatoeba espalha por uma dúzia de verbos; nenhum chega ao limite de confiança
+get.v: {gloss: conseguir, alt: [obter, pegar, receber, ficar]}
+turn.v: {gloss: virar, alt: [girar, transformar, ficar]}
+away.adv: {gloss: longe, alt: [embora, fora, distante]}
+back.adv: {gloss: de volta, alt: [para trás, atrás, voltar]}
+up.prep: {gloss: para cima, alt: [em cima, acima]}
+around.prep: {gloss: ao redor de, alt: [em volta de, por volta de, em torno de, perto de]}
+# "que" e "o que" estão em toda parte, a taxa de base os esconde
+what.pron: {gloss: o que, alt: [que, qual]}
+anything.pron: {gloss: alguma coisa, alt: [algo, qualquer coisa, nada]}
+those.det: {gloss: aqueles, alt: [aquelas, esses, essas]}
+# "seu" também é "your": dele/dela/deles é o que o aluno consegue associar
+his.det: {gloss: dele, alt: [seu, sua]}
+her.det: {gloss: dela, alt: [seu, sua]}
+their.det: {gloss: deles, alt: [delas, seu, sua]}
+hers.pron: {gloss: dela, alt: [seu, sua]}
+# sem verbete no Wiktionary
+all_right.adj: {gloss: tudo bem, alt: [bem, certo, ok]}
+all_right.adv: {gloss: tudo bem, alt: [bem, certo, ok]}
+sure.adj: {gloss: certo, alt: [seguro, com certeza, certeza]}
+# o Tatoeba escreve mais "TV"; a palavra é o que o aluno precisa
+TV.n: {gloss: televisão, alt: [TV, tevê]}
+CV.n: {gloss: currículo, alt: [CV]}
+# o Wiktionary oferece "vegetal"/"hortaliça"; no Brasil se diz "legume" ou "verdura"
+vegetable.n: {gloss: legume, alt: [verdura, vegetal, hortaliça]}
+# "a lot" é "muito"; o Wiktionary só tem lot = "lote", "destino"
+lot.pron: {gloss: muito, alt: [bastante, muitos, vários]}
+lot.adv: {gloss: muito, alt: [bastante]}
+# o Tatoeba é cheio de "a few" (alguns); "few" sozinho é "poucos"
+few.det: {gloss: poucos, alt: [alguns, pouco]}
+else.adv: {gloss: mais, alt: [outro, outra coisa, de outro modo]}
+o'clock.adv: {gloss: em ponto, alt: [hora, horas]}
+# o português omite "it" ou usa o/a; ele/ela sozinhos pareceriam "he/she"
+it.pron: {gloss: isso, alt: [ele, ela, o, a]}
+# o CEFR-J lista como substantivo e adjetivo; em português são interjeições
+hello.n: {gloss: olá, alt: [oi, alô]}
+sorry.adj: {gloss: desculpe, alt: [desculpa, sinto muito, arrependido, com pena]}
+most.det: {gloss: a maioria, alt: [maioria, mais, maior parte]}
+than.prep: {gloss: do que, alt: [que, de]}
+than.conj: {gloss: do que, alt: [que, de]}
+each_other.pron: {gloss: um ao outro, alt: [uns aos outros, se]}
+yourself.pron: {gloss: você mesmo, alt: [se, si mesmo, você]}
+
+# --- revisão A1 ---
+# sentido errado para a classe gramatical
+about.adv: {gloss: cerca de, alt: [aproximadamente, mais ou menos]}
+only.adj: {gloss: único, alt: [só]}
+little.adj: {gloss: pequeno, alt: [pouco]}
+careful.adj: {gloss: cuidadoso, alt: [cuidado, atento]}
+late.adv: {gloss: tarde, alt: [atrasado]}
+late.adj: {alt: [tarde]}
+tonight.adv: {gloss: hoje à noite, alt: [esta noite]}
+outside.adv: {gloss: lá fora, alt: [fora]}
+either.adv: {gloss: também não, alt: [tampouco]}
+borrow.v: {gloss: pegar emprestado, alt: []}
+drop.v: {gloss: deixar cair, alt: [soltar, largar, cair]}
+join.v: {gloss: juntar-se a, alt: [participar, entrar, unir]}
+ride.v: {gloss: andar de, alt: [cavalgar, montar]}
+exercise.v: {gloss: fazer exercício, alt: [exercitar]}
+both.adv: {gloss: os dois, alt: [ambos, tanto quanto]}
+kick.n: {gloss: chute, alt: [pontapé]}
+gold.adj: {gloss: de ouro, alt: [dourado]}
+blank.adj: {gloss: em branco, alt: [vazio]}
+OK.adj: {gloss: bem, alt: [ok, tudo bem]}
+past.adv: {drop: "sem equivalente de uma palavra (walk past = passar por)"}
+shake.n: {drop: "sentido incerto (milk-shake, sacudida); o Tatoeba dá 'mão'"}
+# tradução errada ou incompleta
+homework.n: {gloss: lição de casa, alt: [dever de casa, tarefa]}
+nineteen.num: {gloss: dezenove, alt: []}
+hometown.n: {gloss: cidade natal, alt: []}
+haircut.n: {gloss: corte de cabelo, alt: []}
+sunshine.n: {gloss: luz do sol, alt: [sol]}
+cartoon.n: {gloss: desenho animado, alt: [desenho, quadrinhos]}
+pop.n: {gloss: música pop, alt: [pop]}
+underline.n: {gloss: sublinhado, alt: []}
+quarter.n: {gloss: um quarto, alt: [quarta parte, trimestre, quinze minutos]}
+parent.n: {gloss: pai ou mãe, alt: [pais]}
+grandparent.n: {gloss: avô ou avó, alt: [avós]}
+ruler.n: {gloss: régua, alt: [governante]}
+# o sentido mais comum no Brasil ou para o aluno
+bad.adj: {gloss: ruim, alt: [mau]}
+enjoy.v: {gloss: aproveitar, alt: [curtir, gostar de, desfrutar]}
+become.v: {gloss: tornar-se, alt: [virar, ficar]}
+card.n: {gloss: cartão, alt: [carta]}
+dish.n: {gloss: prato, alt: [louça]}
+board.n: {gloss: quadro, alt: [tábua, tabuleiro, conselho]}
+shower.n: {gloss: chuveiro, alt: [banho]}
+building.n: {gloss: prédio, alt: [edifício, construção]}
+business.n: {gloss: negócio, alt: [negócios, empresa]}
+pants.n: {gloss: calça, alt: [calças]}
+trousers.n: {gloss: calça, alt: [calças]}
+gray.adj: {gloss: cinza, alt: [cinzento]}
+exciting.adj: {gloss: emocionante, alt: [empolgante, animado]}
+nurse.n: {gloss: enfermeiro, alt: [enfermeira]}
+foggy.adj: {gloss: com neblina, alt: [enevoado, nebuloso]}
+Olympics.n: {gloss: Olimpíadas, alt: [Jogos Olímpicos]}
+# alternativas erradas, raras ou de Portugal
+friend.n: {alt: [amiga, colega]}
+world.n: {alt: []}
+meet.v: {alt: [conhecer]}
+kind.n: {alt: [espécie]}
+cut.v: {alt: []}
+carry.v: {alt: [levar, transportar]}
+close.adj: {alt: [perto, íntimo]}
+weather.n: {alt: [clima]}
+share.v: {alt: [dividir]}
+dress.n: {alt: []}
+beach.n: {alt: []}
+change.n: {alt: [troco]}
+color.n: {alt: []}
+watch.n: {alt: []}
+push.v: {alt: [apertar, pressionar]}
+action.n: {alt: []}
+worker.n: {alt: [operário, funcionário]}
+excited.adj: {alt: [empolgado, entusiasmado]}
+character.n: {alt: [personagem, caractere]}
+farm.n: {alt: [sítio, granja]}
+ice_cream.n: {alt: []}
+fair.adj: {alt: [claro]}
+ride.n: {alt: [passeio, volta]}
+bottom.n: {alt: []}
+pay.n: {alt: [pagamento]}
+cloth.n: {alt: [tecido]}
+eleven.num: {alt: []}
+# alternativas que faltavam
+too.adv: {alt: [demais]}
+soon.adv: {alt: [em breve, cedo]}
+often.adv: {alt: [muitas vezes, com frequência]}
+later.adv: {alt: [mais tarde]}
+hard.adv: {alt: [com força, muito]}
+phone.v: {alt: [telefonar]}
+holiday.n: {alt: [férias]}
+candy.n: {alt: [bala]}
+toilet.n: {alt: [vaso sanitário, privada]}
+lovely.adj: {alt: [lindo, encantador]}
+thin.adj: {alt: [fino]}
+hall.n: {alt: [corredor]}
+officer.n: {alt: [policial]}
+cafe.n: {alt: [cafeteria, lanchonete]}
+merry.adj: {alt: [feliz]}
+
+# --- A1/A2 que ficavam de fora (sem tradução ou com confiança < 0,2) ---
+fun.n: {gloss: diversão, alt: [graça]}
+everyday.adj: {gloss: cotidiano, alt: [do dia a dia, diário]}
+swimming.n: {gloss: natação, alt: [nadar]}
+try.n: {gloss: tentativa, alt: []}
+stop.n: {gloss: parada, alt: [ponto]}
+saw.n: {gloss: serra, alt: []}
+down.adv: {gloss: para baixo, alt: [abaixo, embaixo]}
+up.adv: {gloss: para cima, alt: [acima, em cima]}
+out.adv: {gloss: fora, alt: [para fora, lá fora]}
+welcome.v: {gloss: dar as boas-vindas, alt: [receber, acolher]}
+well.adj: {gloss: bem, alt: [bom, saudável]}
+still.adj: {gloss: parado, alt: [imóvel, quieto]}
+super.adj: {gloss: ótimo, alt: [incrível, super]}
+drive.n: {gloss: passeio de carro, alt: [viagem, trajeto]}
+front.adj: {gloss: da frente, alt: [dianteiro]}
+snowy.adj: {gloss: com neve, alt: [nevado]}
+across.prep: {gloss: do outro lado de, alt: [através de]}
+anymore.adv: {gloss: não mais, alt: [mais]}
+downtown.adv: {gloss: no centro, alt: [para o centro]}
+left.adv: {gloss: à esquerda, alt: [para a esquerda]}
+comic.adj: {gloss: cômico, alt: [engraçado]}
+can.n: {gloss: lata, alt: []}
+back.adj: {gloss: de trás, alt: [traseiro]}
+alright.adj: {gloss: bem, alt: [tudo bem, ok]}
+east.adj: {gloss: leste, alt: [oriental]}
+west.adj: {gloss: oeste, alt: [ocidental]}
+south.adj: {gloss: sul, alt: [meridional]}
+east.adv: {gloss: para o leste, alt: [a leste]}
+singing.n: {gloss: canto, alt: [cantar]}
+oppose.v: {gloss: opor-se a, alt: [ser contra]}
+overweight.adj: {gloss: acima do peso, alt: [gordo]}
+range.n: {gloss: variedade, alt: [alcance, faixa, gama]}
+favorite.n: {gloss: favorito, alt: [preferido]}
+CD_player.n: {gloss: aparelho de CD, alt: []}
+interviewer.n: {gloss: entrevistador, alt: []}
+businesswoman.n: {gloss: empresária, alt: [mulher de negócios]}
+car_park.n: {gloss: estacionamento, alt: []}
+digital_camera.n: {gloss: câmera digital, alt: []}
+driver's_license.n: {gloss: habilitação, alt: [CNH]}
+granddad.n: {gloss: vovô, alt: [avô]}
+greatly.adv: {gloss: muito, alt: [bastante]}
+grilled.adj: {gloss: grelhado, alt: []}
+guidebook.n: {gloss: guia de viagem, alt: [guia]}
+headteacher.n: {gloss: diretor de escola, alt: [diretor]}
+ID_card.n: {gloss: identidade, alt: [RG]}
+kindly.adj: {gloss: bondoso, alt: [gentil]}
+latest.adj: {gloss: mais recente, alt: [último]}
+left-hand.adj: {gloss: da esquerda, alt: [esquerdo]}
+right-hand.adj: {gloss: da direita, alt: [direito]}
+lunchtime.n: {gloss: hora do almoço, alt: []}
+main_course.n: {gloss: prato principal, alt: []}
+make-up.n: {gloss: maquiagem, alt: []}
+overseas.adv: {gloss: no exterior, alt: [para o exterior]}
+pleasing.adj: {gloss: agradável, alt: []}
+policewoman.n: {gloss: policial, alt: []}
+rating.n: {gloss: classificação, alt: [avaliação, nota]}
+receptionist.n: {gloss: recepcionista, alt: []}
+roundabout.n: {gloss: rotatória, alt: []}
+schoolwork.n: {gloss: trabalho escolar, alt: [lição de casa]}
+shop_assistant.n: {gloss: vendedor, alt: [balconista]}
+sightseeing.n: {gloss: passeio turístico, alt: [turismo]}
+sitting_room.n: {gloss: sala de estar, alt: [sala]}
+skateboarding.n: {gloss: andar de skate, alt: [skate]}
+sleepless.adj: {gloss: sem dormir, alt: [insone]}
+snowboarding.n: {gloss: snowboard, alt: []}
+someday.adv: {gloss: algum dia, alt: [um dia]}
+sports_center.n: {gloss: centro esportivo, alt: []}
+swimming_costume.n: {gloss: maiô, alt: [roupa de banho]}
+table_tennis.n: {gloss: pingue-pongue, alt: [tênis de mesa]}
+tablespoon.n: {gloss: colher de sopa, alt: []}
+thunderstorm.n: {gloss: tempestade, alt: [temporal, trovoada]}
+tights.n: {gloss: meia-calça, alt: []}
+unimportant.adj: {gloss: sem importância, alt: [insignificante]}
+washing-up.n: {gloss: lavar a louça, alt: [louça]}
+start.n: {gloss: começo, alt: [início, partida]}
+fine.adj: {gloss: bem, alt: [ótimo, fino]}
+color.v: {gloss: colorir, alt: [pintar]}
+track.n: {gloss: trilha, alt: [pista, faixa, trilho]}
+splash.v: {gloss: respingar, alt: [salpicar, espirrar]}
+warm.v: {gloss: aquecer, alt: [esquentar]}
+ship.v: {gloss: enviar, alt: [despachar, mandar]}
+broadcast.n: {gloss: transmissão, alt: [programa]}
+
+# --- revisão A2 ---
+# sentido errado para a classe gramatical
+in.adv: {gloss: dentro, alt: [para dentro, em casa]}
+after.adv: {gloss: depois, alt: [depois de, após]}
+instead.adv: {gloss: em vez disso, alt: [em vez de, no lugar]}
+round.adv: {gloss: ao redor, alt: [em volta, por aí]}
+across.adv: {gloss: do outro lado, alt: [através, de lado a lado]}
+daily.adv: {gloss: diariamente, alt: [todo dia]}
+upstairs.adv: {gloss: lá em cima, alt: [no andar de cima]}
+downstairs.adv: {gloss: lá embaixo, alt: [no andar de baixo, embaixo]}
+besides.adv: {gloss: além disso, alt: [além do mais, também]}
+female.adj: {gloss: feminino, alt: [fêmea]}
+wooden.adj: {gloss: de madeira, alt: []}
+instant.adj: {gloss: instantâneo, alt: [imediato]}
+split.adj: {gloss: dividido, alt: [rachado, partido]}
+running.n: {gloss: corrida, alt: [correr]}
+climbing.n: {gloss: escalada, alt: [escalar]}
+bit.n: {gloss: um pouco, alt: [pedaço, pouco]}
+hundred.num: {gloss: cem, alt: [centena]}
+stand.v: {gloss: ficar de pé, alt: [levantar-se, aguentar, suportar]}
+raise.v: {gloss: levantar, alt: [aumentar, criar, erguer]}
+short.n: {drop: "sentido incerto (shorts, curta-metragem); o Tatoeba dá o adjetivo 'curto'"}
+sake.n: {drop: "só em 'for the sake of' (pelo bem de); o Tatoeba dá 'saquê'"}
+# tradução errada, incompleta ou o contrário
+hardly.adv: {gloss: quase não, alt: [mal, dificilmente]}
+unhealthy.adj: {gloss: pouco saudável, alt: [insalubre, prejudicial]}
+romance.n: {gloss: romance, alt: [namoro, amor]}
+petrol.n: {gloss: gasolina, alt: []}
+headphone.n: {gloss: fone de ouvido, alt: []}
+toothache.n: {gloss: dor de dente, alt: []}
+toe.n: {gloss: dedo do pé, alt: []}
+chef.n: {gloss: cozinheiro-chefe, alt: [chef, cozinheiro]}
+fighter.n: {gloss: lutador, alt: [caça, combatente]}
+cleaner.n: {gloss: faxineiro, alt: [faxineira, produto de limpeza]}
+reunion.n: {gloss: reencontro, alt: [reunião]}
+textbook.n: {gloss: livro didático, alt: [livro]}
+lifestyle.n: {gloss: estilo de vida, alt: []}
+daylight.n: {gloss: luz do dia, alt: []}
+raincoat.n: {gloss: capa de chuva, alt: []}
+text_message.n: {gloss: mensagem de texto, alt: [SMS, torpedo]}
+first_name.n: {gloss: primeiro nome, alt: [nome]}
+petrol_station.n: {gloss: posto de gasolina, alt: [posto]}
+tour_guide.n: {gloss: guia turístico, alt: [guia]}
+capital_letter.n: {gloss: letra maiúscula, alt: [maiúscula]}
+web_page.n: {gloss: página da web, alt: [página]}
+fry.n: {gloss: batata frita, alt: [fritas]}
+fast_food.n: {gloss: fast-food, alt: [comida rápida]}
+email.v: {gloss: mandar e-mail, alt: [enviar por e-mail]}
+text.v: {gloss: mandar mensagem, alt: [mandar]}
+addition.n: {gloss: adição, alt: [acréscimo, além disso]}
+lead.n: {gloss: liderança, alt: [dianteira, chumbo]}
+brainstorm.n: {gloss: chuva de ideias, alt: [brainstorming]}
+# verbos pronominais na forma de dicionário
+wonder.v: {gloss: perguntar-se, alt: [imaginar, querer saber]}
+worry.v: {gloss: preocupar-se, alt: [preocupar]}
+regret.v: {gloss: arrepender-se, alt: [lamentar]}
+retire.v: {gloss: aposentar-se, alt: []}
+graduate.v: {gloss: formar-se, alt: []}
+hurry.v: {gloss: apressar-se, alt: [correr, ter pressa]}
+refer.v: {gloss: referir-se, alt: []}
+mind.v: {gloss: importar-se, alt: [cuidar de]}
+# o sentido mais comum no Brasil ou para o aluno
+wish.v: {gloss: desejar, alt: [querer]}
+prevent.v: {gloss: impedir, alt: [evitar, prevenir]}
+village.n: {gloss: vilarejo, alt: [aldeia, vila, povoado]}
+journey.n: {gloss: viagem, alt: [jornada, trajeto]}
+major.adj: {gloss: principal, alt: [grande, importante]}
+branch.n: {gloss: galho, alt: [ramo, filial]}
+straight.adj: {gloss: reto, alt: [direto, liso]}
+mean.adj: {gloss: malvado, alt: [mau, maldoso, mesquinho]}
+lamp.n: {gloss: luminária, alt: [abajur, lâmpada]}
+furniture.n: {gloss: móveis, alt: [mobília, móvel]}
+exchange.n: {gloss: troca, alt: [intercâmbio, câmbio]}
+cent.n: {gloss: centavo, alt: []}
+curry.n: {gloss: curry, alt: []}
+advertising.n: {gloss: publicidade, alt: [propaganda]}
+playground.n: {gloss: parquinho, alt: [playground, pátio]}
+blonde.adj: {gloss: loiro, alt: [loira, louro]}
+sock.n: {gloss: meia, alt: [meias]}
+glove.n: {gloss: luva, alt: [luvas]}
+secretary.n: {gloss: secretário, alt: [secretária]}
+# alternativas erradas, raras ou de Portugal
+understand.v: {alt: [compreender]}
+lie.v: {alt: [deitar]}
+hold.v: {alt: [manter, aguentar]}
+pretty.adv: {alt: [bastante, muito]}
+somewhere.adv: {alt: []}
+elsewhere.adv: {alt: []}
+second.n: {alt: [momento]}
+missing.adj: {alt: [perdido, faltando]}
+however.adv: {alt: [porém, contudo, entretanto]}
+suit.n: {alt: [traje]}
+argument.n: {alt: [discussão, briga]}
+website.n: {alt: [página]}
+brave.adj: {alt: [valente]}
+earthquake.n: {alt: []}
+wealth.n: {alt: [fortuna]}
+pilot.n: {alt: []}
+online.adj: {alt: []}
+agency.n: {alt: []}
+noun.n: {alt: []}
+roast.v: {alt: [torrar]}
+tram.n: {alt: []}
+bill.n: {alt: [nota]}
+# alternativas que faltavam
+home.adv: {alt: [para casa]}
+used.adj: {alt: [acostumado]}
+end.v: {alt: [terminar]}
+fail.v: {alt: [fracassar, reprovar]}
+appreciate.v: {alt: [agradecer, valorizar]}
+apply.v: {alt: [candidatar-se]}
+stranger.n: {alt: [desconhecido]}
+show.n: {alt: [programa, show]}
+perform.v: {alt: [desempenhar, executar, apresentar-se]}
+helpful.adj: {alt: [prestativo]}
+jam.n: {alt: [engarrafamento]}
+staff.n: {alt: [equipe, funcionários]}
+countryside.n: {alt: [interior, zona rural]}
+alright.adv: {alt: [tudo bem]}
+
+# --- revisão B1 (confiança < 0,75) ---
+# tradução errada ou o contrário
+hit.n: {gloss: sucesso, alt: [golpe, batida]}
+shift.v: {gloss: mudar, alt: [deslocar, trocar]}
+bill.v: {gloss: cobrar, alt: [faturar]}
+remark.v: {gloss: comentar, alt: [observar]}
+overnight.adv: {gloss: durante a noite, alt: [da noite para o dia]}
+unclear.adj: {gloss: pouco claro, alt: [confuso, incerto]}
+insight.n: {gloss: percepção, alt: [compreensão, ideia]}
+swell.v: {gloss: inchar, alt: [aumentar]}
+healing.adj: {gloss: curativo, alt: [de cura]}
+thirst.v: {gloss: ter sede, alt: [ansiar]}
+branch.v: {gloss: ramificar-se, alt: [bifurcar]}
+impair.v: {gloss: prejudicar, alt: [comprometer]}
+lodge.n: {gloss: chalé, alt: [cabana, pousada]}
+southeast.adj: {gloss: sudeste, alt: []}
+mourn.v: {gloss: estar de luto, alt: [lamentar]}
+graduate.n: {gloss: formado, alt: [graduado, diplomado]}
+enclose.v: {gloss: anexar, alt: [cercar, incluir]}
+pole.n: {gloss: polo, alt: [poste, vara]}
+push.n: {gloss: empurrão, alt: [impulso, pressão]}
+rap.v: {drop: "o Tatoeba confunde com 'rape' (deu 'estuprar'); sentido incerto"}
+slight.n: {drop: "o substantivo (desfeita) é raro; o que se aprende é o adjetivo"}
+# sentido errado para a classe gramatical ou incompleto
+while.n: {gloss: um tempo, alt: [tempo, um pouco]}
+whole.n: {gloss: todo, alt: [o todo, totalidade]}
+last.adv: {gloss: por último, alt: [pela última vez]}
+above.adj: {gloss: acima, alt: [mencionado acima]}
+outdoor.adj: {gloss: ao ar livre, alt: []}
+outward.adj: {gloss: exterior, alt: [externo, para fora]}
+waste.adj: {gloss: residual, alt: [de descarte]}
+dating.n: {gloss: namoro, alt: []}
+shake.v: {gloss: sacudir, alt: [tremer, agitar, balançar, apertar]}
+stick.v: {gloss: grudar, alt: [colar, enfiar, ficar]}
+afford.v: {gloss: ter condições de, alt: [bancar, poder pagar]}
+stun.v: {gloss: atordoar, alt: [chocar, surpreender]}
+stare.v: {gloss: encarar, alt: [olhar fixamente]}
+babysit.v: {gloss: ser babá, alt: [cuidar de crianças]}
+glance.n: {gloss: olhada, alt: [relance]}
+heel.n: {gloss: calcanhar, alt: [salto]}
+shortly.adv: {gloss: em breve, alt: [logo, pouco depois]}
+part-time.adj: {gloss: meio período, alt: [meio expediente]}
+workplace.n: {gloss: local de trabalho, alt: []}
+dishwasher.n: {gloss: lava-louças, alt: [lava-louça]}
+upload.v: {gloss: fazer upload, alt: [carregar, enviar, subir]}
+bank_account.n: {gloss: conta bancária, alt: [conta]}
+upstairs.n: {gloss: andar de cima, alt: []}
+housework.n: {gloss: tarefas domésticas, alt: []}
+primary_school.n: {gloss: escola primária, alt: [ensino fundamental]}
+oral.n: {gloss: prova oral, alt: []}
+moreover.adv: {gloss: além disso, alt: [além do mais]}
+furthermore.adv: {gloss: além disso, alt: [além do mais]}
+sophomore.n: {gloss: aluno do 2º ano, alt: [segundanista]}
+sunbathe.v: {gloss: tomar sol, alt: []}
+tense.n: {gloss: tempo verbal, alt: []}
+remote_control.n: {gloss: controle remoto, alt: [controle]}
+wildly.adv: {gloss: descontroladamente, alt: [loucamente]}
+underage.adj: {gloss: menor de idade, alt: []}
+wetland.n: {gloss: área alagada, alt: [pântano, brejo]}
+ice_skating.n: {gloss: patinação no gelo, alt: []}
+seawater.n: {gloss: água do mar, alt: []}
+boom.n: {gloss: estrondo, alt: [explosão, crescimento]}
+carton.n: {gloss: caixa, alt: [embalagem, caixinha]}
+overwork.n: {gloss: excesso de trabalho, alt: []}
+haven.n: {gloss: refúgio, alt: [abrigo, paraíso]}
+exchange_rate.n: {gloss: taxa de câmbio, alt: [câmbio]}
+bulletin.n: {gloss: boletim, alt: [informativo]}
+divide.n: {gloss: divisão, alt: [divisor]}
+noisily.adv: {gloss: ruidosamente, alt: [com barulho]}
+brainstorming.n: {gloss: chuva de ideias, alt: [brainstorming]}
+# o sentido mais comum no Brasil ou para o aluno
+require.v: {gloss: exigir, alt: [requerer, precisar de]}
+deadly.adj: {gloss: mortal, alt: [letal, mortífero]}
+dull.adj: {gloss: sem graça, alt: [chato, monótono]}
+excitement.n: {gloss: empolgação, alt: [entusiasmo, agitação]}
+praise.n: {gloss: elogio, alt: [louvor]}
+strain.n: {gloss: tensão, alt: [esforço, cepa]}
+craft.n: {gloss: artesanato, alt: [ofício, habilidade]}
+chase.n: {gloss: perseguição, alt: [caça]}
+landlord.n: {gloss: proprietário, alt: [locador, senhorio, dono]}
+homeless.adj: {gloss: sem-teto, alt: [desabrigado, morador de rua]}
+hip.n: {gloss: quadril, alt: [anca]}
+curly.adj: {gloss: cacheado, alt: [encaracolado, crespo]}
+unusually.adv: {gloss: excepcionalmente, alt: [estranhamente]}
+retail.n: {gloss: varejo, alt: []}
+quake.n: {gloss: terremoto, alt: [tremor]}
+# verbos pronominais na forma de dicionário
+boast.v: {gloss: gabar-se, alt: [vangloriar-se]}
+specialize.v: {gloss: especializar-se, alt: []}
+# alternativas erradas ou que faltavam
+grave.n: {alt: [sepultura, tumba]}
+horn.n: {alt: [buzina, trompa]}
+damage.v: {alt: [estragar, prejudicar]}
+fair.n: {alt: [exposição]}
+breast.n: {alt: [mama, peito]}
+round.n: {alt: [volta]}
+cut.n: {alt: []}
+beat.v: {alt: [vencer, derrotar]}
+eventually.adv: {alt: [por fim, no fim]}
+fit.v: {alt: [servir]}
+crash.v: {alt: [colidir, cair]}
+rely.v: {alt: [depender, contar com]}
+glance.v: {alt: [dar uma olhada]}
+assignment.n: {alt: [tarefa, dever]}
+collar.n: {alt: [gola, colarinho]}
+mild.adj: {alt: [leve, ameno]}
+score.n: {alt: [placar, nota, partitura]}
+farther.adv: {alt: [mais longe]}
+freezer.n: {alt: [congelador]}
+stuffed.adj: {alt: [recheado, empalhado]}
+souvenir.n: {alt: [lembrança, lembrancinha]}
+razor.n: {alt: [lâmina, barbeador]}
+afterward.adv: {alt: [mais tarde, em seguida]}
+grill.n: {alt: [grelha]}
+outline.v: {alt: [esboçar, delinear]}
+# saíam do banco com tradução errada ("volunteer" = "precisar", "tape" = "descobrir")
+volunteer.v: {gloss: oferecer-se, alt: [ser voluntário]}
+market.v: {gloss: comercializar, alt: [vender, divulgar]}
+provided.conj: {gloss: desde que, alt: [contanto que]}
+tape.v: {gloss: gravar, alt: [colar com fita]}
+owing.adj: {gloss: devido, alt: [devido a]}
+
+# --- revisão B2 (confiança < 0,75) ---
+# tradução errada ou o contrário
+will.n: {gloss: vontade, alt: [testamento]}
+slap.v: {gloss: dar um tapa, alt: [estapear, esbofetear]}
+equal.n: {gloss: igual, alt: [semelhante, par]}
+grade.v: {gloss: dar nota, alt: [avaliar, corrigir, classificar]}
+scarcely.adv: {gloss: mal, alt: [quase não, dificilmente]}
+foul.adj: {gloss: nojento, alt: [fétido, sujo, ofensivo]}
+shooting.n: {gloss: tiroteio, alt: [disparo]}
+screen.v: {gloss: exibir, alt: [triar, filtrar, examinar]}
+wreck.n: {gloss: destroços, alt: [naufrágio, ruína]}
+real_estate.n: {gloss: imóveis, alt: [imobiliário]}
+tiptoe.v: {gloss: ir na ponta dos pés, alt: []}
+erupt.v: {gloss: entrar em erupção, alt: [explodir, irromper]}
+pave.v: {gloss: pavimentar, alt: [asfaltar]}
+willingly.adv: {gloss: de boa vontade, alt: [de bom grado]}
+burden.v: {gloss: sobrecarregar, alt: [pesar]}
+broadcast.v: {gloss: transmitir, alt: []}
+hover.v: {gloss: pairar, alt: []}
+thinker.n: {gloss: pensador, alt: []}
+pessimist.n: {gloss: pessimista, alt: []}
+leap.n: {gloss: salto, alt: [pulo]}
+flutter.n: {gloss: agitação, alt: [palpitação]}
+handicap.n: {gloss: desvantagem, alt: [deficiência, obstáculo]}
+confidently.adv: {gloss: com confiança, alt: []}
+crossly.adv: {gloss: com irritação, alt: [irritado, zangado]}
+giveaway.n: {gloss: brinde, alt: [sorteio, indício]}
+nut.n: {gloss: noz, alt: [castanha, porca]}
+major.n: {drop: "sentido incerto (major do exército ou especialização na faculdade)"}
+hone.n: {drop: "o substantivo (pedra de amolar) é raro; o Tatoeba dá 'habilidade'"}
+funk.n: {drop: "sentido incerto (a música ou 'mau humor')"}
+pint.n: {drop: "unidade sem equivalente usual no Brasil"}
+# sentido errado para a classe gramatical ou incompleto
+since.adv: {gloss: desde então, alt: []}
+though.adv: {gloss: no entanto, alt: [mas, porém, embora]}
+underground.adv: {gloss: debaixo da terra, alt: [no subsolo]}
+planning.n: {gloss: planejamento, alt: []}
+fighting.n: {gloss: luta, alt: [briga, combate]}
+means.n: {gloss: meio, alt: [meios, recursos]}
+improved.adj: {gloss: melhorado, alt: []}
+honorable.adj: {gloss: honrado, alt: [honroso]}
+designer.adj: {gloss: de grife, alt: [de marca]}
+expert.adj: {gloss: experiente, alt: [perito, especialista]}
+short-term.adj: {gloss: de curto prazo, alt: []}
+high-tech.adj: {gloss: de alta tecnologia, alt: []}
+offshore.adj: {gloss: em alto-mar, alt: [ao largo]}
+tip.v: {gloss: dar gorjeta, alt: [inclinar, virar]}
+overhear.v: {gloss: ouvir por acaso, alt: [entreouvir]}
+flip.v: {gloss: virar, alt: [folhear, lançar]}
+trace.v: {gloss: rastrear, alt: [localizar, traçar, seguir]}
+usher.v: {gloss: conduzir, alt: [acompanhar, inaugurar]}
+commute.v: {gloss: deslocar-se, alt: [ir ao trabalho]}
+upside_down.adv: {gloss: de cabeça para baixo, alt: [de ponta-cabeça]}
+polar_bear.n: {gloss: urso-polar, alt: []}
+first_language.n: {gloss: língua materna, alt: []}
+hard_drive.n: {gloss: disco rígido, alt: [HD]}
+virtual_reality.n: {gloss: realidade virtual, alt: []}
+gambling.n: {gloss: jogo de azar, alt: [apostas]}
+stroke.n: {gloss: derrame, alt: [AVC, golpe, pincelada]}
+outskirts.n: {gloss: arredores, alt: [periferia, subúrbio]}
+regard.n: {gloss: consideração, alt: [respeito, lembranças]}
+ballot.n: {gloss: cédula, alt: [votação]}
+cottage.n: {gloss: chalé, alt: [casa de campo, cabana]}
+infant.n: {gloss: bebê, alt: [criança, recém-nascido]}
+colon.n: {gloss: dois-pontos, alt: [cólon]}
+predicament.n: {gloss: apuro, alt: [aperto, dificuldade]}
+adjustment.n: {gloss: ajuste, alt: []}
+attainment.n: {gloss: conquista, alt: [realização, obtenção]}
+timing.n: {gloss: momento certo, alt: [sincronia]}
+# o sentido mais comum no Brasil ou para o aluno
+gently.adv: {gloss: delicadamente, alt: [suavemente, com cuidado]}
+guard.v: {gloss: vigiar, alt: [proteger, guardar]}
+gum.n: {gloss: chiclete, alt: [goma, gengiva]}
+bun.n: {gloss: pãozinho, alt: [coque]}
+pitch.n: {gloss: arremesso, alt: [tom, campo]}
+gross.adj: {gloss: nojento, alt: [bruto, grosseiro]}
+litter.n: {gloss: lixo, alt: [ninhada]}
+virtually.adv: {gloss: praticamente, alt: [quase, virtualmente]}
+hardware.n: {gloss: ferragens, alt: [hardware, ferramentas]}
+faculty.n: {gloss: corpo docente, alt: [faculdade]}
+housekeeper.n: {gloss: governanta, alt: [empregada, diarista]}
+superb.adj: {gloss: excelente, alt: [magnífico, esplêndido]}
+shabby.adj: {gloss: surrado, alt: [gasto, maltrapilho]}
+prompt.adj: {gloss: imediato, alt: [rápido, pontual]}
+unreasonable.adj: {gloss: pouco razoável, alt: [irracional, absurdo]}
+bustling.adj: {gloss: movimentado, alt: [agitado]}
+crease.n: {gloss: vinco, alt: [dobra, ruga]}
+softness.n: {gloss: maciez, alt: [suavidade, delicadeza]}
+complexion.n: {gloss: pele, alt: [tez, cútis]}
+accordingly.adv: {gloss: de acordo, alt: [consequentemente]}
+admittedly.adv: {gloss: reconhecidamente, alt: [é verdade que]}
+broadly.adv: {gloss: em linhas gerais, alt: [amplamente, de modo geral]}
+doubly.adv: {gloss: duplamente, alt: []}
+gracefulness.n: {gloss: graça, alt: [elegância, leveza]}
+partisan.n: {gloss: partidário, alt: [seguidor]}
+pickle.n: {gloss: picles, alt: []}
+coalition.n: {gloss: coalizão, alt: [coligação]}
+unofficial.adj: {gloss: não oficial, alt: [extraoficial]}
+antivirus.n: {gloss: antivírus, alt: []}
+# português de Portugal
+manufacturing.n: {gloss: fabricação, alt: [manufatura]}
+retailer.n: {gloss: varejista, alt: []}
+transistor.n: {gloss: transistor, alt: []}
+seesaw.n: {gloss: gangorra, alt: []}
+ferryboat.n: {gloss: balsa, alt: [ferry]}
+exceptional.adj: {alt: []}
+# verbos pronominais na forma de dicionário
+familiarize.v: {gloss: familiarizar-se, alt: []}
+# alternativas erradas ou que faltavam
+bruise.n: {alt: [roxo, mancha roxa]}
+mogul.n: {alt: []}
+workbench.n: {alt: []}
+trip.v: {alt: []}
+tough.adj: {alt: [difícil, resistente]}
+store.v: {alt: [guardar]}
+spot.v: {alt: [notar, ver]}
+lap.n: {alt: [volta]}
+grief.n: {alt: [luto, dor]}
+compromise.v: {alt: [ceder, chegar a um acordo]}
+surroundings.n: {alt: [arredores]}
+stiff.adj: {alt: [rígido]}
+stingy.adj: {alt: [pão-duro, avarento]}
+tackle.v: {alt: [enfrentar, lidar com]}
+feedback.n: {alt: [retorno, opinião]}
+ultimate.adj: {alt: [definitivo, máximo]}
+breakdown.n: {alt: [pane]}
+nursery.n: {alt: [creche, viveiro]}
+audition.n: {alt: [audição]}
+pension.n: {alt: [aposentadoria]}
+surge.n: {alt: [aumento, onda]}
+landing.n: {alt: [pouso]}
+sparkling.adj: {alt: [brilhante, com gás]}
+scooter.n: {alt: [lambreta]}
+provision.n: {alt: [fornecimento, provisão]}
+breakup.n: {alt: [separação, rompimento]}
+merge.v: {alt: [fundir, unir, juntar]}
+tuition.n: {alt: [ensino, aulas]}
+politeness.n: {alt: [educação, cortesia]}
+bookmark.n: {alt: [favorito]}
+
+# --- revisão B1/B2 (confiança >= 0,75: só os erros claros) ---
+# tradução errada, o contrário ou pedaço de expressão
+dislike.v: {gloss: não gostar de, alt: [antipatizar, detestar]}
+unwilling.adj: {gloss: relutante, alt: [sem vontade]}
+unreliable.adj: {gloss: pouco confiável, alt: [não confiável]}
+haunt.v: {gloss: assombrar, alt: []}
+alike.adj: {gloss: parecido, alt: [semelhante, igual]}
+fine.n: {gloss: multa, alt: []}
+general.n: {gloss: general, alt: []}
+polish.n: {gloss: polimento, alt: [esmalte, graxa]}
+dye.n: {gloss: tintura, alt: [corante]}
+honeymoon.n: {gloss: lua de mel, alt: []}
+nevertheless.adv: {gloss: no entanto, alt: [mesmo assim, contudo]}
+percent.n: {gloss: por cento, alt: []}
+behalf.n: {gloss: em nome de, alt: []}
+human_rights.n: {gloss: direitos humanos, alt: []}
+heart_attack.n: {gloss: ataque cardíaco, alt: [infarto]}
+climate_change.n: {gloss: mudança climática, alt: []}
+stock_market.n: {gloss: bolsa de valores, alt: []}
+native_speaker.n: {gloss: falante nativo, alt: []}
+carbon_dioxide.n: {gloss: dióxido de carbono, alt: [gás carbônico]}
+last_minute.n: {gloss: última hora, alt: [último minuto]}
+upside_down.adj: {gloss: de cabeça para baixo, alt: [de ponta-cabeça]}
+shower.v: {gloss: tomar banho, alt: []}
+panic.v: {gloss: entrar em pânico, alt: []}
+starve.v: {gloss: passar fome, alt: [morrer de fome]}
+wildlife.n: {gloss: vida selvagem, alt: [fauna]}
+sunrise.n: {gloss: nascer do sol, alt: [amanhecer]}
+rainforest.n: {gloss: floresta tropical, alt: []}
+roommate.n: {gloss: colega de quarto, alt: []}
+scholarship.n: {gloss: bolsa de estudos, alt: [bolsa]}
+tablecloth.n: {gloss: toalha de mesa, alt: []}
+full_stop.n: {gloss: ponto final, alt: [ponto]}
+prom.n: {gloss: baile de formatura, alt: []}
+gravy.n: {gloss: molho de carne, alt: [molho]}
+pork.n: {gloss: carne de porco, alt: [porco]}
+health_care.n: {gloss: assistência médica, alt: [saúde]}
+household.n: {gloss: lar, alt: [casa, família]}
+delighted.adj: {gloss: encantado, alt: [muito contente]}
+roast.adj: {gloss: assado, alt: []}
+somewhat.adv: {gloss: um pouco, alt: [algo, meio]}
+second.adv: {gloss: em segundo lugar, alt: []}
+near.adv: {gloss: perto, alt: [perto de, próximo]}
+indoors.adv: {gloss: dentro de casa, alt: [lá dentro]}
+that.adv: {gloss: tão, alt: [assim]}
+good.n: {gloss: bem, alt: [bom]}
+slight.adj: {gloss: leve, alt: [pequeno, ligeiro]}
+double.n: {gloss: dobro, alt: [sósia, dublê]}
+nerves.n: {gloss: nervos, alt: [nervosismo]}
+facilities.n: {gloss: instalações, alt: []}
+finance.n: {gloss: finanças, alt: []}
+chemical.n: {gloss: produto químico, alt: [substância química]}
+scramble.v: {gloss: embaralhar, alt: [mexer, correr]}
+rape.v: {drop: "tema sensível; as frases com a palavra já são bloqueadas"}
+rape.n: {drop: "tema sensível; as frases com a palavra já são bloqueadas"}
+# falsos cognatos e o sentido mais comum
+suppose.v: {gloss: supor, alt: [achar, imaginar, dever]}
+compromise.n: {gloss: meio-termo, alt: [acordo, concessão]}
+sympathetic.adj: {gloss: solidário, alt: [compreensivo]}
+meanwhile.adv: {gloss: enquanto isso, alt: [nesse meio-tempo]}
+experiment.n: {gloss: experimento, alt: [experiência]}
+vain.adj: {gloss: vaidoso, alt: [vão, fútil]}
+status.n: {gloss: situação, alt: [status, condição]}
+common_sense.n: {gloss: bom senso, alt: [senso comum]}
+account.v: {gloss: explicar, alt: [responder por]}
+address.v: {gloss: abordar, alt: [dirigir-se a, tratar de]}
+waste.n: {gloss: desperdício, alt: [perda, lixo, resíduo]}
+crossing.n: {gloss: travessia, alt: [cruzamento, faixa de pedestres]}
+vessel.n: {gloss: embarcação, alt: [navio, vaso, recipiente]}
+fur.n: {gloss: pelo, alt: [pele]}
+summit.n: {gloss: cume, alt: [cúpula, topo]}
+packing.n: {gloss: embalagem, alt: [arrumar as malas]}
+postcard.n: {gloss: cartão-postal, alt: [postal]}
+iron.v: {gloss: passar roupa, alt: [passar]}
+bowl.v: {gloss: arremessar, alt: [jogar boliche]}
+far.adj: {gloss: distante, alt: [longe]}
+outside.n: {gloss: exterior, alt: [lado de fora]}
+prime.adj: {gloss: principal, alt: [primo, primordial]}
+chip.n: {gloss: batata frita, alt: [lasca, chip]}
+laundry.n: {gloss: roupa para lavar, alt: [roupa suja, lavanderia]}
+cherry.n: {gloss: cereja, alt: [cerejeira]}
+runway.n: {gloss: pista, alt: [pista de pouso, passarela]}
+thriller.n: {gloss: suspense, alt: [thriller]}
+saucepan.n: {gloss: panela, alt: [caçarola]}
+fitness.n: {gloss: forma física, alt: [condicionamento, aptidão]}
+fright.n: {gloss: susto, alt: [medo]}
+hop.n: {gloss: pulo, alt: [salto, lúpulo]}
+tin.n: {gloss: lata, alt: [estanho]}
+calf.n: {gloss: bezerro, alt: [panturrilha]}
+unpack.v: {gloss: desfazer a mala, alt: [desembalar, desempacotar]}
+undress.v: {gloss: tirar a roupa, alt: [despir-se]}
+pee.v: {gloss: fazer xixi, alt: [urinar]}
+hood.n: {gloss: capuz, alt: [capô]}
+cabinet.n: {gloss: armário, alt: [gabinete]}
+penalty.n: {gloss: penalidade, alt: [multa, pênalti, pena]}
+valentine.n: {gloss: Dia dos Namorados, alt: [namorado]}
+microwave.n: {gloss: micro-ondas, alt: []}
+stake.n: {gloss: estaca, alt: [aposta, participação]}
+disposal.n: {gloss: descarte, alt: [disposição, eliminação]}
+prompt.v: {gloss: provocar, alt: [levar a, estimular]}
+conductor.n: {gloss: maestro, alt: [condutor, cobrador]}
+villa.n: {gloss: casa de campo, alt: [mansão]}
+welcome.n: {gloss: boas-vindas, alt: [recepção, acolhida]}
+unrealistic.adj: {gloss: pouco realista, alt: [irreal]}
+supporter.n: {gloss: apoiador, alt: [torcedor, partidário]}
+percentage.n: {gloss: porcentagem, alt: [percentagem]}
+laser.n: {gloss: laser, alt: []}
+bourbon.n: {gloss: bourbon, alt: []}
+# verbos pronominais na forma de dicionário
+behave.v: {gloss: comportar-se, alt: [se comportar]}
+resemble.v: {gloss: parecer-se com, alt: [parecer]}
+surrender.v: {gloss: render-se, alt: []}
+divorce.v: {gloss: divorciar-se, alt: []}
+strive.v: {gloss: esforçar-se, alt: []}
+enroll.v: {gloss: matricular-se, alt: []}
+# português de Portugal
+billion.n: {gloss: bilhão, alt: []}
+infection.n: {gloss: infecção, alt: []}
+infect.v: {gloss: infectar, alt: []}
+detect.v: {gloss: detectar, alt: [descobrir]}
+conception.n: {gloss: concepção, alt: []}
+broccoli.n: {gloss: brócolis, alt: [brócoli]}
+underpants.n: {gloss: cueca, alt: [cuecas]}
+lottery.n: {alt: []}
+characteristic.n: {alt: []}
+sports.adj: {alt: []}
+humid.adj: {alt: []}
+spectator.n: {alt: []}
+perspective.n: {alt: []}
+perception.n: {alt: []}
+access.v: {alt: []}
+deficit.n: {alt: []}
+concrete.n: {alt: []}
+DNA.n: {alt: []}
+retirement.n: {alt: []}
+plumber.n: {alt: []}
+leopard.n: {alt: []}
+sunset.n: {alt: []}
+# alternativas erradas ou que faltavam
+assist.v: {alt: [auxiliar]}
+iron.n: {alt: [ferro de passar]}
+negotiate.v: {alt: []}
+waste.v: {alt: [perder, gastar]}
+evil.n: {alt: []}
+fat.n: {alt: []}
+idle.adj: {alt: [ocioso, parado]}
+queue.v: {alt: [ficar na fila]}
+record.n: {alt: [registro, disco]}
+rush.v: {alt: [apressar-se]}
+tend.v: {alt: [costumar]}
+live.adj: {alt: [ao vivo]}
+straw.n: {alt: [canudo]}
+water.v: {alt: [regar]}
+employee.n: {alt: [funcionário]}
+laptop.n: {alt: [notebook]}
+fed_up.adj: {alt: [cheio, de saco cheio]}
+spare.adj: {alt: [extra, sobressalente]}
+chemist.n: {alt: [farmacêutico]}
+mold.n: {alt: [mofo, bolor]}
+leash.n: {alt: [guia]}
+entrepreneur.n: {alt: [empreendedor]}
+slam.v: {alt: [bater com força]}

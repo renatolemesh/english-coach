@@ -153,9 +153,11 @@ exercício (o retorno da resposta vai junto com a próxima pergunta).
   dois níveis vizinhos discordarem, e grava o nível. Não conta como aula nem cria cartões.
 - **Limite:** `plans.lessons_per_day` (Grátis: 1). Uma aula concluída conta na meta diária e dá
   pontos no ranking (acertos + 5).
-- **Conteúdo** em `data/course/`: `words.jsonl` e `sentences.jsonl` gerados por
+- **Conteúdo** em `data/course/`: `words.jsonl` e `sentences.jsonl` (A1 a B2) gerados por
   `npx tsx scripts/build-course.ts` (CEFR-J + Wiktionary + Tatoeba; licenças em
-  `data/course/LICENSE.md` e na página `/panel/creditos`), e `traps.yaml` escrito à mão.
+  `data/course/LICENSE.md` e na página `/panel/creditos`), com as correções de tradução de
+  `overrides.yaml`; `traps.yaml` escrito à mão. Cada frase tem `fit` (0 a 1, quão literal é a
+  tradução); montar, traduzir e dizer em inglês só usam frases com `fit` ≥ 0,75.
 
 ## Testes e qualidade
 

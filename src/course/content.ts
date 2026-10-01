@@ -31,6 +31,8 @@ export const Sentence = z.object({
   pt: z.string(),
   alt_en: list,
   level: z.string(),
+  // how literally pt renders en (scripts/build-course.ts); older files have none
+  fit: z.number().min(0).max(1).default(1),
   words: list,
   src: z.string().default(""),
 });

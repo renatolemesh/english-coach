@@ -9,6 +9,7 @@
  * Fewer new items when reviews pile up, so accuracy stays around 85%.
  */
 import type { Card } from "ts-fsrs";
+import { LEVELS } from "../domain/topics.js";
 import { type CourseContent, levelIndex, type Sentence, type Word } from "./content.js";
 import {
   AUDIO_TYPES,
@@ -25,6 +26,12 @@ import { relearning } from "./srs.js";
 export const LESSON_SIZE = 10;
 const RETEST_GAP = 4; // a new word comes back this many exercises later
 const MIN_CONF = 0.5; // gloss confidence below this is not taught
+// order, translate and say show the Portuguese and expect its English: a looser translation
+// ("Às vezes não consigo me segurar ao mostrar minhas emoções" for "Sometimes I can't help
+// showing emotions") asks for words the student cannot guess
+export const GOOD_FIT = 0.75;
+type SentenceType = "order" | "dictation" | "translate" | "repeat" | "say";
+const SHOWS_PT: ReadonlySet<SentenceType> = new Set(["order", "translate", "say"]);
 // Content words are taught as vocabulary; pronouns, prepositions, auxiliaries and the like are
 // learned inside sentences (a multiple choice for "of = de" teaches little).
 const TEACH_POS: ReadonlySet<string> = new Set(["noun", "verb", "adjective", "adverb", "number"]);
@@ -119,16 +126,17 @@ function sentence(
   input: PlanInput,
   maxWords: number,
   taken: Set<string>,
-  noNames = false,
+  { noNames = false, faithful = false } = {},
 ): Sentence | null {
   const { content, known } = input;
   const pool = content.poolLevel(input.level);
   const candidates: Sentence[] = [];
   for (let level = pool; level >= 0 && candidates.length < 400; level--) {
-    const group = content.sentencesByLevel.get(["A1", "A2", "B1", "B2", "C1", "C2"][level] ?? "");
+    const group = content.sentencesByLevel.get(LEVELS[level] ?? "");
     for (const s of shuffle(group ?? [], input.rng).slice(0, 400)) {
       const n = s.en.split(/\s+/).length;
       if (noNames && hasName(s.en)) continue;
+      if (faithful && s.fit < GOOD_FIT) continue;
       if (n >= 4 && n <= maxWords && !input.usedSentences.has(s.id) && !taken.has(s.id)) {
         candidates.push(s);
       }
@@ -147,6 +155,24 @@ function sentence(
     .sort((a, b) => b.score - a.score)[0]?.s;
   if (best) taken.add(best.id);
   return best ?? null;
+}
+
+/** A sentence exercise. Spoken ones and dictation avoid names (Whisper spells them its own way);
+ * one that shows the Portuguese needs a faithful pair, else it becomes the exercise that shows
+ * the English instead (dictation, repeat), where the Portuguese is only a tip. */
+function sentenceStep(
+  input: PlanInput,
+  type: SentenceType,
+  maxWords: number,
+  taken: Set<string>,
+): Step | null {
+  const spoken = type === "repeat" || type === "say";
+  const noNames = spoken || type === "dictation";
+  const s = sentence(input, maxWords, taken, { noNames, faithful: SHOWS_PT.has(type) });
+  if (s) return { type, item: null, sentence: s.id };
+  if (!SHOWS_PT.has(type)) return null;
+  const other = sentence(input, maxWords, taken, { noNames: true });
+  return other ? { type: spoken ? "repeat" : "dictation", item: null, sentence: other.id } : null;
 }
 
 function retestType(i: number): ExerciseType {
@@ -174,11 +200,11 @@ export function planLesson(input: PlanInput): Step[] {
     if (trap) extras.push(trap);
   }
   const practice = (["order", "dictation", "translate"] as const)[input.lessonsDone % 3] ?? "order";
-  const s1 = sentence(input, practice === "order" ? 8 : 10, taken, practice === "dictation");
-  if (s1) extras.push({ type: practice, item: null, sentence: s1.id });
+  const s1 = sentenceStep(input, practice, practice === "order" ? 8 : 10, taken);
+  if (s1) extras.push(s1);
   const speaking = (["repeat", "say"] as const)[input.lessonsDone % 2] ?? "repeat";
-  const s2 = sentence(input, 9, taken, true);
-  if (s2) extras.push({ type: speaking, item: null, sentence: s2.id });
+  const s2 = sentenceStep(input, speaking, 9, taken);
+  if (s2) extras.push(s2);
 
   let fresh = backlog > 12 ? 1 : backlog > 6 ? 2 : 3;
   const reviewRoom = Math.max(0, LESSON_SIZE - extras.length - 2 * fresh);

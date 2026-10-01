@@ -10,32 +10,44 @@
  *   https://github.com/openlanguageprofiles/olp-en-cefrj (cefrj-vocabulary-profile-1.5.csv)
  *   https://downloads.tatoeba.org/exports/per_language/{eng,por}/ (eng_sentences_detailed,
  *     por_sentences, eng-por_links; .tsv.bz2, unpack with bunzip2)
- *   https://kaikki.org/ptwiktionary/raw-wiktextract-data.jsonl.gz (save as wikt/ptwikt.jsonl.gz) Writes data/course/{words,sentences}.jsonl and out/course-build-report.txt.
+ *   https://kaikki.org/ptwiktionary/raw-wiktextract-data.jsonl.gz (save as wikt/ptwikt.jsonl.gz)
+ * Writes data/course/{words,sentences}.jsonl and out/course-build-report.txt, applying the hand
+ * fixes in data/course/overrides.yaml (an id there that is not a CEFR-J entry fails the build).
  *
  * Glosses: the Portuguese candidates (glosses of the English Wiktionary entry, Portuguese entries
  * that translate to the word, and lemmas that co-occur strongly in Tatoeba) are scored by how
  * often they appear, lemmatized, in the Brazilian translations of sentences that use the word
  * with the same part of speech, weighted by part-of-speech agreement: "paint" as a noun is
  * "tinta", not "pintar", even though most "paint" sentences are about painting.
+ *
+ * Fidelity (`fit` in sentences.jsonl, 0..1): how literally the Portuguese renders the English
+ * (see fidelity()). Of several Brazilian translations the closest one is kept, and pairs that are
+ * clearly not translations are dropped: the app shows the Portuguese and expects that English.
  */
-import { createReadStream, mkdirSync, writeFileSync } from "node:fs";
+import { createReadStream, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { createInterface } from "node:readline";
+import { pathToFileURL } from "node:url";
 import { createGunzip } from "node:zlib";
+import { parse as parseYaml } from "yaml";
+import { z } from "zod";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const DEFAULT_INPUT = path.join(ROOT, "out", "course-sources");
 const OUT_DIR = path.join(ROOT, "data", "course");
+const OVERRIDES_FILE = path.join(OUT_DIR, "overrides.yaml");
 const REPORT_FILE = path.join(ROOT, "out", "course-build-report.txt");
 
-const LEVELS = ["A1", "A2", "B1"] as const;
+const LEVELS = ["A1", "A2", "B1", "B2"] as const;
 const MIN_WORDS = 3;
 const MAX_WORDS = 12;
 const POOL_PER_LEVEL = 3000;
 const MAX_EXAMPLES = 3;
-const MIN_CONF = 0.2; // below this a word is dropped (the planner only teaches >= 0.35)
+const MIN_CONF = 0.2; // below this a word is dropped (the planner only teaches >= 0.5)
 const GLOSS_MAX = 20;
 const SAMPLE_CAP = 2000; // sentences per word used to score glosses (shortest first)
+export const FIT_MIN = 0.3; // `lenient` fidelity below this: not a translation, dropped
+export const FIT_GOOD = 0.75; // GOOD_FIT in src/course/planner.ts (only reported here)
 
 // --- small helpers ------------------------------------------------------------------------
 
@@ -272,7 +284,7 @@ interface Entry {
   word: string;
   lookup: string[]; // spellings to look up in Wiktionary
   info: PosInfo;
-  level: number; // 0 A1, 1 A2, 2 B1
+  level: number; // index in LEVELS: 0 A1 ... 3 B2
   order: number;
   forms: Map<string, Infl>; // single tokens, lowercase
   phrases: string[][]; // multiword forms
@@ -327,6 +339,18 @@ const EXTRA_KNOWN: Record<string, number> = {
   america: 1, american: 1, england: 1, japan: 1, china: 1, france: 1, germany: 1, italy: 1,
   spain: 1, portugal: 1, canada: 1, australia: 1, europe: 1, london: 1, paris: 1, tokyo: 1,
   boston: 1, christmas: 1,
+};
+// their Portuguese, for the fidelity score ("Mia speaks English" = "Mia fala inglês")
+// biome-ignore format: a word list
+const EXTRA_PT: Record<string, string> = {
+  born: "nascer nascido", goodbye: "tchau adeus", bye: "tchau adeus", oh: "ah oh", wow: "uau nossa",
+  english: "inglês", portuguese: "português", brazil: "brasil", brazilian: "brasileiro",
+  spanish: "espanhol", french: "francês", german: "alemão", italian: "italiano",
+  japanese: "japonês", chinese: "chinês", america: "américa estados", american: "americano",
+  england: "inglaterra", japan: "japão", china: "china", france: "frança", germany: "alemanha",
+  italy: "itália", spain: "espanha", portugal: "portugal", canada: "canadá",
+  australia: "austrália", europe: "europa", london: "londres", paris: "paris", tokyo: "tóquio",
+  boston: "boston", christmas: "natal",
 };
 
 async function loadEntries(file: string): Promise<Entry[]> {
@@ -904,6 +928,15 @@ const FIXED = [
   "of course", "as well", "at least", "at all", "right now", "right away", "by the way",
   "in front of", "thank you", "no longer", "so far", "kind of", "at last",
 ].map((x) => x.split(" "));
+// their Portuguese, for the fidelity score
+// biome-ignore format: a table
+const FIXED_PT: Record<string, string> = {
+  "of course": "claro certeza certo", "as well": "também", "at least": "menos",
+  "at all": "nada nenhum", "right now": "agora já", "right away": "imediatamente já agora logo",
+  "by the way": "aliás propósito falar", "in front of": "frente diante",
+  "thank you": "obrigado obrigada agradecer", "no longer": "mais", "so far": "agora momento",
+  "kind of": "meio tipo pouco", "at last": "finalmente enfim",
+};
 const NAME_TOKENS = new Set(["tom", "mary"]);
 
 interface Cand {
@@ -929,6 +962,7 @@ interface Gloss {
   conf: number;
   why: string;
   top: Scored[];
+  trans: Set<number>; // Portuguese lemma ids that translate the word (for the fidelity score)
 }
 
 const FUNCTION_PT = new Set(["pron", "article", "prep", "conj", "contraction", "num", "abbrev"]);
@@ -951,6 +985,135 @@ const DEFINITION_WORDS =
     .map((w) => w.replace(/_/g, " "));
 const DEFINITION_START = new RegExp(`^(${DEFINITION_WORDS.join("|")})(?!\\p{L})`, "u");
 
+// --- fidelity -----------------------------------------------------------------------------------
+
+/** An English token: weight 0 for grammar (it only accounts for Portuguese words) and the
+ * Portuguese lemmas that translate it. */
+export interface FitEn<K> {
+  form: string;
+  weight: number;
+  trans: ReadonlySet<K>;
+}
+/** A Portuguese token: weight 0 for grammar, and its lemmas (the form itself included). */
+export interface FitPt<K> {
+  form: string;
+  weight: number;
+  lemmas: ArrayLike<K>;
+}
+
+const EN_NEG = words("not never no nobody nothing none neither nor nowhere without");
+const PT_NEG = words("não nunca nem nada ninguém nenhum nenhuma nenhuns nenhumas jamais sem");
+// what counts on the English side: content words; adverbs and modals half
+// biome-ignore format: a table
+const EN_WEIGHT: Record<string, number> = {
+  noun: 1, verb: 1, adjective: 1, number: 1, adverb: 0.5, modal: 0.5,
+};
+// auxiliaries and light verbs ("I have eaten" = "Comi"), as the planner's NOT_TAUGHT, and
+// question adverbs (their Portuguese is a grammar word: onde, quando, por que)
+const EN_LIGHT = words("be do have get not let where why when how");
+// "give up" = "desistir": the particle has no Portuguese of its own
+const PARTICLE_ADV = words("up down out off away back over around along about in on through by");
+const PT_POSSESSIVE = words(`meu minha meus minhas seu sua seus suas nosso nossa nossos nossas
+  dele dela deles delas`);
+// auxiliaries: "Vou comer" is "I'll eat", "Tenho comido" is "I have been eating"
+const PT_AUX = ["ser", "estar", "ter", "haver", "ir"];
+// grammar words, listed because Wiktionary gives many of them content senses too ("a" is a
+// letter, "para" and "entre" are verb forms, "sobre" is "sobrar")
+const PT_GRAMMAR = words(`o a os as um uma uns umas de em por para pra pro pros pras com sem sob
+  sobre entre até desde contra perante após ante durante e ou mas nem que se porque pois quando
+  enquanto embora porém contudo todavia como onde aonde quanto quanta quantos quantas qual quais
+  quem cujo cuja eu tu ele ela nós vós eles elas você vocês me te lhe lhes nos vos mim ti si comigo
+  contigo conosco convosco lo la los las isso isto aquilo esse essa esses essas este esta estes
+  estas aquele aquela aqueles aquelas algo alguém tudo cada outro outra outros outras algum alguma
+  alguns algumas qualquer quaisquer tal tais`);
+const GRAMMAR_POS = new Set(["pron", "article", "prep", "conj", "contraction", "abbrev"]);
+const COGNATE = 5; // "destroy" = "destrói", "subconscious" = "subconsciente"
+const cognates = (a: string, b: string) =>
+  a.length >= COGNATE && b.length >= COGNATE && a.slice(0, COGNATE) === b.slice(0, COGNATE);
+
+export interface Fidelity {
+  fit: number;
+  lenient: number; // the same with one more word accounted for: below FIT_MIN, not a translation
+}
+
+/**
+ * How literally `pt` renders `en`, 0..1: the share of weighted content words, on both sides, that
+ * the other side accounts for (an English word whose translation is in the Portuguese, a
+ * Portuguese word that translates some English word, or the same word or a cognate: names,
+ * "hotel", "destrói"); times 0.6 when only one side is negative, and less when the lengths are far
+ * apart. "Sometimes I can't help showing emotions." = "Às vezes não consigo me segurar ao mostrar
+ * minhas emoções." loses "help", "segurar" and "minhas".
+ */
+export function fidelity<K>(en: readonly FitEn<K>[], pt: readonly FitPt<K>[]): Fidelity {
+  const ptLemmas = new Set<K>();
+  const ptForms = pt.map((t) => stripAccents(t.form));
+  for (const t of pt) for (let i = 0; i < t.lemmas.length; i++) ptLemmas.add(t.lemmas[i] as K);
+  const enTrans = new Set<K>();
+  for (const t of en) for (const k of t.trans) enTrans.add(k);
+  const enForms = en.map((t) => t.form);
+  let total = 0;
+  let found = 0;
+  for (const t of en) {
+    if (!t.weight) continue;
+    total += t.weight;
+    const ok =
+      [...t.trans].some((k) => ptLemmas.has(k)) ||
+      ptForms.some((f) => f === t.form || cognates(f, t.form));
+    if (ok) found += t.weight;
+  }
+  pt.forEach((t, j) => {
+    if (!t.weight) return;
+    total += t.weight;
+    const form = ptForms[j] as string;
+    let ok = enForms.some((f) => f === form || cognates(f, form));
+    for (let i = 0; i < t.lemmas.length && !ok; i++) ok = enTrans.has(t.lemmas[i] as K);
+    if (ok) found += t.weight;
+  });
+  let penalty = 1;
+  if (en.some((t) => EN_NEG.has(t.form)) !== pt.some((t) => PT_NEG.has(t.form))) penalty = 0.6;
+  // Portuguese drops subjects ("Did you write it down?" = "Você anotou?"): only far apart counts
+  const ratio = (pt.length + 2) / (en.length + 2);
+  penalty *= Math.min(1, ratio / 0.5, 2 / ratio);
+  const round = (x: number) => Math.round(x * 100) / 100;
+  return {
+    fit: round((total ? found / total : 1) * penalty),
+    lenient: round(((found + 1) / (total + 1)) * penalty),
+  };
+}
+
+/** Of several translations the closest: the first one (more Brazilian, shorter) unless another
+ * is at least 0.05 closer. */
+export function closest<T extends { fit: number }>(options: readonly T[]): T | undefined {
+  let best: T | undefined;
+  for (const o of options) if (!best || o.fit >= best.fit + 0.05 - 1e-9) best = o;
+  return best;
+}
+
+// --- hand overrides -----------------------------------------------------------------------------
+
+const Override = z
+  .object({
+    // a gloss is a WhatsApp button title (20 characters at most)
+    gloss: z.string().trim().min(1).max(GLOSS_MAX).optional(),
+    alt: z.array(z.string().trim().min(1).max(GLOSS_MAX)).optional(),
+    drop: z.string().trim().min(1).optional(),
+  })
+  .strict()
+  .refine((o) => (o.drop ? !o.gloss && !o.alt : Boolean(o.gloss || o.alt)), {
+    message: "either drop (alone), or gloss and/or alt",
+  });
+export type Override = z.infer<typeof Override>;
+
+/** data/course/overrides.yaml: word id -> {gloss, alt} or {drop}. Throws on an unknown id. */
+export function parseOverrides(text: string, ids: ReadonlySet<string>): Map<string, Override> {
+  const raw: unknown = parseYaml(text) ?? {};
+  const parsed = z.record(z.string(), Override).safeParse(raw);
+  if (!parsed.success) throw new Error(`overrides.yaml: ${z.prettifyError(parsed.error)}`);
+  const unknown = Object.keys(parsed.data).filter((id) => !ids.has(id));
+  if (unknown.length) throw new Error(`overrides.yaml: unknown word ids: ${unknown.join(", ")}`);
+  return new Map(Object.entries(parsed.data));
+}
+
 // --- main ---------------------------------------------------------------------------------------
 
 interface SentenceOut {
@@ -959,6 +1122,7 @@ interface SentenceOut {
   pt: string;
   alt_en: string[];
   level: string;
+  fit: number;
   words: string[];
   src: string;
 }
@@ -975,58 +1139,6 @@ interface WordOut {
   forms: string[];
   examples: string[];
 }
-
-// Hand fixes for high-frequency words the statistics get wrong; each one was checked.
-const OVERRIDES: Record<string, { gloss: string; alt?: string[] }> = {
-  // Wiktionary only has the Latin degree ("artium magister")
-  "a.m..adv": { gloss: "da manhã", alt: ["de manhã", "manhã"] },
-  "p.m..adv": { gloss: "da tarde", alt: ["da noite", "tarde", "noite"] },
-  // Tatoeba spreads it over a dozen verbs; none reaches the teaching threshold
-  "get.v": { gloss: "conseguir", alt: ["obter", "pegar", "receber", "ficar"] },
-  "turn.v": { gloss: "virar", alt: ["girar", "transformar", "ficar"] },
-  "away.adv": { gloss: "longe", alt: ["embora", "fora", "distante"] },
-  "back.adv": { gloss: "de volta", alt: ["para trás", "atrás", "voltar"] },
-  "up.prep": { gloss: "para cima", alt: ["em cima", "acima"] },
-  "around.prep": {
-    gloss: "ao redor de",
-    alt: ["em volta de", "por volta de", "em torno de", "perto de"],
-  },
-  // "que" and "o que" are everywhere, so the base rate hides them
-  "what.pron": { gloss: "o que", alt: ["que", "qual"] },
-  "anything.pron": { gloss: "alguma coisa", alt: ["algo", "qualquer coisa", "nada"] },
-  "those.det": { gloss: "aqueles", alt: ["aquelas", "esses", "essas"] },
-  // "seu" is also "your": dele/dela/deles is what a learner can map back
-  "his.det": { gloss: "dele", alt: ["seu", "sua"] },
-  "her.det": { gloss: "dela", alt: ["seu", "sua"] },
-  "their.det": { gloss: "deles", alt: ["delas", "seu", "sua"] },
-  // no Wiktionary entry
-  "all_right.adj": { gloss: "tudo bem", alt: ["bem", "certo", "ok"] },
-  "all_right.adv": { gloss: "tudo bem", alt: ["bem", "certo", "ok"] },
-  "sure.adj": { gloss: "certo", alt: ["seguro", "com certeza", "certeza"] },
-  // Tatoeba writes "TV" more often; the word is what a learner needs
-  "TV.n": { gloss: "televisão", alt: ["TV", "tevê"] },
-  "CV.n": { gloss: "currículo", alt: ["CV"] },
-  // Wiktionary offers "vegetal"/"hortaliça"; Brazilians say "legume" or "verdura"
-  "vegetable.n": { gloss: "legume", alt: ["verdura", "vegetal", "hortaliça"] },
-  // "a lot" is "muito"; Wiktionary only has lot = "lote", "destino"
-  "lot.pron": { gloss: "muito", alt: ["bastante", "muitos", "vários"] },
-  "lot.adv": { gloss: "muito", alt: ["bastante"] },
-  "hers.pron": { gloss: "dela", alt: ["seu", "sua"] },
-  // Tatoeba is full of "a few" (alguns); "few" alone is "poucos"
-  "few.det": { gloss: "poucos", alt: ["alguns", "pouco"] },
-  "else.adv": { gloss: "mais", alt: ["outro", "outra coisa", "de outro modo"] },
-  "o'clock.adv": { gloss: "em ponto", alt: ["hora", "horas"] },
-  // Portuguese drops "it" or uses o/a; ele/ela alone would read as "he/she"
-  "it.pron": { gloss: "isso", alt: ["ele", "ela", "o", "a"] },
-  // CEFR-J lists these as a noun and an adjective; Portuguese says them as interjections
-  "hello.n": { gloss: "olá", alt: ["oi", "alô"] },
-  "sorry.adj": { gloss: "desculpe", alt: ["desculpa", "sinto muito", "arrependido", "com pena"] },
-  "most.det": { gloss: "a maioria", alt: ["maioria", "mais", "maior parte"] },
-  "than.prep": { gloss: "do que", alt: ["que", "de"] },
-  "than.conj": { gloss: "do que", alt: ["que", "de"] },
-  "each_other.pron": { gloss: "um ao outro", alt: ["uns aos outros", "se"] },
-  "yourself.pron": { gloss: "você mesmo", alt: ["se", "si mesmo", "você"] },
-};
 
 const MALE = ["Lucas", "Pedro", "Leo", "Rafael", "Noah", "Daniel", "Gabriel", "Bruno"];
 const FEMALE = ["Ana", "Julia", "Mia", "Sofia", "Emma", "Laura", "Clara", "Helena"];
@@ -1068,7 +1180,18 @@ async function main(): Promise<void> {
 
   // 1. word list and candidate forms
   const entries = await loadEntries(path.join(input, "olp", "cefrj-vocabulary-profile-1.5.csv"));
-  progress(`${entries.length} CEFR-J entries A1-B1`);
+  progress(`${entries.length} CEFR-J entries ${LEVELS[0]}-${LEVELS.at(-1)}`);
+  const overrides = parseOverrides(
+    readFileSync(OVERRIDES_FILE, "utf8"),
+    new Set(entries.map((e) => e.id)),
+  );
+  for (const e of entries) {
+    const drop = overrides.get(e.id)?.drop;
+    if (drop && e.vocab) {
+      e.vocab = false;
+      e.dropReason = "dropped in overrides.yaml";
+    }
+  }
   const cand = entries.map(candidateForms);
 
   // 2. Wiktionary
@@ -1474,6 +1597,47 @@ async function main(): Promise<void> {
     return EU_WORDS.has(candidate) || candidate.split(/[ -]/).some((p) => EU_WORDS.has(p));
   }
 
+  // weight of a Portuguese token in the fidelity score: 0 for grammar, auxiliaries and negation
+  // (checked apart), 0.5 for adverbs and possessives ("minhas emoções" for "emotions" is a loose
+  // translation, if a small one)
+  const isGrammarPt = (tok: string) => PT_GRAMMAR.has(tok) || CONTRACTION_OF.has(tok);
+  const ptWeights = new Map<string, number>();
+  function ptWeight(tok: string): number {
+    let w = ptWeights.get(tok);
+    if (w !== undefined) return w;
+    const lemmas = an.lemmas(tok);
+    const pos = new Set<string>();
+    for (const l of lemmas) for (const p of lex.lemmaPos.get(l) ?? []) pos.add(p);
+    if (PT_POSSESSIVE.has(tok)) w = 0.5;
+    else if (isGrammarPt(tok) || PT_NEG.has(tok) || lemmas.some((l) => PT_AUX.includes(l))) w = 0;
+    else if (pos.size && [...pos].every((p) => GRAMMAR_POS.has(p))) w = 0;
+    else if (!pos.size || ["noun", "verb", "adj", "num"].some((p) => pos.has(p))) w = 1;
+    else w = 0.5;
+    ptWeights.set(tok, w);
+    return w;
+  }
+  // lemmas for the fidelity score, with the suffix guesses that analyze() leaves out for words
+  // Wiktionary knows ("bebido" is listed as an adjective, not as a form of "beber")
+  const fitLemmaCache = new Map<string, Int32Array>();
+  function fitLemmas(tok: string): Int32Array {
+    let hit = fitLemmaCache.get(tok);
+    if (!hit) {
+      const ids = new Set(an.analyze(tok));
+      for (const l of an.guess(tok)) ids.add(an.id(l));
+      hit = Int32Array.from(ids);
+      fitLemmaCache.set(tok, hit);
+    }
+    return hit;
+  }
+
+  /** Portuguese lemma ids of a gloss candidate: "às vezes" -> vez (and "às" for grammar words) */
+  function addTrans(out: Set<number>, key: string, content: boolean): void {
+    for (const part of key.toLowerCase().split(/\s+/)) {
+      if (!part || (content && isGrammarPt(part))) continue;
+      for (const id of an.analyze(part)) out.add(id);
+    }
+  }
+
   function chooseGlosses(): Map<Entry, Gloss> {
     const result = new Map<Entry, Gloss>();
     const multiCache = new Map<string, number>();
@@ -1627,8 +1791,28 @@ async function main(): Promise<void> {
           if (!prior.has(`com ${key}`)) prior.set(`com ${key}`, 0.5 * p);
         }
       }
+      // what the word can be in a Brazilian translation, for the fidelity score: every candidate
+      // and the lemmas that translators use with it ("can't help" = "não consigo evitar")
+      const trans = new Set<number>();
+      const content = (EN_WEIGHT[e.info.pos] ?? 0) > 0;
+      for (const key of prior.keys()) addTrans(trans, key, content);
+      if (n >= 5) {
+        const assoc = [...counts]
+          .filter(([, c]) => c >= 3 && c / n >= 0.05)
+          .map(([l, c]) => {
+            const base = (lemmaDf[l] ?? 0) / withBr;
+            return { l, lift: (c / n - base) / (1 - base) };
+          })
+          .filter((x) => {
+            const lemma = an.strs[x.l] as string;
+            return x.lift >= 0.1 && !NAME_TOKENS.has(lemma) && (!content || ptWeight(lemma) > 0);
+          })
+          .sort((a, b) => b.lift - a.lift || a.l - b.l)
+          .slice(0, 40);
+        for (const { l } of assoc) trans.add(l);
+      }
       if (!prior.size) {
-        result.set(e, { gloss: "", alt: [], conf: 0, why: "no candidate", top: [] });
+        result.set(e, { gloss: "", alt: [], conf: 0, why: "no candidate", top: [], trans });
         continue;
       }
 
@@ -1803,6 +1987,7 @@ async function main(): Promise<void> {
           conf: 0,
           why,
           top: top4,
+          trans,
         });
         continue;
       }
@@ -1835,7 +2020,7 @@ async function main(): Promise<void> {
         )
           alt.push(display(r.key, e));
       }
-      result.set(e, { gloss: display(best.key, e), alt, conf, why: "", top: top4 });
+      result.set(e, { gloss: display(best.key, e), alt, conf, why: "", top: top4, trans });
     }
     return result;
   }
@@ -1891,16 +2076,21 @@ async function main(): Promise<void> {
   }
 
   const glosses = chooseGlosses();
-  // overrides
+  // hand fixes: a new gloss was checked, so it is taught
+  const overridden: string[] = [];
   for (const e of entries) {
-    const o = OVERRIDES[e.id];
+    const o = overrides.get(e.id);
     const g = glosses.get(e);
-    if (o && g) {
+    if (!o || !g || o.drop) continue;
+    const before = `${g.gloss} [${g.alt.join(", ")}]`;
+    if (o.gloss) {
       g.gloss = o.gloss;
-      g.alt = o.alt ?? g.alt.filter((a) => a !== o.gloss);
       g.conf = Math.max(g.conf, 0.9);
       g.why = "";
     }
+    g.alt = (o.alt ?? g.alt).filter((a) => a !== g.gloss);
+    for (const x of [g.gloss, ...g.alt]) addTrans(g.trans, x, (EN_WEIGHT[e.info.pos] ?? 0) > 0);
+    overridden.push(`${e.id} (${LEVELS[e.level]}): ${before} -> ${g.gloss} [${g.alt.join(", ")}]`);
   }
   progress("glosses chosen");
 
@@ -1919,6 +2109,7 @@ async function main(): Promise<void> {
     difficulty: number;
     toks: Set<string>;
     names: Map<string, string>;
+    fit: number;
   }
   const rank = new Map<Entry, number>();
   const ordered = entries
@@ -1969,7 +2160,53 @@ async function main(): Promise<void> {
     return { level, slots, toks };
   }
 
+  const idsOf = (text: string) => {
+    const out = new Set<number>();
+    for (const w of text.split(" ")) for (const id of an.analyze(w)) out.add(id);
+    return out;
+  };
+  const fixedTrans = new Map(Object.entries(FIXED_PT).map(([k, v]) => [k, idsOf(v)]));
+  const extraTrans = new Map(Object.entries(EXTRA_PT).map(([k, v]) => [k, idsOf(v)]));
+  const noTrans = new Set<number>();
+
+  /** fidelity() of an analyzed English sentence and a Portuguese one. */
+  function fitOf(a: { slots: ReturnType<typeof assign>; toks: Tok[] }, ptText: string): Fidelity {
+    const particle = (i: number) =>
+      a.slots[i]?.e?.info.pos === "adverb" && PARTICLE_ADV.has(a.toks[i]?.w ?? "");
+    const enFit = a.toks.map((t, i): FitEn<number> => {
+      const e = a.slots[i]?.e;
+      if (!e) return { form: t.w, weight: 0, trans: extraTrans.get(t.w) ?? noTrans };
+      // "going to" is the future: "vou comer"
+      const future = t.w === "going" && a.toks[i + 1]?.w === "to";
+      const light = EN_LIGHT.has(e.word) || particle(i) || future;
+      const weight = e.vocab && !light ? (EN_WEIGHT[e.info.pos] ?? 0) : 0;
+      let trans = glosses.get(e)?.trans ?? noTrans;
+      // "go back" = "voltar": the verb takes the particle's translations too
+      for (const j of [i + 1, i + 2]) {
+        const p = a.slots[j]?.e;
+        if (e.info === VERB && p && particle(j))
+          trans = new Set([...trans, ...(glosses.get(p)?.trans ?? [])]);
+      }
+      return { form: t.w, weight, trans };
+    });
+    a.toks.forEach((_, i) => {
+      for (const fx of FIXED) {
+        if (!fx.every((w, j) => a.toks[i + j]?.w === w)) continue;
+        const slot = enFit[i];
+        if (slot) slot.trans = fixedTrans.get(fx.join(" ")) ?? noTrans;
+      }
+    });
+    const ptFit = ptTokens(ptText).map(
+      (tok): FitPt<number> => ({ form: tok, weight: ptWeight(tok), lemmas: fitLemmas(tok) }),
+    );
+    return fidelity(enFit, ptFit);
+  }
+
   const recs: Rec[] = [];
+  // for the report: what the first acceptable translation scored (the choice before `fit`)
+  const fitStats = { several: 0, changed: 0, oldSum: 0, newSum: 0, oldGood: 0, newGood: 0, n: 0 };
+  const fixedPairs: string[] = [];
+  const droppedPairs: string[] = [];
   const usedEn = new Set<string>();
   const usedPt = new Set<string>();
   const normEn = (s: string) =>
@@ -2005,7 +2242,16 @@ async function main(): Promise<void> {
       continue;
     }
     // names: Tom and Mary are replaced (same name in both texts), others kept
-    let chosen: { p: number; text: string; en: string; names: Map<string, string> } | null = null;
+    interface Choice {
+      p: number;
+      text: string;
+      en: string;
+      names: Map<string, string>;
+      analysis: Exclude<ReturnType<typeof analyzeEn>, string>;
+      fit: number;
+      lenient: number;
+    }
+    const choices: Choice[] = [];
     let why = "";
     for (const o of options) {
       const ptText = o.s?.text ?? "";
@@ -2049,16 +2295,32 @@ async function main(): Promise<void> {
         why = "length mismatch";
         continue;
       }
-      chosen = { p: o.p, text: ptOut, en: enText, names };
-      break;
+      const analysis = analyzeEn(enText, ptOut);
+      if (typeof analysis === "string") {
+        why = analysis;
+        if (analysis === "name missing in pt") continue;
+        break; // the English itself is not usable
+      }
+      choices.push({
+        p: o.p,
+        text: ptOut,
+        en: enText,
+        names,
+        analysis,
+        ...fitOf(analysis, ptOut),
+      });
     }
-    if (!chosen) {
+    // the closest translation; the first one is what was chosen before the fidelity score
+    const chosen = closest(choices);
+    const first = choices[0];
+    if (!chosen || !first) {
       bump(`pair: ${why || "no translation"}`);
       continue;
     }
-    const analysis = analyzeEn(chosen.en, chosen.text);
-    if (typeof analysis === "string") {
-      bump(`pair: ${analysis}`);
+    const analysis = chosen.analysis;
+    if (chosen.lenient < FIT_MIN) {
+      bump(`pair: not a translation (lenient fit < ${FIT_MIN})`);
+      droppedPairs.push(`${chosen.fit.toFixed(2)} ${chosen.en} = ${chosen.text}`);
       continue;
     }
     const key = normEn(chosen.en.replace(NAMES_RE, "NAME"));
@@ -2069,6 +2331,18 @@ async function main(): Promise<void> {
     }
     usedEn.add(key);
     usedPt.add(ptKey);
+    fitStats.n++;
+    fitStats.oldSum += first.fit;
+    fitStats.newSum += chosen.fit;
+    if (first.fit >= FIT_GOOD) fitStats.oldGood++;
+    if (chosen.fit >= FIT_GOOD) fitStats.newGood++;
+    if (choices.length > 1) fitStats.several++;
+    if (chosen !== first) {
+      fitStats.changed++;
+      fixedPairs.push(
+        `${chosen.en}\n      was ${first.fit.toFixed(2)} ${first.text}\n      now ${chosen.fit.toFixed(2)} ${chosen.text}`,
+      );
+    }
     const wordsIn: Entry[] = [];
     const lit = new Set<Entry>();
     analysis.slots.forEach((slot, i) => {
@@ -2096,6 +2370,7 @@ async function main(): Promise<void> {
       difficulty,
       toks: new Set(analysis.toks.map((t) => t.w)),
       names: chosen.names,
+      fit: chosen.fit,
     });
     bump("pair: usable");
   }
@@ -2126,7 +2401,8 @@ async function main(): Promise<void> {
     if (!g?.gloss || g.conf < MIN_CONF) continue;
     const gl = glossLemmas(e);
     const scoredRecs = (byEntry.get(e) ?? []).map((r) => {
-      let s = r.nWords * 0.15 + r.difficulty * 2 + (r.native ? 0 : 0.3);
+      let s = r.nWords * 0.15 + r.difficulty * 2 + (r.native ? 0 : 0.3) + 2 * (1 - r.fit);
+      if (r.fit < FIT_GOOD) s += 2;
       if (r.level > e.level) s += 3;
       if (!r.litEntries.has(e)) s += 2;
       if (![...gl].some((l) => r.ptLemmas.has(l))) s += 1.5;
@@ -2139,14 +2415,22 @@ async function main(): Promise<void> {
       if (picked.some((p) => jaccard(p.toks, r.toks) > 0.5)) continue;
       picked.push(r);
     }
-    picked.sort((a, b) => a.nWords - b.nWords || a.difficulty - b.difficulty || a.enId - b.enId);
+    // the cloze shows "Tradução: <pt>" of the first example with the word: a faithful one
+    const loose = (r: Rec) => (r.fit < FIT_GOOD ? 1 : 0);
+    picked.sort(
+      (a, b) =>
+        loose(a) - loose(b) ||
+        a.nWords - b.nWords ||
+        a.difficulty - b.difficulty ||
+        a.enId - b.enId,
+    );
     examples.set(e, picked);
     for (const r of picked) keep.add(r);
   }
-  const poolCount = [0, 0, 0];
+  const poolCount = LEVELS.map(() => 0);
   for (let level = 0; level < LEVELS.length; level++) {
     const perWord = new Map<Entry, number>();
-    // short first, but not only three-word sentences: up to 5/7/9 words cost nothing
+    // short first, but not only three-word sentences: up to 5/7/9/11 words cost nothing
     const comfort = 5 + 2 * level;
     const cands = recs
       .filter((r) => r.level === level && r.words.length)
@@ -2157,7 +2441,8 @@ async function main(): Promise<void> {
           (r.nWords <= 3 ? 0.3 : 0) +
           r.difficulty * 3 +
           (r.native ? 0 : 0.4) +
-          (/["“”:;]/.test(r.en) ? 1 : 0),
+          (/["“”:;]/.test(r.en) ? 1 : 0) +
+          3 * (1 - r.fit),
       }))
       .sort((a, b) => a.s - b.s || a.r.enId - b.r.enId);
     let taken = 0;
@@ -2201,7 +2486,7 @@ async function main(): Promise<void> {
       }
       if (!ok) continue;
       const a = analyzeEn(replaced, r.pt);
-      if (typeof a === "string") continue;
+      if (typeof a === "string" || fitOf(a, r.pt).lenient < FIT_MIN) continue;
       const k = normEn(replaced);
       if (k === main || out.some((o) => normEn(o) === k)) continue;
       out.push(replaced);
@@ -2226,6 +2511,7 @@ async function main(): Promise<void> {
     pt: r.pt,
     alt_en: altEn.get(r) ?? [],
     level: LEVELS[r.level] ?? "A1",
+    fit: r.fit,
     words: r.words.filter((e) => taught.has(e)).map((e) => e.id),
     src: `tatoeba:${r.enId}-${r.ptId}`,
   }));
@@ -2263,15 +2549,78 @@ async function main(): Promise<void> {
   line(`runtime: ${((Date.now() - started) / 1000).toFixed(1)} s`);
   line();
   line("== counts ==");
+  const good = (list: SentenceOut[]) =>
+    `${Math.round((100 * list.filter((s) => s.fit >= FIT_GOOD).length) / (list.length || 1))}%`;
   for (const [i, lv] of LEVELS.entries()) {
     const nw = wordsOut.filter((w) => w.level === lv).length;
-    const ns = sentencesOut.filter((s) => s.level === lv).length;
-    line(`${lv}: ${nw} words, ${ns} sentences (${poolCount[i]} pool + examples)`);
+    const ss = sentencesOut.filter((s) => s.level === lv);
+    line(
+      `${lv}: ${nw} words, ${ss.length} sentences (${poolCount[i]} pool + examples), ` +
+        `${good(ss)} with fit >= ${FIT_GOOD}`,
+    );
   }
-  line(`total: ${wordsOut.length} words, ${sentencesOut.length} sentences`);
+  line(`total: ${wordsOut.length} words, ${sentencesOut.length} sentences, ${good(sentencesOut)}`);
   const noEx = wordsOut.filter((w) => !w.examples.length).length;
-  const lowConf = wordsOut.filter((w) => w.conf < 0.35).length;
-  line(`words without examples: ${noEx}; below planner threshold 0.35: ${lowConf}`);
+  const lowConf = wordsOut.filter((w) => w.conf < 0.5).length;
+  line(`words without examples: ${noEx}; below planner threshold 0.5: ${lowConf}`);
+  line();
+  line("== fidelity ==");
+  const pct = (a: number) => `${((100 * a) / (fitStats.n || 1)).toFixed(1)}%`;
+  const mean = (a: number) => (a / (fitStats.n || 1)).toFixed(3);
+  line(`usable pairs: ${fitStats.n}; with several Brazilian translations: ${fitStats.several}`);
+  line(
+    `first acceptable translation (the old choice): mean fit ${mean(fitStats.oldSum)}, ` +
+      `${pct(fitStats.oldGood)} >= ${FIT_GOOD}`,
+  );
+  line(
+    `closest translation (kept): mean fit ${mean(fitStats.newSum)}, ` +
+      `${pct(fitStats.newGood)} >= ${FIT_GOOD}; changed in ${fitStats.changed}`,
+  );
+  line(`dropped as not a translation (lenient fit < ${FIT_MIN}): ${droppedPairs.length}`);
+  const hist = new Map<string, number>();
+  for (const s of sentencesOut) {
+    const bin = (Math.floor(s.fit * 10) / 10).toFixed(1);
+    hist.set(bin, (hist.get(bin) ?? 0) + 1);
+  }
+  line(
+    `kept sentences by fit: ${[...hist]
+      .sort()
+      .map(([b, c]) => `${b}: ${c}`)
+      .join(", ")}`,
+  );
+  line();
+  line("-- 20 pairs where a closer translation was chosen --");
+  for (const x of sample(fixedPairs, 20, rng)) line(`  ${x}`);
+  line();
+  line("-- 20 pairs dropped --");
+  for (const x of sample(droppedPairs, 20, rng)) line(`  ${x}`);
+  line();
+  for (const lv of LEVELS) {
+    line(`-- 10 random kept pairs ${lv} --`);
+    for (const s of sample(
+      sentencesOut.filter((x) => x.level === lv),
+      10,
+      rng,
+    ))
+      line(`  ${s.fit.toFixed(2)} ${s.en} = ${s.pt}`);
+    line(`-- 10 random kept pairs ${lv} with fit >= ${FIT_GOOD} --`);
+    for (const s of sample(
+      sentencesOut.filter((x) => x.level === lv && x.fit >= FIT_GOOD),
+      10,
+      rng,
+    ))
+      line(`  ${s.fit.toFixed(2)} ${s.en} = ${s.pt}`);
+    line(`-- 10 random kept pairs ${lv} with fit < ${FIT_GOOD} --`);
+    for (const s of sample(
+      sentencesOut.filter((x) => x.level === lv && x.fit < FIT_GOOD),
+      10,
+      rng,
+    ))
+      line(`  ${s.fit.toFixed(2)} ${s.en} = ${s.pt}`);
+  }
+  line();
+  line(`== overrides.yaml: ${overrides.size} entries, ${overridden.length} applied to glosses ==`);
+  for (const x of overridden) line(`  ${x}`);
   line();
   line("== filters ==");
   for (const [k, v] of [...stats.entries()].sort()) line(`${k}: ${v}`);
@@ -2280,7 +2629,8 @@ async function main(): Promise<void> {
   const dropped = new Map<string, string[]>();
   for (const e of entries) {
     if (!e.vocab) {
-      push(dropped, e.dropReason, e.id);
+      const why = overrides.get(e.id)?.drop;
+      push(dropped, e.dropReason, `${e.id} (${LEVELS[e.level]})${why ? `: ${why}` : ""}`);
       continue;
     }
     const g = glosses.get(e);
@@ -2294,10 +2644,11 @@ async function main(): Promise<void> {
       );
   }
   for (const [reason, ids] of dropped) {
-    line(`${reason}: ${ids.length} (all A1/A2, up to 40 B1)`);
-    const early = ids.filter((id) => !id.includes("(B1)"));
-    for (const id of [...early, ...ids.filter((id) => id.includes("(B1)")).slice(0, 40)])
-      line(`  ${id}`);
+    line(`${reason}: ${ids.length} (all A1/A2, up to 40 per higher level)`);
+    for (const [i, lv] of LEVELS.entries()) {
+      const here = ids.filter((id) => id.includes(`(${lv})`));
+      for (const id of i < 2 ? here : here.slice(0, 40)) line(`  ${id}`);
+    }
   }
   line();
   line("== 60 lowest-confidence glosses kept ==");
@@ -2320,7 +2671,7 @@ async function main(): Promise<void> {
   line("== 30 random sentence pairs ==");
   for (const s of sample(sentencesOut, 30, rng)) {
     line(
-      `${s.id} ${s.level} ${s.en} = ${s.pt}` +
+      `${s.id} ${s.level} ${s.fit.toFixed(2)} ${s.en} = ${s.pt}` +
         (s.alt_en.length ? `  (also: ${s.alt_en.join(" | ")})` : ""),
     );
     line(`    ${s.words.join(" ")}`);
@@ -2343,4 +2694,5 @@ async function main(): Promise<void> {
   progress(`wrote ${wordsOut.length} words, ${sentencesOut.length} sentences`);
 }
 
-await main();
+// run as a script; tests import the pure functions above
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) await main();
