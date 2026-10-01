@@ -27,6 +27,21 @@ beforeEach(async () => {
 });
 
 describe("SqlCourseRepository", () => {
+  it("a placement test is not a lesson (limits, goal, ranking) and sets the level", async () => {
+    const turns = new SqlRepository(database.db);
+    const { user_id: id } = await turns.createStudent("c", "5511", "Grátis", "Ana");
+    const test = await repo.createLesson(id, "placement", [{ type: "meaning", item: "w:x" }]);
+    await repo.saveLesson({ ...test, status: "done", points: 0 });
+    const midnight = new Date(Date.now() - 3600_000);
+    expect(await repo.lessonsSince(id, midnight)).toBe(0);
+    expect(await repo.lessonsDone(id)).toBe(0);
+    expect((await turns.practiceStats(id, midnight, "B1", 75)).today).toBe(0);
+    const progress = await new PanelQueries(database.db).progress(id, 1, "B1");
+    expect(progress.today).toBe(0);
+    await repo.saveLevel(id, "A2");
+    expect((await turns.studentAccess("c", "5511"))?.level).toBe("A2");
+  });
+
   it("cards, lessons, attempts and stats", async () => {
     const turns = new SqlRepository(database.db);
     const student = await turns.createStudent("c", "5511", "Grátis", "Ana");

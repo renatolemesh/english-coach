@@ -50,12 +50,18 @@ export class MemoryCourseRepository implements CourseRepository {
 
   async lessonsSince(studentId: number, since: Date): Promise<number> {
     return this.lessons.filter(
-      (l) => l.studentId === studentId && l.startedAt >= since && l.status !== "abandoned",
+      (l) =>
+        l.studentId === studentId &&
+        l.startedAt >= since &&
+        l.status !== "abandoned" &&
+        l.kind !== "placement",
     ).length;
   }
 
   async lessonsDone(studentId: number): Promise<number> {
-    return this.lessons.filter((l) => l.studentId === studentId && l.status === "done").length;
+    return this.lessons.filter(
+      (l) => l.studentId === studentId && l.status === "done" && l.kind !== "placement",
+    ).length;
   }
 
   async card(studentId: number, item: string): Promise<CardRow | null> {
@@ -106,5 +112,11 @@ export class MemoryCourseRepository implements CourseRepository {
       words: [...known].filter((k) => k.startsWith("w:")).length,
       due: (await this.dueCards(studentId, now, 10_000)).length,
     };
+  }
+
+  readonly levels = new Map<number, string>(); // placement results
+
+  async saveLevel(studentId: number, level: string): Promise<void> {
+    this.levels.set(studentId, level);
   }
 }

@@ -111,6 +111,7 @@ export interface TextsData {
   readonly levelBody: string; // {current}
   readonly levelButton: string;
   readonly levelNames: Readonly<Record<string, string>>;
+  readonly levelTestRow: readonly [string, string]; // the placement test in the level list
   readonly tutorBody: string; // {current}
   readonly tutorButton: string;
   readonly accents: Readonly<Record<string, string>>;
@@ -180,6 +181,7 @@ export const EN: Texts = makeTexts({
     "/transcribe - read the last voice note\n" +
     "/translate - translate the last voice note into Portuguese\n" +
     "/language - messages in English or Portuguese\n" +
+    "/test - placement test: find your level (about 2 minutes)\n" +
     "/goal - your daily goal and the way to the next level\n" +
     "/reminders - turn the daily goal reminder on or off\n" +
     "/menu - all options\n" +
@@ -326,6 +328,7 @@ export const EN: Texts = makeTexts({
     C1: "Advanced: express yourself naturally",
     C2: "Proficient: almost like a native speaker",
   },
+  levelTestRow: ["📝 Placement test", "Not sure? Find your level in about 2 minutes"],
   tutorBody: "You're talking with *{current}*. Pick another voice:",
   tutorButton: "See voices",
   accents: { british: "British accent", american: "American accent" },
@@ -372,6 +375,7 @@ export const PT: Texts = makeTexts({
     "/transcrever - ler o último áudio\n" +
     "/traduzir - traduzir o último áudio\n" +
     "/idioma - mensagens em inglês ou português\n" +
+    "/teste - teste de nível: descubra seu nível (uns 2 minutos)\n" +
     "/meta - sua meta diária e o caminho para o próximo nível\n" +
     "/lembretes - liga ou desliga o lembrete da meta diária\n" +
     "/menu - todas as opções\n" +
@@ -517,6 +521,7 @@ export const PT: Texts = makeTexts({
     C1: "Avançado: se expressa com naturalidade",
     C2: "Proficiente: quase como nativo",
   },
+  levelTestRow: ["📝 Teste de nível", "Na dúvida? Descubra seu nível em uns 2 minutos"],
   tutorBody: "Quem conversa com você agora é *{current}*. Escolha outra voz:",
   tutorButton: "Ver vozes",
   accents: { british: "sotaque britânico", american: "sotaque americano" },

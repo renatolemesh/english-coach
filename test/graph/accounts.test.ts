@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { hashPassword, verifyPassword } from "../../src/accounts/passwords.js";
 import { defaultRuntimeConfig } from "../../src/accounts/runtime.js";
 import * as verification from "../../src/accounts/verification.js";
+import { COURSE_PT } from "../../src/course/texts.js";
 import { StudentAccess } from "../../src/domain/accounts.js";
 import { EN, formatText, PT } from "../../src/domain/texts.js";
 import { CONN, Harness, PHONE, textMsg } from "./harness.js";
@@ -46,7 +47,12 @@ describe("accounts through the graph", () => {
       password_hash: await hashPassword("secret123"),
     };
     const code = await verification.start(cache, pending);
-    const state = await h.send(textMsg(`ATIVAR ${code}`, 1));
+    await h.send(textMsg(`ATIVAR ${code}`, 1));
+    // first the placement test offer; "Pular" (start) goes to the usual welcome
+    expect(h.channel.sent.map((s) => s.text)).toEqual([
+      `${COURSE_PT.placementOffer} [teste start]`,
+    ]);
+    const state = await h.send(textMsg("/start", 2));
     expect(h.texts()[0]?.startsWith(welcomeStart)).toBe(true); // the /start welcome
     expect(["voice", "choice"]).toContain(h.kinds().at(-1));
     const status = await verification.status(cache, token);
@@ -163,8 +169,8 @@ describe("accounts through the graph", () => {
         password_hash: await hashPassword("secret123"),
       };
       const code = await verification.start(h.container.cache, pending);
-      const state = await h.send(textMsg(`ATIVAR ${code}`, n));
-      expect(h.repo.access.get(state.user_id as number)?.ui_lang ?? null).toBe(saved);
+      await h.send(textMsg(`ATIVAR ${code}`, n));
+      expect(h.repo.access.get(1)?.ui_lang ?? null).toBe(saved);
     }
   });
 });

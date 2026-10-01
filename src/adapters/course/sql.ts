@@ -3,7 +3,7 @@ import { and, count, desc, eq, gte, inArray, lte, ne, or, sql } from "drizzle-or
 import type { Exercise, MistakeData, Step } from "../../course/exercises.js";
 import { cardFromJson, cardToJson } from "../../course/srs.js";
 import type { Db } from "../../db/client.js";
-import { courseAttempts, courseCards, courseLessons, mistakes } from "../../db/schema.js";
+import { courseAttempts, courseCards, courseLessons, mistakes, students } from "../../db/schema.js";
 import type {
   Attempt,
   CardRow,
@@ -93,6 +93,7 @@ export class SqlCourseRepository implements CourseRepository {
           eq(courseLessons.studentId, studentId),
           gte(courseLessons.startedAt, since),
           ne(courseLessons.status, "abandoned"),
+          ne(courseLessons.kind, "placement"),
         ),
       );
     return row?.n ?? 0;
@@ -102,7 +103,13 @@ export class SqlCourseRepository implements CourseRepository {
     const [row] = await this.db
       .select({ n: count() })
       .from(courseLessons)
-      .where(and(eq(courseLessons.studentId, studentId), eq(courseLessons.status, "done")));
+      .where(
+        and(
+          eq(courseLessons.studentId, studentId),
+          eq(courseLessons.status, "done"),
+          ne(courseLessons.kind, "placement"),
+        ),
+      );
     return row?.n ?? 0;
   }
 
@@ -205,5 +212,9 @@ export class SqlCourseRepository implements CourseRepository {
       words: cards?.words ?? 0,
       due: cards?.due ?? 0,
     };
+  }
+
+  async saveLevel(studentId: number, level: string): Promise<void> {
+    await this.db.update(students).set({ level }).where(eq(students.id, studentId));
   }
 }

@@ -19,7 +19,7 @@ export const ROW_DESCRIPTION_CHARS = 72;
 // biome-ignore format: one line
 export const OPTION_COMMANDS = [
   "transcrever", "traduzir", "menu", "reset", "tema", "nivel", "voz", "velocidade", "idioma",
-  "meta", "aula", "revisar", "sair", "ex", "lembretes", "resume",
+  "meta", "aula", "revisar", "sair", "ex", "lembretes", "resume", "teste", "start",
 ] as const;
 const OPTION_RE = new RegExp(`^(${OPTION_COMMANDS.join("|")})(?::([A-Za-z0-9]{1,8}))?$`);
 
@@ -94,7 +94,10 @@ export function levelMenu(t: Texts, current: string, fallbackText: string): Choi
   return {
     body: formatText(t.levelBody, { current }),
     button: t.levelButton,
-    options: LEVELS.map((lv) => option(`nivel:${lv}`, lv, t.levelNames[lv] ?? "")),
+    options: [
+      ...LEVELS.map((lv) => option(`nivel:${lv}`, lv, t.levelNames[lv] ?? "")),
+      option("teste", ...t.levelTestRow), // not sure: the placement test
+    ],
     fallbackText,
   };
 }

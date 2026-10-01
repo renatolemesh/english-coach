@@ -14,7 +14,8 @@ import type { Settings } from "../config.js";
 import type { StudentAccess } from "../domain/accounts.js";
 import { type Choice, option } from "../domain/choices.js";
 import { type IncomingMessage, isConfident } from "../domain/messages.js";
-import { formatText } from "../domain/texts.js";
+import { formatText, PT } from "../domain/texts.js";
+import { LEVELS } from "../domain/topics.js";
 import { effectiveSpeed, effectiveTutor } from "../domain/tutors.js";
 import type { UsageLimits } from "../guardrails/limits.js";
 import { getLogger } from "../logging.js";
@@ -35,6 +36,7 @@ import {
   type Step,
 } from "./exercises.js";
 import { gradeSpeech, gradeText, type HeardWord, parseChoice } from "./grading.js";
+import { PASS, placementBlock, placementLevels, placementNext, START_LEVEL } from "./placement.js";
 import { LESSON_SIZE, planLesson } from "./planner.js";
 import { type Outcome, review } from "./srs.js";
 import { COURSE_PT, type CourseTexts } from "./texts.js";
@@ -58,6 +60,9 @@ export const STOP_COMMANDS: ReadonlySet<string> = new Set([
   "pausar",
   "exit",
 ]);
+export const PLACEMENT_COMMANDS: ReadonlySet<string> = new Set([
+  "teste", "test", "nivelamento", "placement",
+]); // biome-ignore format: a word list
 const ANSWER_COMMAND = "ex"; // button taps: "/ex <nonce><option number>" (0: don't know)
 const SKIP_WORDS = /^(n[aã]o sei|pular|pula|skip|i don'?t know|sei l[aá])[.!]?$/i;
 
@@ -129,6 +134,8 @@ export class CourseEngine {
       return this.guarded(turn, () => this.start(turn, "lesson"));
     if (name && REVIEW_COMMANDS.has(name))
       return this.guarded(turn, () => this.start(turn, "review"));
+    if (name && PLACEMENT_COMMANDS.has(name))
+      return this.guarded(turn, () => this.start(turn, "placement"));
     let lesson = await this.deps.repo.openLesson(userId);
     if (
       lesson?.status === "active" &&
@@ -184,6 +191,20 @@ export class CourseEngine {
     return true;
   }
 
+  /** Right after signup: offer the placement test (Pular goes to the usual /start). False when
+   * there is no content to test with: the caller runs /start. */
+  async offerPlacement(turn: CourseTurn): Promise<boolean> {
+    if (this.deps.content.empty) return false;
+    const t = COURSE_PT;
+    await turn.channel.sendChoice(turn.msg.from, {
+      body: t.placementOffer,
+      options: [option("teste", t.placementGo), option("start", t.placementSkip)],
+      button: "",
+      fallbackText: `${t.placementOffer}\n\n/teste · /start`,
+    });
+    return true;
+  }
+
   // --- starting ----------------------------------------------------------------------------
 
   private async start(turn: CourseTurn, kind: LessonKind): Promise<void> {
@@ -206,6 +227,19 @@ export class CourseEngine {
         return;
       }
       await repo.saveLesson({ ...open, status: "abandoned" });
+    }
+    if (kind === "placement") {
+      const levels = placementLevels(this.deps.content);
+      const first = levels.includes(START_LEVEL) ? START_LEVEL : (levels.at(-1) ?? "A1");
+      const block = placementBlock(this.deps.content, first, new Set(), this.rng);
+      if (!block.length) {
+        await channel.sendText(msg.from, t.unavailable);
+        return;
+      }
+      const lesson = await repo.createLesson(userId, kind, block);
+      log.info("placement_started", { level: first });
+      await this.next(turn, lesson, t.placementIntro);
+      return;
     }
     const limit = access.lessons_per_day;
     if (kind === "lesson" && limit !== null && limit !== undefined) {
@@ -263,13 +297,14 @@ export class CourseEngine {
       }
       current = { ...current, position: current.position + 1 }; // could not be shown: skip it
     }
+    if (current.kind === "placement") return this.placementStep(turn, current, prefix);
     await this.finish(turn, current, prefix);
   }
 
   private build(turn: CourseTurn, step: Step): Exercise | null {
     const g = {
       content: this.deps.content,
-      level: turn.access.level || "B1",
+      level: step.level ?? (turn.access.level || "B1"), // placement: the level being tested
       texts: COURSE_PT,
       rng: this.rng,
     };
@@ -306,7 +341,12 @@ export class CourseEngine {
     }
     const plan = this.prepareNext(turn, lesson);
     await this.deps.repo.saveLesson({ ...lesson, plan, status: "active", current: ex });
-    const header = formatText(lesson.kind === "review" ? t.reviewHeader : t.lessonHeader, {
+    const headers = {
+      lesson: t.lessonHeader,
+      review: t.reviewHeader,
+      placement: t.placementHeader,
+    };
+    const header = formatText(headers[lesson.kind], {
       n: lesson.position + 1,
       total: lesson.plan.length,
     });
@@ -511,7 +551,7 @@ export class CourseEngine {
     const repo = this.deps.repo;
     const userId = turn.access.user_id;
     const step = lesson.plan[lesson.position];
-    if (ex.item) {
+    if (ex.item && lesson.kind !== "placement") {
       const row = await repo.card(userId, ex.item);
       await repo.saveCard(userId, {
         item: ex.item,
@@ -531,12 +571,82 @@ export class CourseEngine {
     log.info("exercise_answered", { type: ex.type, correct: g.correct, score: g.score });
     const moved: Lesson = {
       ...lesson,
+      // placement: each answer decides the next block
+      plan: lesson.plan.map((s, i) => (i === lesson.position ? { ...s, ok: g.correct } : s)),
       current: null,
       position: lesson.position + 1,
       answered: lesson.answered + 1,
       correct: lesson.correct + (g.correct ? 1 : 0),
     };
     await this.next(turn, moved, g.feedback);
+  }
+
+  /** Placement test, after each block: test another level, or give the result. */
+  private async placementStep(turn: CourseTurn, lesson: Lesson, prefix: string): Promise<void> {
+    const levels = placementLevels(this.deps.content);
+    const results = lesson.plan
+      .filter((s) => s.level && s.ok !== undefined)
+      .map((s) => ({ level: s.level as string, ok: s.ok as boolean }));
+    const decision = placementNext(results, levels);
+    if ("next" in decision) {
+      const used = new Set(lesson.plan.map((s) => s.item ?? ""));
+      const block = placementBlock(this.deps.content, decision.next, used, this.rng);
+      if (block.length)
+        return this.next(turn, { ...lesson, plan: [...lesson.plan, ...block] }, prefix);
+    }
+    // the result, or (content ran out) the highest level passed so far
+    const passed = levels.filter((lv) => {
+      const mine = results.filter((r) => r.level === lv);
+      return mine.length && mine.filter((r) => r.ok).length >= Math.min(PASS, mine.length);
+    });
+    const level = "result" in decision ? decision.result : (passed.at(-1) ?? levels[0] ?? "A1");
+    await this.finishPlacement(turn, lesson, prefix, level, results, levels);
+  }
+
+  private async finishPlacement(
+    turn: CourseTurn,
+    lesson: Lesson,
+    prefix: string,
+    level: string,
+    results: readonly { level: string; ok: boolean }[],
+    levels: readonly string[],
+  ): Promise<void> {
+    const t = COURSE_PT;
+    const { access } = turn;
+    await this.deps.repo.saveLesson({ ...lesson, status: "done", current: null, points: 0 });
+    await this.deps.repo.saveLevel(access.user_id, level);
+    const blocks = levels
+      .map((lv) => {
+        const mine = results.filter((r) => r.level === lv);
+        if (!mine.length) return "";
+        const right = mine.filter((r) => r.ok).length;
+        const pass = right >= Math.min(PASS, mine.length);
+        return `${lv} ${pass ? "✅" : "❌"} ${right}/${mine.length}`;
+      })
+      .filter(Boolean)
+      .join(" · ");
+    const nextLevel = LEVELS[(LEVELS as readonly string[]).indexOf(level) + 1];
+    const top =
+      level === levels.at(-1) && nextLevel ? formatText(t.placementTop, { next: nextLevel }) : "";
+    const result = formatText(t.placementResult, {
+      level,
+      name: (PT.levelNames[level] ?? level).split(":")[0] ?? level, // "Básico: ..." -> "Básico"
+      blocks,
+    });
+    log.info("placement_done", { level, answered: results.length });
+    const body = [prefix, result, top].filter(Boolean).join("\n\n");
+    // a student who never talked gets the first-meeting welcome; the others, a new question
+    const talk = access.topic ? "resume" : "start";
+    await turn.channel.sendChoice(turn.msg.from, {
+      body,
+      options: [
+        option(talk, t.placementTalk),
+        option("aula", t.placementLesson),
+        option("menu", t.menu),
+      ],
+      button: "",
+      fallbackText: `${body}\n\n/${talk} · /aula · /menu`,
+    });
   }
 
   private async finish(turn: CourseTurn, lesson: Lesson, prefix: string): Promise<void> {

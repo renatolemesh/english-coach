@@ -2,7 +2,7 @@
 import type { Card } from "ts-fsrs";
 import type { Exercise, MistakeData, Step } from "../course/exercises.js";
 
-export type LessonKind = "lesson" | "review";
+export type LessonKind = "lesson" | "review" | "placement";
 export type LessonStatus = "active" | "paused" | "done" | "abandoned";
 
 export interface Lesson {
@@ -47,9 +47,9 @@ export interface CourseRepository {
   openLesson(studentId: number): Promise<Lesson | null>;
   createLesson(studentId: number, kind: LessonKind, plan: Step[]): Promise<Lesson>;
   saveLesson(lesson: Lesson): Promise<void>;
-  /** Lessons started since `since` (not counting abandoned ones). */
+  /** Lessons and reviews started since `since` (not abandoned ones, not placement tests). */
   lessonsSince(studentId: number, since: Date): Promise<number>;
-  /** Finished lessons, ever. */
+  /** Finished lessons and reviews, ever (not placement tests). */
   lessonsDone(studentId: number): Promise<number>;
   card(studentId: number, item: string): Promise<CardRow | null>;
   dueCards(studentId: number, now: Date, limit: number): Promise<CardRow[]>;
@@ -61,4 +61,6 @@ export interface CourseRepository {
   /** The student's latest mistakes from the conversation (newest first). */
   conversationMistakes(studentId: number, limit: number): Promise<MistakeData[]>;
   stats(studentId: number, now: Date): Promise<CourseStats>;
+  /** The placement test's result becomes the student's level. */
+  saveLevel(studentId: number, level: string): Promise<void>;
 }

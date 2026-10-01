@@ -365,7 +365,13 @@ export class PanelQueries {
     for (const r of await this.db
       .select({ day: sql<string>`${lessonDay}::text`, n: count() })
       .from(courseLessons)
-      .where(and(eq(courseLessons.studentId, studentId), eq(courseLessons.status, "done")))
+      .where(
+        and(
+          eq(courseLessons.studentId, studentId),
+          eq(courseLessons.status, "done"),
+          ne(courseLessons.kind, "placement"), // a test, not practice
+        ),
+      )
       .groupBy(lessonDay)) {
       perDay.set(r.day, (perDay.get(r.day) ?? 0) + r.n);
     }
@@ -454,6 +460,7 @@ export class PanelQueries {
       .where(
         and(
           eq(courseLessons.status, "done"),
+          ne(courseLessons.kind, "placement"),
           gte(courseLessons.finishedAt, weekStart(this.tz, now)),
           eq(students.inRanking, true),
           eq(students.status, "active"),

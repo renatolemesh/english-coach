@@ -200,6 +200,7 @@ describe("MetaCloudChannel", () => {
       "nivel:B2",
       "nivel:C1",
       "nivel:C2",
+      "teste", // not sure: the placement test
     ]);
     expect(rows.every((r) => r.title.length <= 24 && (r.description ?? "").length <= 72)).toBe(
       true,

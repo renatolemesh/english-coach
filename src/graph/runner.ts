@@ -75,6 +75,16 @@ export class ConversationRunner {
     } catch (exc) {
       log.warning("touch_failed", { error: String(exc) }); // only reminders depend on it
     }
+    if (ctx.course && admission.start) {
+      // just signed up: offer the placement test first (its Pular button sends /start)
+      const course = ctx.course;
+      const offered = await withContext(
+        { user_id: access.user_id, connection_id: connectionId },
+        () =>
+          course.offerPlacement({ msg: message, access, channel: ctx.channel, config: ctx.config }),
+      );
+      if (offered) return {};
+    }
     if (ctx.course && !admission.start) {
       // lessons (/aula) and their answers; everything else goes on to the conversation
       const course = ctx.course;

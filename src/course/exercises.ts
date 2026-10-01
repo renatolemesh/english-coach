@@ -52,6 +52,8 @@ export interface Step {
   data?: MistakeData;
   fresh?: boolean; // first time the student sees this item
   ready?: Exercise; // built ahead so its audio could be rendered while the student answered
+  level?: string; // placement test: the level this step tests
+  ok?: boolean; // placement test: answered right
 }
 
 export interface Exercise {

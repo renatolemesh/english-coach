@@ -9,7 +9,8 @@ Tutor de conversação em inglês pelo WhatsApp. MVP em TypeScript (Node 22).
 3. Em seguida recebe um **voice note** do tutor, que continua a conversa, com os botões
    **Transcrever**, **Traduzir** e **Menu** (na Evolution: `/transcrever`, `/traduzir`, `/menu`).
 4. `/menu` troca tema, nível, voz (Sarah, padrão; Emma, George, Michael), velocidade da fala e
-   idioma das mensagens (inglês, recomendado, ou português).
+   idioma das mensagens. Sem escolha do aluno, as mensagens saem em português até o A2 e no
+   idioma padrão do painel a partir do B1.
 5. Memória da conversa: últimos 10 turnos + um resumo. Se o estado se perder, é reconstruído a
    partir da tabela `turns`.
 
@@ -115,7 +116,7 @@ Alternativa: `CONNECTIONS_FILE=connections.yaml` (modelo em `connections.example
 - **Aluno:** cadastro em `/panel/signup` cria uma conta no plano Teste Ilimitado (30 dias sem
   limite), que depois vira o Grátis (15 mensagens por dia, só a voz da Sarah e as velocidades
   1,0x e 0,9x). Para confirmar o telefone, o aluno manda `ATIVAR <código>` para o WhatsApp do
-  bot. No painel acompanha o progresso, a meta diária, o caminho para o próximo nível e o
+  bot, que oferece o teste de nível (`/teste`) antes da primeira conversa. No painel acompanha o progresso, a meta diária, o caminho para o próximo nível e o
   ranking da semana, e ajusta as preferências.
 - **Equipe** (`/panel/admin`, papéis admin e staff): alunos, planos, conexões, configurações,
   usuários e auditoria.
@@ -128,6 +129,11 @@ editável no painel).
 Metas (`src/domain/progress.ts`): meta diária de 1 a 30 práticas (`/meta`), subida de nível
 CEFR após N respostas com nota 75+ no nível atual, e pontos semanais para o ranking (segunda a
 domingo, só primeiro nome e inicial; o aluno pode sair nas configurações).
+
+Lembretes (`src/worker/reminders.ts`, job do worker a cada 10 min): a Meta só entrega mensagem
+livre até 24 h depois da última mensagem do aluno. Quem escreveu há 20-23 h e ainda não cumpriu
+a meta do dia recebe um lembrete (nunca das 22h às 8h locais), e o próximo só depois de
+escrever de novo. `/lembretes off` ou o painel desligam.
 
 ## Aulas (`/aula`)
 
@@ -142,6 +148,9 @@ exercício (o retorno da resposta vai junto com a próxima pergunta).
   fala pelo whisper (palavras e a probabilidade de cada uma).
 - **Revisão espaçada:** FSRS (`ts-fsrs`), um cartão por item em `course_cards`; `/revisar` só
   revisões. Plano por aula em `src/course/planner.ts`.
+- **Teste de nível** (`/teste`, `src/course/placement.ts`): blocos de 4 perguntas de um nível
+  (significados CEFR-J e uma pegadinha), 3 certas para passar; começa no A2, sobe ou desce até
+  dois níveis vizinhos discordarem, e grava o nível. Não conta como aula nem cria cartões.
 - **Limite:** `plans.lessons_per_day` (Grátis: 1). Uma aula concluída conta na meta diária e dá
   pontos no ranking (acertos + 5).
 - **Conteúdo** em `data/course/`: `words.jsonl` e `sentences.jsonl` gerados por

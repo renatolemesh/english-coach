@@ -235,6 +235,7 @@ export class SqlRepository implements TurnRepository {
         and(
           eq(courseLessons.studentId, userId),
           eq(courseLessons.status, "done"),
+          ne(courseLessons.kind, "placement"), // a test, not practice
           gte(courseLessons.finishedAt, since),
         ),
       );

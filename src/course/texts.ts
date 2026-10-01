@@ -51,6 +51,16 @@ export interface CourseTexts {
   readonly review: string; // button
   readonly menu: string; // button
   readonly optionsButton: string; // list button for more than 3 options
+  // placement test (/teste)
+  readonly placementOffer: string; // right after signup
+  readonly placementGo: string; // button
+  readonly placementSkip: string; // button
+  readonly placementIntro: string; // above the first question
+  readonly placementHeader: string; // {n}
+  readonly placementResult: string; // {level} {name} {blocks}
+  readonly placementTop: string; // passed the highest level tested: {next}
+  readonly placementTalk: string; // button
+  readonly placementLesson: string; // button
 }
 
 export const COURSE_PT: CourseTexts = {
@@ -104,4 +114,21 @@ export const COURSE_PT: CourseTexts = {
   review: "🔁 Revisar",
   menu: "☰ Menu",
   optionsButton: "Ver opções",
+  placementOffer:
+    "👋 Boas-vindas ao *saybest*!\n\nAntes da primeira conversa, quer descobrir seu nível de " +
+    "inglês? São perguntas rápidas de tocar no botão (uns 2 minutos), e as conversas e as aulas " +
+    "já começam no ponto certo.",
+  placementGo: "📝 Fazer o teste",
+  placementSkip: "⏭️ Pular",
+  placementIntro:
+    "📝 *Teste de nível*: perguntas de vocabulário e gramática que ficam mais difíceis ou mais " +
+    "fáceis conforme você responde. Se não souber, escreva *não sei*: chutar atrapalha o resultado.",
+  placementHeader: "*Teste de nível · {n}*",
+  placementResult:
+    "🎓 *Seu nível: {level}* ({name})\n{blocks}\n\nAjustei as conversas e as aulas para esse " +
+    "nível. Se ficar fácil ou difícil demais, é só mudar: /nivel",
+  placementTop:
+    "Você foi bem até o nível mais alto do teste. Quer conversas mais puxadas? /nivel {next}",
+  placementTalk: "🎙️ Conversar",
+  placementLesson: "📚 Aula rápida",
 };
