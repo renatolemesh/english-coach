@@ -170,5 +170,18 @@ automaticamente (`src/db/migrate.ts`).
 - Logs JSON: `docker compose logs -f worker` (cada turno termina com `turn_done`).
 - Mensagens recebidas: tabela `webhook_events` (status e erro).
 - Webhook 401: secret ou assinatura errados. 404: conexão inexistente ou desativada.
+- Backup: `ops/backup.sh` faz o `pg_dump` do banco e empacota `.env` e compose em
+  `/home/chatbot/backups/saybest`, envia para o Drive (`gdrive:saybest-backups`, rclone) e
+  guarda 14 dias. Restaurar:
+  `docker exec -i saybest-db pg_restore -U coach -d coach --clean --if-exists < saybest_<data>.dump`.
+- Vigia: `ops/vigia.sh` checa containers, `/health`, o endereço público, o worker (fila do
+  BullMQ), erros e falhas do LLM nos logs e a idade do backup. Avisa pelo WhatsApp (uazapi, o
+  mesmo canal dos outros alertas do servidor) e manda "normalizado" quando tudo volta.
+  `--resumo` só imprime e `--teste` manda uma mensagem de teste.
+- Cron (host em Europe/Berlin; o número de destino fica no crontab, fora do repositório):
+  ```
+  30 7 * * * /home/chatbot/chatbot/english-coach/ops/backup.sh >> /var/log/saybest-backup.log 2>&1
+  */5 * * * * DESTINO=55DDDNUMERO /home/chatbot/chatbot/english-coach/ops/vigia.sh >> /var/log/saybest-vigia.log 2>&1
+  ```
 
 Guia para agentes de código: `CLAUDE.md`.

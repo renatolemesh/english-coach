@@ -12,6 +12,7 @@ src/rag/             ingestão e busca híbrida (pgvector)   src/prompts/     Pr
 src/api/             Hono: webhooks, API de admin          src/panel/       Hono + Nunjucks (templates/panel-ts)
 src/worker/          BullMQ                                src/connections/ conexões WhatsApp (credenciais cifradas)
 src/db/              Drizzle (schema, client, migrate)     src/container.ts escolhe as implementações
+ops/                 backup.sh (pg_dump + Drive) e vigia.sh (alertas pela uazapi), rodam no host via cron
 src/course/          aulas /aula: conteúdo, exercícios, correção, FSRS, motor
 test/                Vitest, espelha src/; fixtures em test/fixtures; evals em test/*-eval.yaml
 scripts/             migrate, ingest, create-admin, eval-conversations, download-models
