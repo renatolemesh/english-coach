@@ -1,6 +1,7 @@
 /**
- * Fixed texts of the course mode (/aula), in the student's language (/idioma). Word meanings,
- * tips and translations are always Portuguese: the course is for Brazilian learners.
+ * Fixed texts of the course mode (/aula). Always Portuguese, whatever /idioma says: meanings,
+ * tips and translations are Portuguese (the course is for Brazilian learners), and English
+ * instructions around them made the exercises read half in each language.
  * Templates use `{name}` placeholders (domain/texts formatText).
  */
 
@@ -8,7 +9,8 @@ export interface CourseTexts {
   readonly firstLesson: string; // shown above the first exercise ever
   readonly lessonHeader: string; // {n} {total}
   readonly reviewHeader: string; // {n} {total}
-  readonly meaning: string; // {word} {example}
+  readonly meaning: string; // {word}
+  readonly example: string; // under the question: {en}
   readonly word: string; // {pt}
   readonly listen: string;
   readonly cloze: string; // {sentence} {pt}
@@ -57,10 +59,11 @@ export const COURSE_PT: CourseTexts = {
     "escreva ou mande áudio quando eu pedir. Para parar: /sair",
   lessonHeader: "*{n}/{total}*",
   reviewHeader: "*Revisão {n}/{total}*",
-  meaning: "O que significa *{word}*?{example}",
+  meaning: "O que *{word}* significa?",
+  example: "Exemplo: _{en}_",
   word: "Como se diz *{pt}* em inglês?",
   listen: "🎧 Qual palavra você ouviu?",
-  cloze: "Complete a frase:\n\n*{sentence}*\n_{pt}_",
+  cloze: "Complete a frase em inglês:\n\n*{sentence}*\n\nTradução: _{pt}_",
   type: "✍️ Escreva em inglês: *{pt}*",
   order:
     "🧩 Monte a frase em inglês: _{pt}_\n\n{tiles}\n\nMande os números na ordem (ex.: 3 1 2) ou escreva a frase.",
@@ -68,10 +71,10 @@ export const COURSE_PT: CourseTexts = {
   translate: "✍️ Traduza para o inglês:\n\n_{pt}_",
   repeat: "🎙️ Ouça e repita mandando um áudio:\n\n*{en}*",
   say: "🎙️ Diga em inglês, mandando um áudio:\n\n_{pt}_",
-  fix: "Qual frase está certa?\n_{pt}_\n\n{options}",
-  falseFriend: "Cuidado com a pegadinha! O que *{word}* significa?",
+  fix: "Qual é o jeito certo de dizer em inglês?\n_{pt}_\n\n{options}",
+  falseFriend: "⚠️ Pegadinha! O que *{word}* significa em inglês?",
   pair: "🎧 Qual palavra você ouviu? _({sound})_",
-  chat: "💬 _{context}_\n\n{them}\n\nQual a melhor resposta?",
+  chat: "💬 Situação: _{context}_\n\n{them}\n\nQual a melhor resposta?",
   mistake: "Na conversa você disse: _{said}_\nQual é o certo?",
   labelled: "{options}",
   right: ["✅ Isso!", "✅ Certo!", "✅ Mandou bem!", "✅ Perfeito!", "✅ Boa!"],
@@ -102,60 +105,3 @@ export const COURSE_PT: CourseTexts = {
   menu: "☰ Menu",
   optionsButton: "Ver opções",
 };
-
-export const COURSE_EN: CourseTexts = {
-  ...COURSE_PT,
-  firstLesson:
-    "📚 *Quick lesson*: 10 exercises with words, sentences, listening and speaking. Tap the " +
-    "options, type, or send a voice message when I ask. To stop: /sair",
-  lessonHeader: "*{n}/{total}*",
-  reviewHeader: "*Review {n}/{total}*",
-  meaning: "What does *{word}* mean?{example}",
-  word: "How do you say *{pt}* in English?",
-  listen: "🎧 Which word did you hear?",
-  cloze: "Complete the sentence:\n\n*{sentence}*\n_{pt}_",
-  type: "✍️ Write it in English: *{pt}*",
-  order:
-    "🧩 Build the sentence in English: _{pt}_\n\n{tiles}\n\nSend the numbers in order " +
-    "(e.g. 3 1 2) or type the sentence.",
-  dictation: "🎧 Type the sentence you heard.",
-  translate: "✍️ Translate into English:\n\n_{pt}_",
-  repeat: "🎙️ Listen and repeat with a voice message:\n\n*{en}*",
-  say: "🎙️ Say it in English with a voice message:\n\n_{pt}_",
-  fix: "Which sentence is correct?\n_{pt}_\n\n{options}",
-  falseFriend: "Watch out, it's a trap! What does *{word}* mean?",
-  pair: "🎧 Which word did you hear? _({sound})_",
-  chat: "💬 _{context}_\n\n{them}\n\nWhat's the best reply?",
-  mistake: "In our chat you said: _{said}_\nWhich one is correct?",
-  right: ["✅ Yes!", "✅ Right!", "✅ Well done!", "✅ Perfect!", "✅ Nice!"],
-  almost: "✅ Right! Just watch the spelling: *{words}*",
-  wrong: "❌ Almost. The answer is: *{answer}*",
-  skipped: "👉 The answer is: *{answer}*",
-  spoken: "🎙️ *{score}/100*. I heard: _{heard}_",
-  spokenWeak: "Practise: *{words}*",
-  spokenRetry: "🎧 I couldn't hear it well. Could you record it again somewhere quieter?",
-  chooseHint: "Tap an option or send its number (1 to {n}). To leave the lesson: /sair",
-  typeHint: "This one is *typed* ✍️ (or tap _I don't know_).",
-  voiceHint: "This one needs a *voice message* 🎙️ (or tap _I don't know_).",
-  stale: "That button belongs to an earlier exercise. Keep going with the last one 👇",
-  paused: "⏸️ Lesson paused. To pick up where you stopped: /aula",
-  resumed: "▶️ Back to the lesson.",
-  finished: "🏁 *Lesson complete!* {correct} of {total} right · +{points} points",
-  finishedNew: "New words: {words}",
-  finishedDue: "Reviews waiting for you: {n} (/revisar)",
-  nothingToReview: "Nothing to review right now 🎉 How about a new lesson? /aula",
-  dailyLimit:
-    "You've done {n} lesson(s) today, your plan's limit. More tomorrow! Meanwhile, send me a " +
-    "voice message and let's talk 🙂",
-  unavailable: "Lessons are not available yet. Send me a voice message and let's talk!",
-  dontKnow: "🤷 I don't know",
-  stop: "⏹️ Leave lesson",
-  again: "▶️ Another lesson",
-  review: "🔁 Review",
-  menu: "☰ Menu",
-  optionsButton: "See options",
-};
-
-export function courseTexts(lang: string | null | undefined): CourseTexts {
-  return lang === "pt" ? COURSE_PT : COURSE_EN;
-}

@@ -37,7 +37,7 @@ import {
 import { gradeSpeech, gradeText, type HeardWord, parseChoice } from "./grading.js";
 import { LESSON_SIZE, planLesson } from "./planner.js";
 import { type Outcome, review } from "./srs.js";
-import { type CourseTexts, courseTexts } from "./texts.js";
+import { COURSE_PT, type CourseTexts } from "./texts.js";
 
 const log = getLogger("coach.course.engine");
 const RENDERING = new Map<string, Promise<Buffer>>(); // audio being rendered, by voice/speed/text
@@ -140,7 +140,7 @@ export class CourseEngine {
     if (name === ANSWER_COMMAND) {
       return this.guarded(turn, async () => {
         if (lesson?.status !== "active" || !lesson.current) {
-          await turn.channel.sendText(msg.from, this.texts(turn).paused);
+          await turn.channel.sendText(msg.from, COURSE_PT.paused);
           return;
         }
         await this.tap(turn, lesson, cmd?.[1] ?? "");
@@ -150,7 +150,7 @@ export class CourseEngine {
     if (name && STOP_COMMANDS.has(name)) {
       return this.guarded(turn, async () => {
         await this.deps.repo.saveLesson({ ...lesson, status: "paused" });
-        await turn.channel.sendText(msg.from, this.texts(turn).paused);
+        await turn.channel.sendText(msg.from, COURSE_PT.paused);
       });
     }
     if (name) {
@@ -176,7 +176,7 @@ export class CourseEngine {
     } catch (exc) {
       log.exception("course_failed", exc);
       try {
-        await turn.channel.sendText(turn.msg.from, this.texts(turn).unavailable);
+        await turn.channel.sendText(turn.msg.from, COURSE_PT.unavailable);
       } catch {
         // nothing else to do
       }
@@ -184,15 +184,11 @@ export class CourseEngine {
     return true;
   }
 
-  private texts(turn: CourseTurn): CourseTexts {
-    return courseTexts(turn.access.ui_lang || turn.config.default_ui_lang);
-  }
-
   // --- starting ----------------------------------------------------------------------------
 
   private async start(turn: CourseTurn, kind: LessonKind): Promise<void> {
     const { access, channel, msg } = turn;
-    const t = this.texts(turn);
+    const t = COURSE_PT;
     const repo = this.deps.repo;
     const userId = access.user_id;
     if (this.deps.content.empty) {
@@ -274,7 +270,7 @@ export class CourseEngine {
     const g = {
       content: this.deps.content,
       level: turn.access.level || "B1",
-      texts: this.texts(turn),
+      texts: COURSE_PT,
       rng: this.rng,
     };
     const ex = makeExercise(step, g);
@@ -297,7 +293,7 @@ export class CourseEngine {
    * False when its audio could not be made: the caller moves on to another step. */
   private async send(turn: CourseTurn, lesson: Lesson, ex: Exercise, prefix: string) {
     const { channel, msg } = turn;
-    const t = this.texts(turn);
+    const t = COURSE_PT;
     if (ex.audio) {
       try {
         const [voice, speed] = this.voice(turn);
@@ -373,7 +369,7 @@ export class CourseEngine {
   /** A button tap: "<nonce><n>", n = 1.. for an option, 0 for "don't know". */
   private async tap(turn: CourseTurn, lesson: Lesson, arg: string): Promise<void> {
     const ex = lesson.current as Exercise;
-    const t = this.texts(turn);
+    const t = COURSE_PT;
     if (arg.slice(0, -1) !== ex.nonce) {
       await turn.channel.sendText(turn.msg.from, t.stale);
       return;
@@ -387,7 +383,7 @@ export class CourseEngine {
   /** A typed or spoken answer. */
   private async reply(turn: CourseTurn, lesson: Lesson, text: string): Promise<void> {
     const { msg, channel } = turn;
-    const t = this.texts(turn);
+    const t = COURSE_PT;
     const ex = lesson.current;
     if (!ex) return this.next(turn, lesson, "");
     if (text && SKIP_WORDS.test(text)) return this.graded(turn, lesson, this.skip(t, ex));
@@ -481,7 +477,7 @@ export class CourseEngine {
     if (!heard.text.trim() || !isConfident(heard, s.sttMinConfidence)) return null;
     const words: HeardWord[] = heard.words?.length ? heard.words : [{ text: heard.text, p: 1 }];
     const grade = gradeSpeech(words, ex.accept);
-    const t = this.texts(turn);
+    const t = COURSE_PT;
     const pass = ex.type === "say" ? 70 : 80;
     const outcome: Outcome = grade.score >= pass ? "good" : grade.score >= 60 ? "hard" : "again";
     let feedback = formatText(t.spoken, { score: grade.score, heard: heard.text.trim() });
@@ -544,7 +540,7 @@ export class CourseEngine {
   }
 
   private async finish(turn: CourseTurn, lesson: Lesson, prefix: string): Promise<void> {
-    const t = this.texts(turn);
+    const t = COURSE_PT;
     const repo = this.deps.repo;
     const points = lesson.correct + (lesson.kind === "lesson" ? LESSON_BONUS : 0);
     await repo.saveLesson({ ...lesson, status: "done", current: null, points });

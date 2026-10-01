@@ -196,10 +196,12 @@ function meaning(w: Word, g: GenContext, item: string): Exercise | null {
   const wrong = distinctBy(shuffle(neighbours(w, g), g.rng), (c) => c.gloss, 2, [w.gloss]);
   if (wrong.length < 2) return null;
   const ex = exampleOf(w, g);
-  const body = formatText(g.texts.meaning, {
-    word: w.word,
-    example: ex ? `\n\n_${ex.en}_` : "",
-  });
+  const body = [
+    formatText(g.texts.meaning, { word: w.word }),
+    ex ? formatText(g.texts.example, { en: ex.en }) : "",
+  ]
+    .filter(Boolean)
+    .join("\n\n");
   return {
     ...withOptions(
       base(g, "meaning", item),

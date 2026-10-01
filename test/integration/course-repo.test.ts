@@ -122,6 +122,6 @@ describe("SqlCourseRepository", () => {
       (r: { item: string }) => r.item[0],
     );
     expect(kinds).toContain("m"); // the conversation mistake became a card
-    expect(channel.sent.at(-1)?.text).toContain("Lesson complete!"); // ui_lang unset: English
+    expect(channel.sent.at(-1)?.text).toContain("Aula concluída!"); // Portuguese, whatever ui_lang
   });
 });
