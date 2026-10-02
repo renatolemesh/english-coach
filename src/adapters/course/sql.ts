@@ -3,7 +3,14 @@ import { and, count, desc, eq, gte, inArray, lte, ne, or, sql } from "drizzle-or
 import type { Exercise, MistakeData, Step } from "../../course/exercises.js";
 import { cardFromJson, cardToJson } from "../../course/srs.js";
 import type { Db } from "../../db/client.js";
-import { courseAttempts, courseCards, courseLessons, mistakes, students } from "../../db/schema.js";
+import {
+  courseAttempts,
+  courseCards,
+  courseLessons,
+  mistakes,
+  students,
+  turns,
+} from "../../db/schema.js";
 import type {
   Attempt,
   CardRow,
@@ -180,13 +187,15 @@ export class SqlCourseRepository implements CourseRepository {
   }
 
   async conversationMistakes(studentId: number, limit: number): Promise<MistakeData[]> {
-    return this.db
+    const rows = await this.db
       .select({
         original: mistakes.original,
         correction: mistakes.correction,
         explanation: mistakes.explanation,
+        context: turns.transcript, // what the student said around it: the exercise's context
       })
       .from(mistakes)
+      .leftJoin(turns, eq(turns.id, mistakes.turnId))
       .where(
         and(
           eq(mistakes.studentId, studentId),
@@ -195,6 +204,7 @@ export class SqlCourseRepository implements CourseRepository {
       )
       .orderBy(desc(mistakes.id))
       .limit(limit);
+    return rows.map(({ context, ...m }) => (context ? { ...m, context } : m));
   }
 
   async stats(studentId: number, now: Date): Promise<CourseStats> {

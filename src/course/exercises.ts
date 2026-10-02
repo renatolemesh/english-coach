@@ -8,7 +8,7 @@
  */
 import { formatText } from "../domain/texts.js";
 import { type CourseContent, GOOD_FIT, levelIndex, type Sentence, type Word } from "./content.js";
-import { levenshtein, normalize } from "./grading.js";
+import { FUNCTION_WORDS, levenshtein, normalize } from "./grading.js";
 import type { CourseTexts } from "./texts.js";
 
 export const EXERCISE_TYPES = [
@@ -42,6 +42,7 @@ export interface MistakeData {
   original: string;
   correction: string;
   explanation: string;
+  context?: string; // the student's whole message (turns.transcript)
 }
 
 /** One planned exercise (course_lessons.plan). */
@@ -451,14 +452,194 @@ function chat(id: string, g: GenContext, item: string): Exercise | null {
   };
 }
 
-function mistake(data: MistakeData, g: GenContext, item: string): Exercise {
-  const ex = withOptions(base(g, "mistake", item), data.correction, [data.original], g);
-  const body = formatText(g.texts.mistake, { said: data.original });
+// --- the student's own mistakes ---------------------------------------------------------------
+
+// Showing "you said X" next to X as an option gives the answer away. Instead the correction
+// comes with a gap where the slip was, inside the student's own sentence, and what they said
+// is one of the options; "you said" only comes with the feedback.
+// Only one slip per item: rewrites ("I am Henad Lemis" -> "I My name is Henad Lemis"), mere
+// contractions and capitals ("i am" -> "I'm") and fragments with nothing around the gap
+// ("sunday" -> "Sundays") are not practised.
+
+export const NOTHING = "— (nada)"; // the option for a word that should not be there
+const MAX_SLIP = 2; // words changed on each side
+const CONTEXT_WORDS = 7; // of the student's sentence on each side of the mistake
+
+const CONTRACTIONS: Readonly<Record<string, string>> = {
+  "i'm": "I am", "you're": "you are", "we're": "we are", "they're": "they are",
+  "he's": "he is", "she's": "she is", "it's": "it is", "that's": "that is",
+  "there's": "there is", "what's": "what is", "isn't": "is not", "aren't": "are not",
+  "wasn't": "was not", "weren't": "were not", "don't": "do not", "doesn't": "does not",
+  "didn't": "did not", "won't": "will not", "can't": "cannot", "i've": "I have",
+  "i'll": "I will", "i'd": "I would", "haven't": "have not", "hasn't": "has not",
+}; // biome-ignore format: a word list
+
+// words a slip swaps for another of the same group: the third option comes from here
+const CONFUSABLE: readonly (readonly string[])[] = [
+  ["in", "on", "at", "for", "to", "of", "with", "about", "from", "by"],
+  ["a", "an", "the"],
+  ["am", "is", "are", "was", "were", "be", "been"],
+  ["do", "does", "did"],
+  ["have", "has", "had"],
+  ["this", "that", "these", "those"],
+  ["my", "your", "his", "her", "its", "our", "their"],
+  ["some", "any"],
+  ["much", "many"],
+];
+
+const wordKey = (t: string) =>
+  t
+    .toLowerCase()
+    .replace(/[’`]/g, "'")
+    .replace(/^[^\p{L}\p{N}']+|[^\p{L}\p{N}']+$/gu, "");
+
+/** "I'm fine" -> ["I", "am", "fine"]: contractions written out, so "I'm" = "I am". */
+function words(text: string): string[] {
+  return text
+    .split(/\s+/)
+    .flatMap((t) => {
+      const full = CONTRACTIONS[wordKey(t)];
+      if (!full) return [t];
+      const tail = t.match(/[^\p{L}\p{N}'’]+$/u)?.[0] ?? "";
+      const first = /^\p{Lu}/u.test(t) ? full.charAt(0).toUpperCase() + full.slice(1) : full;
+      return `${first}${tail}`.split(" ");
+    })
+    .filter((t) => wordKey(t));
+}
+
+export type MistakePlan =
+  | { kind: "gap"; before: string[]; after: string[]; right: string; wrong: string } // "": none
+  | { kind: "order"; tokens: string[] }
+  | { kind: "word"; said: string; right: string };
+
+/** How a conversation mistake is practised, or null when it cannot make a fair exercise. */
+export function mistakePlan(data: MistakeData, isWord: (w: string) => boolean): MistakePlan | null {
+  const said = words(data.original);
+  const fixed = words(data.correction);
+  const a = said.map(wordKey);
+  const b = fixed.map(wordKey);
+  if (!a.length || !b.length || a.join(" ") === b.join(" ")) return null; // capitals, contractions
+  if (
+    said.length <= 2 &&
+    fixed.length <= 3 &&
+    a.every((w) => !isWord(w) && !FUNCTION_WORDS.has(w))
+  ) {
+    return { kind: "word", said: data.original.trim(), right: fixed.join(" ") }; // "praia"
+  }
+  if (b.length >= 3 && b.length <= MAX_TILES && [...a].sort().join() === [...b].sort().join()) {
+    return { kind: "order", tokens: fixed }; // "I miss very much this time"
+  }
+  let p = 0;
+  while (p < a.length && p < b.length && a[p] === b[p]) p++;
+  let s = 0;
+  while (s < a.length - p && s < b.length - p && a[a.length - 1 - s] === b[b.length - 1 - s]) s++;
+  const wrong = said.slice(p, said.length - s);
+  const right = fixed.slice(p, fixed.length - s);
+  if (wrong.length > MAX_SLIP || right.length > MAX_SLIP) return null; // a rewrite
+  const known = (w: string) =>
+    isWord(wordKey(w)) || FUNCTION_WORDS.has(wordKey(w)) || /^\p{Lu}/u.test(w); // or a name
+  if (!right.every(known)) return null; // "entry-frag"
   return {
-    ...ex,
-    body: ex.labelled ? `${body}\n\n${labelledOptions(ex.options)}` : body,
-    reveal: data.correction,
-    tip: data.explanation,
+    kind: "gap",
+    before: fixed.slice(0, p),
+    after: fixed.slice(fixed.length - s),
+    right: right.join(" ").replace(/[.,;:!?]+$/, ""),
+    wrong: wrong.join(" ").replace(/[.,;:!?]+$/, ""),
+  };
+}
+
+/** The student's sentence around the mistake: [words before, words after] (they may have other
+ * slips: it is still what they said, and it says what they meant). Empty when not found. */
+function around(context: string | undefined, original: string): [string, string] {
+  if (!context) return ["", ""];
+  const flat = context.replace(/\s+/g, " ");
+  const at = flat.toLowerCase().indexOf(original.trim().toLowerCase());
+  if (at < 0) return ["", ""];
+  const start = Math.max(
+    flat.lastIndexOf(". ", at),
+    flat.lastIndexOf("? ", at),
+    flat.lastIndexOf("! ", at),
+  );
+  const end = flat.slice(at + original.trim().length).search(/[.?!](\s|$)/);
+  const left = flat
+    .slice(start < 0 ? 0 : start + 2, at)
+    .trim()
+    .split(" ")
+    .filter(Boolean);
+  const tail = flat.slice(at + original.trim().length);
+  const right = (end < 0 ? tail : tail.slice(0, end + 1)).trim().split(" ").filter(Boolean);
+  const cut = (w: string[], fromEnd: boolean) =>
+    w.length <= CONTEXT_WORDS
+      ? w.join(" ")
+      : fromEnd
+        ? `… ${w.slice(-CONTEXT_WORDS).join(" ")}`
+        : `${w.slice(0, CONTEXT_WORDS).join(" ")} …`;
+  return [cut(left, true), cut(right, false)];
+}
+
+/** A third option of the same kind as the slip ("in"/"on" -> "at"; "eat"/"ate" -> "eaten"). */
+function confusable(plan: { right: string; wrong: string }, g: GenContext): string | null {
+  const taken = [plan.right.toLowerCase(), plan.wrong.toLowerCase()];
+  const target = taken.find(Boolean) ?? "";
+  if (target.includes(" ")) return null;
+  const group = CONFUSABLE.find((c) => c.includes(target));
+  if (group)
+    return (
+      pick(
+        group.filter((w) => !taken.includes(w)),
+        g.rng,
+      ) ?? null
+    );
+  const lemma = g.content.wordList.find(
+    (w) => taken.every((t) => t && [w.word, ...w.forms].includes(t)) && w.pos === "verb",
+  );
+  return (
+    pick(lemma?.forms.filter((f) => !taken.includes(f) && !f.includes(" ")) ?? [], g.rng) ?? null
+  );
+}
+
+function mistake(data: MistakeData, g: GenContext, item: string): Exercise | null {
+  const plan = mistakePlan(data, (w) => g.content.isWord(w));
+  if (!plan) return null;
+  const explanation = /^(same as|igual|mesmo)/i.test(data.explanation.trim())
+    ? ""
+    : data.explanation;
+  const tip = [formatText(g.texts.mistakeSaid, { said: data.original.trim() }), explanation]
+    .filter(Boolean)
+    .join("\n");
+  const ex = { ...base(g, "mistake", item), reveal: data.correction, tip };
+  if (plan.kind === "word") {
+    return {
+      ...ex,
+      mode: "text",
+      body: formatText(g.texts.mistakeWord, { said: plan.said }),
+      accept: [data.correction, plan.right],
+    };
+  }
+  if (plan.kind === "order") {
+    let tiles = shuffle(plan.tokens, g.rng);
+    for (let i = 0; i < 5 && tiles.join(" ") === plan.tokens.join(" "); i++)
+      tiles = shuffle(plan.tokens, g.rng);
+    const shown = tiles.map((t, i) => `${KEYCAPS[i]} ${t}`).join("   ");
+    return {
+      ...ex,
+      mode: "text",
+      body: formatText(g.texts.mistakeOrder, { tiles: shown }),
+      tiles,
+      accept: [data.correction, plan.tokens.join(" ")],
+    };
+  }
+  const [left, right] = around(data.context, data.original);
+  const sentence = [left, ...plan.before, "___", ...plan.after, right]
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+([.,;:!?])/g, "$1"); // "with ___ ." -> "with ___."
+  if (!left && !right && plan.before.length + plan.after.length < 1) return null; // no context
+  const third = confusable(plan, g);
+  const options = [plan.right || NOTHING, plan.wrong || NOTHING, ...(third ? [third] : [])];
+  return {
+    ...withOptions(ex, options[0] as string, options.slice(1), g),
+    body: formatText(g.texts.mistake, { sentence }),
   };
 }
 

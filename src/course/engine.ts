@@ -30,7 +30,9 @@ import {
   type ExerciseType,
   fallbackTypes,
   labelledOptions,
+  type MistakeData,
   makeExercise,
+  mistakePlan,
   optionLabel,
   pick,
   type Step,
@@ -251,14 +253,15 @@ export class CourseEngine {
     }
     const lessonsDone = await repo.lessonsDone(userId);
     const known = await repo.knownItems(userId);
-    const due = (await repo.dueCards(userId, now, LESSON_SIZE * 3)).map((c) => ({
-      item: c.item,
-      card: c.card,
-      data: c.data,
-    }));
+    // conversation mistakes that make a fair exercise (exercises.ts mistakePlan)
+    const fair = (data: MistakeData) =>
+      data.original.length <= 80 && mistakePlan(data, (w) => this.deps.content.isWord(w)) !== null;
+    const due = (await repo.dueCards(userId, now, LESSON_SIZE * 3))
+      .filter((c) => !c.item.startsWith("m:") || (c.data && fair(c.data)))
+      .map((c) => ({ item: c.item, card: c.card, data: c.data }));
     const mistakes = (await repo.conversationMistakes(userId, MISTAKES_SCAN))
       .map((data) => ({ key: mistakeKey(data.original, data.correction), data }))
-      .filter((m) => !known.has(m.key) && m.data.original.length <= 80);
+      .filter((m) => !known.has(m.key) && fair(m.data));
     const since = new Date(now.getTime() - SENTENCE_REPEAT_DAYS * 86_400_000);
     const plan = planLesson({
       content: this.deps.content,
@@ -480,7 +483,7 @@ export class CourseEngine {
 
   private gradeTyped(t: CourseTexts, ex: Exercise, text: string): Graded {
     let answer = text;
-    if (ex.type === "order" && /^[\d\s,.-]+$/.test(text)) {
+    if (ex.tiles.length && /^[\d\s,.-]+$/.test(text)) {
       // "3 1 2": the numbers of the tiles in order
       const picked = text.match(/\d/g)?.map((d) => ex.tiles[Number(d) - 1]) ?? [];
       answer = picked.every(Boolean) ? picked.join(" ") : text;

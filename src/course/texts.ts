@@ -24,7 +24,10 @@ export interface CourseTexts {
   readonly falseFriend: string; // {word}
   readonly pair: string; // {sound}
   readonly chat: string; // {context} {them}
-  readonly mistake: string; // {said}
+  readonly mistake: string; // {sentence}: the correction with a gap, in the student's sentence
+  readonly mistakeOrder: string; // {tiles}
+  readonly mistakeWord: string; // {said}: a Portuguese word in the English
+  readonly mistakeSaid: string; // {said}: in the feedback
   readonly labelled: string; // "A) ... B) ..." fallback under the question: {options}
   readonly right: readonly string[];
   readonly almost: string; // typos: {words}
@@ -85,7 +88,12 @@ export const COURSE_PT: CourseTexts = {
   falseFriend: "⚠️ Pegadinha! O que *{word}* significa em inglês?",
   pair: "🎧 Qual palavra você ouviu? _({sound})_",
   chat: "💬 Situação: _{context}_\n\n{them}\n\nQual a melhor resposta?",
-  mistake: "Na conversa você disse: _{said}_\nQual é o certo?",
+  mistake: "💬 *Da sua conversa*: complete do jeito certo.\n\n*{sentence}*",
+  mistakeOrder:
+    "💬 *Da sua conversa*: monte a frase na ordem certa.\n\n{tiles}\n\n" +
+    "Mande os números na ordem (ex.: 3 1 2) ou escreva a frase.",
+  mistakeWord: "💬 *Da sua conversa*: você usou *{said}*. Como se diz em inglês?",
+  mistakeSaid: "Na conversa você disse: _{said}_",
   labelled: "{options}",
   right: ["✅ Isso!", "✅ Certo!", "✅ Mandou bem!", "✅ Perfeito!", "✅ Boa!"],
   almost: "✅ Certo! Só atenção à escrita: *{words}*",

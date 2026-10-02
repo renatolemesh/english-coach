@@ -94,7 +94,7 @@ describe("SqlCourseRepository", () => {
       [access.user_id],
     );
     await database.pool.query(
-      "INSERT INTO mistakes (student_id, turn_id, original, correction, type, explanation, topic) VALUES ($1, 1, 'I have 20 years', 'I am 20', 'grammar', 'Age uses be.', 't')",
+      "INSERT INTO mistakes (student_id, turn_id, original, correction, type, explanation, topic) VALUES ($1, 1, 'I am agree', 'I agree', 'grammar', 'Agree is a verb: no am.', 't')",
       [access.user_id],
     );
     const settings = testSettings();
