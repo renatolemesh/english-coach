@@ -14,6 +14,14 @@ Há dois tipos de front end:
 
 O núcleo (grafo da conversa, motor das aulas, metas, ranking, lembretes) não sabe qual canal é.
 
+## Situação (03/10/2026)
+
+- Etapa 1: feita e no ar.
+- Etapa 2: código no ar; falta criar o bot no @BotFather, cadastrar a conexão `telegram-main`,
+  rodar `scripts/telegram-setup.ts` e pôr o `@` do bot em `telegram_bot` no painel.
+- Etapa 3: API e app web no ar em 127.0.0.1:8010/app/; falta o nginx repassar `/app/` para ficar
+  público. Android e iOS: `app/README.md` (builds fora deste servidor).
+
 ## Etapa 1: núcleo separado dos canais
 
 1. **Porta `ChatChannel`** (antes `WhatsAppChannel`), com `capabilities`:
