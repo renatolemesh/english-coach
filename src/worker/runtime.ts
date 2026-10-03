@@ -2,6 +2,8 @@
  * loaded, browser started), Postgres checkpointer, graph runner, channel pool, event log. */
 import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
 import type pg from "pg";
+import { FfmpegAudio } from "../adapters/audio/ffmpeg.js";
+import { AppChannel } from "../adapters/channels/app.js";
 import type { Settings } from "../config.js";
 import { CredentialCipher } from "../connections/crypto.js";
 import { EventLog } from "../connections/events.js";
@@ -90,6 +92,7 @@ export async function buildRuntime(
     container,
     runner: new ConversationRunner(saver, checkpointPruner(database.pool)),
     pool,
+    app: new AppChannel(container.appStore, new FfmpegAudio()),
     events: new EventLog(database.db),
     queue,
     async close() {

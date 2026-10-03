@@ -13,6 +13,7 @@ import { getLogger } from "../logging.js";
 import { createPanel, landingPage } from "../panel/index.js";
 import { BullTaskQueue } from "../worker/queue.js";
 import { adminRouter } from "./admin.js";
+import { appRouter } from "./app-api.js";
 import type { AppState } from "./deps.js";
 import { httpError } from "./errors.js";
 import { webhooksRouter } from "./webhooks.js";
@@ -87,6 +88,7 @@ export function createApp(state: AppState): Hono {
   app.route("/webhooks", webhooksRouter(state));
   app.route("/admin", adminRouter(state));
   if (state.db) {
+    app.route("/app/v1", appRouter(state)); // the Flutter app (docs/multicanal.md)
     const { connections, pool } = state;
     app.route(
       "/panel",

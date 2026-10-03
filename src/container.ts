@@ -7,6 +7,8 @@ import { AccountGate } from "./accounts/gate.js";
 import type { RuntimeConfig } from "./accounts/runtime.js";
 import { defaultRuntimeConfig } from "./accounts/runtime.js";
 import { RuntimeConfigStore } from "./accounts/runtime-store.js";
+import { MemoryAppStore } from "./adapters/app/memory.js";
+import { SqlAppStore } from "./adapters/app/sql.js";
 import { MemoryCache } from "./adapters/cache/memory.js";
 import { RedisCache } from "./adapters/cache/redis.js";
 import { MemoryCourseRepository } from "./adapters/course/memory.js";
@@ -24,6 +26,7 @@ import { CourseEngine } from "./course/engine.js";
 import { connect, type Database } from "./db/client.js";
 import type { GraphContext } from "./graph/context.js";
 import { UsageLimits } from "./guardrails/limits.js";
+import type { AppStore } from "./ports/app.js";
 import type { Cache } from "./ports/cache.js";
 import type { ChatChannel } from "./ports/channel.js";
 import type { CourseRepository } from "./ports/course.js";
@@ -58,6 +61,7 @@ export class Container {
     public courseRepo: CourseRepository = database
       ? new SqlCourseRepository(database.db)
       : new MemoryCourseRepository(),
+    public appStore: AppStore = database ? new SqlAppStore(database.db) : new MemoryAppStore(),
   ) {}
 
   /** The course content (data/course), loaded on first use. */

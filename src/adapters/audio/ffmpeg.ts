@@ -97,6 +97,26 @@ export class FfmpegAudio {
     );
   }
 
+  /** Any audio -> MP3 mono: what every app player plays (iOS does not play OGG/Opus). */
+  toMp3(data: Buffer, bitrateKbps = 48): Promise<Buffer> {
+    return this.run(
+      [
+        "-i",
+        "pipe:0",
+        "-c:a",
+        "libmp3lame",
+        "-b:a",
+        `${bitrateKbps}k`,
+        "-ac",
+        "1",
+        "-f",
+        "mp3",
+        "pipe:1",
+      ],
+      data,
+    );
+  }
+
   private run(args: string[], input: Buffer): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const proc = spawn(this.binary, ["-hide_banner", "-loglevel", "error", "-nostdin", ...args], {

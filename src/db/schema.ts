@@ -377,3 +377,70 @@ export const courseAttempts = pgTable(
     }).onDelete("cascade"),
   ],
 );
+
+// --- the app (src/api/app-api.ts, adapters/channels/app.ts) -----------------------------------
+
+const bytea = customType<{ data: Buffer }>({ dataType: () => "bytea" });
+
+/** Logged-in app sessions: only the token's sha256 is stored. */
+export const appTokens = pgTable(
+  "app_tokens",
+  {
+    id: serial().primaryKey(),
+    studentId: integer("student_id").notNull(),
+    tokenHash: varchar("token_hash", { length: 64 }).notNull(),
+    createdAt: tz("created_at").defaultNow().notNull(),
+    lastUsedAt: tz("last_used_at").defaultNow().notNull(),
+  },
+  (t) => [
+    unique("app_tokens_token_hash_key").on(t.tokenHash),
+    index("ix_app_tokens_student_id").on(t.studentId),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "app_tokens_student_id_fkey",
+    }).onDelete("cascade"),
+  ],
+);
+
+/** What the bot "sent" to the app: the app fetches them (GET /app/v1/events). */
+export const appEvents = pgTable(
+  "app_events",
+  {
+    id: serial().primaryKey(),
+    studentId: integer("student_id").notNull(),
+    kind: varchar({ length: 16 }).notNull(), // text | voice | image | choice | evaluation
+    text: text(),
+    data: jsonb(), // choice: {options, button}; evaluation: the evaluation
+    mediaId: varchar("media_id", { length: 40 }),
+    createdAt: tz("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("ix_app_events_student_id").on(t.studentId, t.id),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "app_events_student_id_fkey",
+    }).onDelete("cascade"),
+  ],
+);
+
+/** Audio and images of the app, both ways (the tutor's voice, the student's recordings). */
+export const appMedia = pgTable(
+  "app_media",
+  {
+    id: varchar({ length: 40 }).primaryKey(),
+    studentId: integer("student_id").notNull(),
+    mime: varchar({ length: 80 }).notNull(),
+    data: bytea().notNull(),
+    createdAt: tz("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("ix_app_media_created_at").on(t.createdAt),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "app_media_student_id_fkey",
+    }).onDelete("cascade"),
+  ],
+);
