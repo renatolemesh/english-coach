@@ -214,8 +214,8 @@ async function runScenario(
   const phone = phoneFor(scenario.id);
   const topic = scenario.topic ?? defaults.topic;
   const level = scenario.level ?? defaults.level;
-  await container.repo.createStudent(CONNECTION, phone, "Ilimitado"); // unknown: refused
-  await runner.setProfile(CONNECTION, phone, { topic, level });
+  const { user_id: userId } = await container.repo.createStudent(CONNECTION, phone, "Ilimitado");
+  await runner.setProfile(userId, { topic, level });
 
   const steps: Step[] = [...scenario.steps];
   if (scenario.opener ?? true) steps.unshift({ text: `/tema ${topic}`, setup: true }); // Emma asks first
@@ -224,7 +224,7 @@ async function runScenario(
     if ("idle_hours" in step) {
       // pretend the student went away
       await runner.graph.updateState(
-        { configurable: { thread_id: threadId(CONNECTION, phone) } },
+        { configurable: { thread_id: threadId(userId) } },
         { last_seen: Date.now() / 1000 - Number(step.idle_hours) * 3600 },
         "persist",
       );

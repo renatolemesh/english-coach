@@ -92,6 +92,9 @@ export const students = pgTable(
     inRanking: boolean("in_ranking").notNull().default(true),
     reminders: boolean().notNull().default(true), // a nudge before the 24 h window closes
     remindedAt: tz("reminded_at"),
+    // where the last message came from (reminders go there): a student_identities pair
+    lastConnectionId: varchar("last_connection_id", { length: 64 }),
+    lastAddress: varchar("last_address", { length: 64 }),
   },
   (t) => [
     index("ix_students_connection_id").on(t.connectionId),
@@ -101,6 +104,28 @@ export const students = pgTable(
       name: "students_plan_id_fkey",
     }).onDelete("set null"),
     unique("students_connection_id_phone_key").on(t.connectionId, t.phone),
+  ],
+);
+
+/** Where a student talks to the bot: (connection, address) -> student. The address is the phone
+ * on WhatsApp, the chat id on Telegram, the student id in the app. One student, many channels. */
+export const studentIdentities = pgTable(
+  "student_identities",
+  {
+    id: serial().primaryKey(),
+    studentId: integer("student_id").notNull(),
+    connectionId: varchar("connection_id", { length: 64 }).notNull(),
+    address: varchar({ length: 64 }).notNull(),
+    createdAt: tz("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    unique("student_identities_connection_address_key").on(t.connectionId, t.address),
+    index("ix_student_identities_student_id").on(t.studentId),
+    foreignKey({
+      columns: [t.studentId],
+      foreignColumns: [students.id],
+      name: "student_identities_student_id_fkey",
+    }).onDelete("cascade"),
   ],
 );
 

@@ -22,7 +22,7 @@ export function meta(s: ConversationState): Record<string, unknown> {
   return {
     user_id: s.user_id,
     connection_id: s.connection_id,
-    thread_id: `${s.connection_id}:${s.phone}`,
+    thread_id: `student:${s.user_id}`,
   };
 }
 

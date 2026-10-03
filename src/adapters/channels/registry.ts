@@ -1,7 +1,7 @@
 /** provider name -> adapter. The only place that maps a connection to a channel class. */
 import type { Settings } from "../../config.js";
 import type { ConnectionConfig, Provider } from "../../domain/connections.js";
-import type { WhatsAppChannel } from "../../ports/channel.js";
+import type { ChatChannel } from "../../ports/channel.js";
 import { EvolutionChannel } from "./evolution.js";
 import { MetaCloudChannel } from "./meta-cloud.js";
 import { WahaChannel } from "./waha.js";
@@ -31,7 +31,7 @@ export class MisconfiguredConnectionError extends Error {
   override name = "ValueError";
 }
 
-export function buildChannel(conn: ConnectionConfig, settings: Settings): WhatsAppChannel {
+export function buildChannel(conn: ConnectionConfig, settings: Settings): ChatChannel {
   const missing = missingFields(conn);
   if (missing.length) {
     throw new MisconfiguredConnectionError(`connection ${conn.id}: missing ${missing.join(", ")}`);

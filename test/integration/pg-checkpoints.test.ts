@@ -6,13 +6,13 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { ConversationRunner, threadId } from "../../src/graph/runner.js";
 import type { ConversationState } from "../../src/graph/state.js";
 import { checkpointPruner } from "../../src/worker/runtime.js";
-import { audioMsg, CONN, Harness, PHONE, textMsg } from "../graph/harness.js";
+import { audioMsg, Harness, textMsg } from "../graph/harness.js";
 import { TEST_DATABASE_URL } from "./helpers.js";
 
 const SCHEMA = "lg_ts_test";
 const pool = new pg.Pool({ connectionString: TEST_DATABASE_URL });
 const saver = new PostgresSaver(pool, undefined, { schema: SCHEMA });
-const TID = threadId(CONN, PHONE);
+const TID = threadId(1);
 
 const count = async (table: string) =>
   Number(

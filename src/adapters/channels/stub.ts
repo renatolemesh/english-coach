@@ -1,15 +1,16 @@
 /** Base for providers whose adapter is not written yet: fails loudly, never silently. */
 import type { ConnectionConfig } from "../../domain/connections.js";
 import type { IncomingMessage } from "../../domain/messages.js";
-import type { WhatsAppChannel } from "../../ports/channel.js";
+import type { ChatChannel } from "../../ports/channel.js";
 
 export class NotImplementedChannelError extends Error {
   override name = "NotImplementedError";
 }
 
-export abstract class NotImplementedChannel implements WhatsAppChannel {
+export abstract class NotImplementedChannel implements ChatChannel {
   abstract readonly provider: string;
   readonly interactive = false;
+  readonly cards = true;
 
   constructor(readonly conn: ConnectionConfig) {}
 

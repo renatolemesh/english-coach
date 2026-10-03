@@ -86,6 +86,8 @@ describe("templates", () => {
     inRanking: true,
     reminders: true,
     remindedAt: null,
+    lastConnectionId: null,
+    lastAddress: null,
   };
   const turn: Turn = {
     id: 1,

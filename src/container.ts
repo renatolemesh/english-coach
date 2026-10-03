@@ -25,7 +25,7 @@ import { connect, type Database } from "./db/client.js";
 import type { GraphContext } from "./graph/context.js";
 import { UsageLimits } from "./guardrails/limits.js";
 import type { Cache } from "./ports/cache.js";
-import type { WhatsAppChannel } from "./ports/channel.js";
+import type { ChatChannel } from "./ports/channel.js";
 import type { CourseRepository } from "./ports/course.js";
 import type { LLMClient } from "./ports/llm.js";
 import type { ImageRenderer, SpeechToText, TextToSpeech } from "./ports/media.js";
@@ -76,10 +76,7 @@ export class Container {
   }
 
   /** Per-message dependencies for the graph (the channel is the message's connection). */
-  graphContext(
-    channel: WhatsAppChannel,
-    config: RuntimeConfig = defaultRuntimeConfig(),
-  ): GraphContext {
+  graphContext(channel: ChatChannel, config: RuntimeConfig = defaultRuntimeConfig()): GraphContext {
     const media = this.requireMedia();
     const panelUrl = `${this.settings.publicBaseUrl.replace(/\/+$/, "")}/panel`;
     return {

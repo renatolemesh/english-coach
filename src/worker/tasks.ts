@@ -10,7 +10,7 @@ import type { EventLogPort } from "../connections/events.js";
 import type { PoolEntry } from "../connections/pool.js";
 import type { Container } from "../container.js";
 import { IncomingMessage } from "../domain/messages.js";
-import { type ConversationRunner, threadId } from "../graph/runner.js";
+import type { ConversationRunner } from "../graph/runner.js";
 import { getLogger } from "../logging.js";
 import { PanelQueries } from "../panel/queries.js";
 import { LockTimeoutError } from "../ports/cache.js";
@@ -64,7 +64,7 @@ export async function processMessage(
     const [, channel] = found;
     // Messages of one conversation never run concurrently (they share a checkpoint).
     await rt.container.cache.withLock(
-      `thread:${threadId(connectionId, msg.from)}`,
+      `thread:${connectionId}:${msg.from}`, // one sender's messages in order
       settings.threadLockTimeoutS,
       settings.threadLockWaitS,
       async () => {

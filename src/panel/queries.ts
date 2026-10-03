@@ -24,6 +24,7 @@ import {
   courseLessons,
   mistakes,
   plans,
+  studentIdentities,
   students,
   turns,
 } from "../db/schema.js";
@@ -263,12 +264,17 @@ export class PanelQueries {
     phone: string,
     values: Partial<typeof students.$inferInsert> = {},
   ): Promise<number> {
-    const [row] = await this.db
-      .insert(students)
-      .values({ connectionId, phone, level: "B1", ...values })
-      .returning({ id: students.id });
-    if (!row) throw new Error("student not created");
-    return row.id;
+    return this.db.transaction(async (tx) => {
+      const [row] = await tx
+        .insert(students)
+        .values({ connectionId, phone, level: "B1", ...values })
+        .returning({ id: students.id });
+      if (!row) throw new Error("student not created");
+      await tx
+        .insert(studentIdentities)
+        .values({ studentId: row.id, connectionId, address: phone });
+      return row.id;
+    });
   }
 
   async deleteStudent(studentId: number): Promise<void> {

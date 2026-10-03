@@ -1,5 +1,5 @@
 /**
- * LangGraph state for one conversation thread (thread_id = connection_id:phone). Keys are
+ * LangGraph state for one conversation thread (thread_id = student:<id>, any channel). Keys are
  * snake_case like the stored checkpoints. Checkpointed fields must stay JSON-like; per-turn fields (Buffers,
  * evaluations) are reset by `ingest` and cleared by `persist`, and graphs run with
  * durability "exit", so they never reach Postgres.

@@ -35,7 +35,9 @@ export async function sendImage(state: ConversationState, config: NodeConfig): P
   const ctx = ctxOf(config);
   const t = textsOf(state);
   try {
-    if (state.image && state.evaluation) {
+    const { channel } = ctx;
+    const structured = !channel.cards && channel.sendEvaluation;
+    if (state.evaluation && (state.image || structured)) {
       let caption = `Score: ${state.evaluation.score}/100`;
       const confidence = state.stt_confidence;
       if (
@@ -48,7 +50,11 @@ export async function sendImage(state: ConversationState, config: NodeConfig): P
       } else if (state.kind === "text" && (state.text_turns ?? 0) % 3 === 0) {
         caption += `\n\n${t.audioNudge}`; // 1st, 4th, 7th... typed answer
       }
-      return { sent: [`image:${await ctx.channel.sendImage(state.phone, state.image, caption)}`] };
+      const id =
+        structured && channel.sendEvaluation
+          ? `evaluation:${await channel.sendEvaluation(state.phone, state.evaluation, caption)}`
+          : `image:${await channel.sendImage(state.phone, state.image as Buffer, caption)}`;
+      return { sent: [id] };
     }
     return { sent: [`text:${await ctx.channel.sendText(state.phone, t.evaluationUnavailable)}`] };
   } catch (exc) {

@@ -48,9 +48,14 @@ export class Harness {
     return this.container.requireMedia().tts as FakeTTS;
   }
 
-  async send(msg: IncomingMessage): Promise<Partial<ConversationState>> {
+  /** A message from `connection` (another channel of the same student, in some tests). */
+  async send(msg: IncomingMessage, connection = CONN): Promise<Partial<ConversationState>> {
     this.channel.sent.length = 0;
-    return this.runner.handle(msg, CONN, this.container.graphContext(this.channel, this.config));
+    return this.runner.handle(
+      msg,
+      connection,
+      this.container.graphContext(this.channel, this.config),
+    );
   }
 
   kinds(): string[] {
@@ -63,7 +68,7 @@ export class Harness {
   /** Pretend the student went away `hours` ago. */
   async age(hours: number): Promise<void> {
     await this.runner.graph.updateState(
-      { configurable: { thread_id: threadId(CONN, PHONE) } },
+      { configurable: { thread_id: threadId(1) } }, // the only student of most tests
       { last_seen: Date.now() / 1000 - hours * 3600 },
       "persist",
     );

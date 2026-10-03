@@ -11,12 +11,12 @@ import { buildChannel } from "../adapters/channels/registry.js";
 import type { Settings } from "../config.js";
 import type { ConnectionConfig } from "../domain/connections.js";
 import { getLogger } from "../logging.js";
-import type { WhatsAppChannel } from "../ports/channel.js";
+import type { ChatChannel } from "../ports/channel.js";
 import type { ConnectionStorePort } from "./store.js";
 
 const log = getLogger("coach.connections.pool");
 
-export type PoolEntry = readonly [ConnectionConfig, WhatsAppChannel] | null;
+export type PoolEntry = readonly [ConnectionConfig, ChatChannel] | null;
 
 function fingerprint(conn: ConnectionConfig): string {
   const credentials = Object.fromEntries(
@@ -33,7 +33,7 @@ const now = () => performance.now() / 1000;
 
 export class ChannelPool {
   private readonly cache = new Map<string, [number, string, PoolEntry]>();
-  private retired: [number, WhatsAppChannel][] = [];
+  private retired: [number, ChatChannel][] = [];
 
   constructor(
     readonly store: ConnectionStorePort,
@@ -80,7 +80,7 @@ export class ChannelPool {
   }
 
   private async closeRetired(t: number): Promise<void> {
-    const keep: [number, WhatsAppChannel][] = [];
+    const keep: [number, ChatChannel][] = [];
     for (const [retiredAt, channel] of this.retired) {
       if (t - retiredAt >= this.graceS) await channel.close();
       else keep.push([retiredAt, channel]);

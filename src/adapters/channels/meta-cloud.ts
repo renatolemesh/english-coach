@@ -22,7 +22,7 @@ import {
 } from "../../domain/connections.js";
 import { IncomingMessage, type MessageType } from "../../domain/messages.js";
 import { getLogger } from "../../logging.js";
-import type { Headers, WhatsAppChannel } from "../../ports/channel.js";
+import type { ChatChannel, Headers } from "../../ports/channel.js";
 import { asObject, ChannelError, digits, HttpClient, parseEpoch, safeEqual } from "./base.js";
 
 const log = getLogger("coach.adapters.channels.meta_cloud");
@@ -38,9 +38,10 @@ const clip = (text: string, n: number) => Array.from(text).slice(0, n).join("");
 
 const field = (obj: Record<string, unknown> | null, key: string) => asObject(obj?.[key]) ?? {};
 
-export class MetaCloudChannel implements WhatsAppChannel {
+export class MetaCloudChannel implements ChatChannel {
   readonly provider = "meta";
   readonly interactive = true;
+  readonly cards = true;
   readonly http: HttpClient;
   private readonly phoneId: string;
   readonly version: string;

@@ -20,18 +20,19 @@ export interface MemoryPlan {
 
 export class MemoryRepository implements TurnRepository {
   readonly plans = new Map<string, MemoryPlan>();
-  readonly students = new Map<string, number>(); // "connection|phone" -> id
+  readonly students = new Map<string, number>(); // "connection|address" -> id (identities)
   readonly turns: [number, TurnLog][] = [];
   readonly turnTimes: number[] = []; // epoch seconds, parallel to `turns`
   readonly access = new Map<number, StudentAccess>();
   readonly passwords = new Map<number, string>();
   readonly lastMessage = new Map<number, Date>();
+  readonly lastChannel = new Map<number, [string, string]>();
   readonly reminded = new Map<number, Date>();
   known = true;
 
   async getOrCreateStudent(connectionId: string, phone: string): Promise<number> {
     const key = `${connectionId}|${phone}`;
-    if (!this.students.has(key)) this.students.set(key, this.students.size + 1);
+    if (!this.students.has(key)) this.students.set(key, new Set(this.students.values()).size + 1);
     return this.students.get(key) as number;
   }
 
@@ -133,19 +134,31 @@ export class MemoryRepository implements TurnRepository {
     return { today, goodAtLevel };
   }
 
-  async touch(userId: number, at: Date): Promise<void> {
+  async touch(userId: number, at: Date, connectionId: string, address: string): Promise<void> {
     this.lastMessage.set(userId, at);
+    this.lastChannel.set(userId, [connectionId, address]);
+  }
+
+  async linkIdentity(userId: number, connectionId: string, address: string): Promise<boolean> {
+    const key = `${connectionId}|${address}`;
+    const taken = this.students.get(key);
+    if (taken !== undefined) return taken === userId;
+    this.students.set(key, userId);
+    return true;
   }
 
   async reminderCandidates(from: Date, to: Date): Promise<ReminderCandidate[]> {
     const out: ReminderCandidate[] = [];
+    const seen = new Set<number>();
     for (const [key, userId] of this.students) {
+      if (seen.has(userId)) continue; // one student, several channels
+      seen.add(userId);
       const last = this.lastMessage.get(userId);
       const access = this.access.get(userId);
       const reminded = this.reminded.get(userId);
       if (!last || !access || access.status !== "active" || !access.reminders) continue;
       if (last < from || last >= to || (reminded && reminded >= last)) continue;
-      const [connectionId = "", phone = ""] = key.split("|");
+      const [connectionId = "", phone = ""] = this.lastChannel.get(userId) ?? key.split("|");
       out.push({ access, connectionId, phone });
     }
     return out;

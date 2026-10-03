@@ -13,6 +13,7 @@ src/api/             Hono: webhooks, API de admin          src/panel/       Hono
 src/worker/          BullMQ                                src/connections/ conexões WhatsApp (credenciais cifradas)
 src/db/              Drizzle (schema, client, migrate)     src/container.ts escolhe as implementações
 ops/                 backup.sh (pg_dump + Drive) e vigia.sh (alertas pela uazapi), rodam no host via cron
+docs/                multicanal.md: plano dos canais (WhatsApp, Evolution, Telegram, app)
 src/course/          aulas /aula: conteúdo, exercícios, correção, FSRS, motor
 test/                Vitest, espelha src/; fixtures em test/fixtures; evals em test/*-eval.yaml
 scripts/             migrate, ingest, create-admin, eval-conversations, download-models
@@ -57,6 +58,9 @@ templates/  evaluation.njk (card), fonts/ (Inter, OFL), panel-ts/ (painel, landi
   falha se um id não existir) e rodando o build de novo, com `nice -n 10` (uns 5 min, 1,6 GB).
   `traps.yaml` é escrito à mão: resposta certa sem ambiguidade, erradas claramente erradas.
 - A Meta cobra cada mensagem enviada (desde 1º/10/2026): evite mensagens extras por turno.
+- Canais: o núcleo só fala com a porta `ChatChannel` (src/ports/channel.ts). O aluno é achado
+  pela identidade (`student_identities`: conexão + endereço, que é o telefone, o chat id do
+  Telegram ou o id no app); a conversa (thread do LangGraph) é por aluno, `student:<id>`.
 - whisper.cpp: faixas de confiança `STT_MIN_CONFIDENCE=-2.0` (abaixo disso pede para repetir) e
   `STT_SURE_CONFIDENCE=-1.05` (acima disso avalia sem ressalva).
 - Modelos (whisper.cpp, Kokoro, bge-small) ficam em `/opt/models` na imagem do worker

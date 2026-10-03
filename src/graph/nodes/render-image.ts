@@ -7,7 +7,8 @@ import type { ConversationState, Update } from "../state.js";
 const log = getLogger("coach.graph.nodes.render_image");
 
 export async function renderImage(state: ConversationState, config: NodeConfig): Promise<Update> {
-  if (!state.evaluation) return { image: null };
+  // a channel that draws the evaluation itself (the app) needs no card: no browser work
+  if (!state.evaluation || !ctxOf(config).channel.cards) return { image: null };
   try {
     return {
       image: await ctxOf(config).image.render(state.evaluation, topicOf(state), levelOf(state)),

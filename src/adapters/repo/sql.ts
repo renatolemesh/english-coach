@@ -1,8 +1,16 @@
 /** TurnRepository on Postgres (Drizzle). */
 import { and, count, desc, eq, gte, inArray, isNotNull, isNull, lt, ne, or } from "drizzle-orm";
+import { variants } from "../../accounts/phones.js";
 import type { Db } from "../../db/client.js";
 import { advanceEndedPlan } from "../../db/plan-changes.js";
-import { courseLessons, mistakes, plans, students, turns } from "../../db/schema.js";
+import {
+  courseLessons,
+  mistakes,
+  plans,
+  studentIdentities,
+  students,
+  turns,
+} from "../../db/schema.js";
 import {
   type Preferences,
   type StudentAccess,
@@ -43,24 +51,61 @@ export class SqlRepository implements TurnRepository {
   constructor(private readonly db: Db) {}
 
   async getOrCreateStudent(connectionId: string, phone: string): Promise<number> {
-    await this.db.insert(students).values({ connectionId, phone }).onConflictDoNothing();
-    const row = await this.db.query.students.findFirst({
-      columns: { id: true },
-      where: and(eq(students.connectionId, connectionId), eq(students.phone, phone)),
+    const found = await this.studentIdOf(connectionId, phone);
+    if (found !== null) return found;
+    return this.db.transaction(async (tx) => {
+      await tx.insert(students).values({ connectionId, phone }).onConflictDoNothing();
+      const row = await tx.query.students.findFirst({
+        columns: { id: true },
+        where: and(eq(students.connectionId, connectionId), eq(students.phone, phone)),
+      });
+      if (!row) throw new Error("student vanished");
+      await tx
+        .insert(studentIdentities)
+        .values({ studentId: row.id, connectionId, address: phone })
+        .onConflictDoNothing();
+      return row.id;
     });
-    if (!row) throw new Error("student vanished");
-    return row.id;
   }
 
-  async studentAccess(connectionId: string, phone: string): Promise<StudentAccess | null> {
+  /** The student behind (connection, address): phone, Telegram chat id, app id. */
+  private async studentIdOf(connectionId: string, address: string): Promise<number | null> {
+    const row = await this.db.query.studentIdentities.findFirst({
+      columns: { studentId: true },
+      where: and(
+        eq(studentIdentities.connectionId, connectionId),
+        inArray(studentIdentities.address, variants(address)),
+      ),
+    });
+    return row?.studentId ?? null;
+  }
+
+  async studentAccess(connectionId: string, address: string): Promise<StudentAccess | null> {
     const rows = await this.db
       .select({ student: students, plan: plans })
-      .from(students)
+      .from(studentIdentities)
+      .innerJoin(students, eq(students.id, studentIdentities.studentId))
       .leftJoin(plans, eq(plans.id, students.planId))
-      .where(and(eq(students.connectionId, connectionId), eq(students.phone, phone)))
+      .where(
+        and(
+          eq(studentIdentities.connectionId, connectionId),
+          // a phone with or without the ninth digit (WhatsApp still sends old ids without it)
+          inArray(studentIdentities.address, variants(address)),
+        ),
+      )
       .limit(1);
     const row = rows[0];
     return row ? toAccess(row.student, row.plan) : null;
+  }
+
+  async linkIdentity(userId: number, connectionId: string, address: string): Promise<boolean> {
+    const taken = await this.studentIdOf(connectionId, address);
+    if (taken !== null) return taken === userId;
+    await this.db
+      .insert(studentIdentities)
+      .values({ studentId: userId, connectionId, address })
+      .onConflictDoNothing();
+    return (await this.studentIdOf(connectionId, address)) === userId;
   }
 
   async createStudent(
@@ -70,15 +115,17 @@ export class SqlRepository implements TurnRepository {
     name = "",
     passwordHash = "",
     uiLang: string | null = null,
+    studentPhone: string | null = null,
   ) {
     const now = new Date();
+    const known = await this.studentIdOf(connectionId, phone);
     return this.db.transaction(async (tx) => {
       const plan = planName
         ? await tx.query.plans.findFirst({ where: eq(plans.name, planName) })
         : undefined;
-      let student = await tx.query.students.findFirst({
-        where: and(eq(students.connectionId, connectionId), eq(students.phone, phone)),
-      });
+      let student = known
+        ? await tx.query.students.findFirst({ where: eq(students.id, known) })
+        : undefined;
       if (!student) {
         const ends = plan?.durationDays
           ? new Date(now.getTime() + plan.durationDays * 86_400_000)
@@ -87,13 +134,19 @@ export class SqlRepository implements TurnRepository {
           .insert(students)
           .values({
             connectionId,
-            phone,
+            phone: studentPhone ?? phone,
             level: "B1",
             planId: plan?.id ?? null,
             planStartedAt: now,
             planEndsAt: ends,
           })
           .returning();
+        if (student) {
+          await tx
+            .insert(studentIdentities)
+            .values({ studentId: student.id, connectionId, address: phone })
+            .onConflictDoNothing();
+        }
       }
       if (!student) throw new Error("student not created");
       const changes: Partial<StudentRow> = { verifiedAt: student.verifiedAt ?? now };
@@ -243,8 +296,11 @@ export class SqlRepository implements TurnRepository {
     return { today: (today?.n ?? 0) + (lessons?.n ?? 0), goodAtLevel: good?.n ?? 0 };
   }
 
-  async touch(userId: number, at: Date): Promise<void> {
-    await this.db.update(students).set({ lastMessageAt: at }).where(eq(students.id, userId));
+  async touch(userId: number, at: Date, connectionId: string, address: string): Promise<void> {
+    await this.db
+      .update(students)
+      .set({ lastMessageAt: at, lastConnectionId: connectionId, lastAddress: address })
+      .where(eq(students.id, userId));
   }
 
   async reminderCandidates(from: Date, to: Date): Promise<ReminderCandidate[]> {
@@ -263,8 +319,9 @@ export class SqlRepository implements TurnRepository {
       );
     return rows.map(({ student, plan }) => ({
       access: toAccess(student, plan),
-      connectionId: student.connectionId,
-      phone: student.phone,
+      // where they last wrote from (the window that is open is that channel's)
+      connectionId: student.lastConnectionId ?? student.connectionId,
+      phone: student.lastAddress ?? student.phone,
     }));
   }
 

@@ -1,20 +1,22 @@
-/** In-memory WhatsAppChannel: records what would be sent (tests, simulate). */
+/** In-memory ChatChannel: records what would be sent (tests, simulate). */
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { Choice } from "../../domain/choices.js";
+import type { Evaluation } from "../../domain/evaluation.js";
 import type { IncomingMessage } from "../../domain/messages.js";
-import type { WhatsAppChannel } from "../../ports/channel.js";
+import type { ChatChannel } from "../../ports/channel.js";
 
 export interface Sent {
-  kind: "text" | "image" | "voice" | "choice";
+  kind: "text" | "image" | "voice" | "choice" | "evaluation";
   to: string;
   text: string | null;
   data: Buffer | null;
 }
 
-export class FakeChannel implements WhatsAppChannel {
+export class FakeChannel implements ChatChannel {
   readonly provider = "fake";
   interactive = true;
+  cards = true; // false: records evaluations as data, like the app
   readonly media = new Map<string, [Buffer, string]>();
   readonly sent: Sent[] = [];
 
@@ -44,6 +46,11 @@ export class FakeChannel implements WhatsAppChannel {
 
   async sendVoice(to: string, ogg: Buffer) {
     return this.record({ kind: "voice", to, text: null, data: ogg }, ".ogg");
+  }
+
+  async sendEvaluation(to: string, evaluation: Evaluation, caption: string) {
+    const json = Buffer.from(JSON.stringify(evaluation));
+    return this.record({ kind: "evaluation", to, text: caption, data: json }, ".json");
   }
 
   async sendChoice(to: string, choice: Choice) {

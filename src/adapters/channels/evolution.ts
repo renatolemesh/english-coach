@@ -15,7 +15,7 @@ import {
 } from "../../domain/connections.js";
 import { IncomingMessage, type MessageType } from "../../domain/messages.js";
 import { getLogger } from "../../logging.js";
-import type { Headers, WhatsAppChannel } from "../../ports/channel.js";
+import type { ChatChannel, Headers } from "../../ports/channel.js";
 import {
   asObject,
   ChannelError,
@@ -49,9 +49,10 @@ function phoneOf(key: Record<string, unknown>): string | null {
   return null;
 }
 
-export class EvolutionChannel implements WhatsAppChannel {
+export class EvolutionChannel implements ChatChannel {
   readonly provider = "evolution";
   readonly interactive = false;
+  readonly cards = true;
   readonly http: HttpClient;
   private readonly instance: string;
 

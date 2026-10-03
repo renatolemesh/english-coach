@@ -50,7 +50,7 @@ beforeEach(async () => {
 
 describe("reminders", () => {
   it("one nudge 20-23 h after the last message, in the student's language", async () => {
-    await repo.touch(userId, new Date(NOW.getTime() - 21 * HOUR));
+    await repo.touch(userId, new Date(NOW.getTime() - 21 * HOUR), CONN, PHONE);
     streak = 4;
     expect(await sendReminders(deps, NOW)).toBe(1);
     expect(channel.sent).toHaveLength(1);
@@ -69,28 +69,28 @@ describe("reminders", () => {
   });
 
   it("comes back only after the student writes again", async () => {
-    await repo.touch(userId, new Date(NOW.getTime() - 21 * HOUR));
+    await repo.touch(userId, new Date(NOW.getTime() - 21 * HOUR), CONN, PHONE);
     await sendReminders(deps, NOW);
-    await repo.touch(userId, new Date(NOW.getTime() + HOUR)); // tapped a button
+    await repo.touch(userId, new Date(NOW.getTime() + HOUR), CONN, PHONE); // tapped a button
     expect(await sendReminders(deps, new Date(NOW.getTime() + 22 * HOUR))).toBe(1);
   });
 
   it("not too early, not after the window could close", async () => {
     for (const hours of [19, 23.5, 30]) {
-      await repo.touch(userId, new Date(NOW.getTime() - hours * HOUR));
+      await repo.touch(userId, new Date(NOW.getTime() - hours * HOUR), CONN, PHONE);
       expect(await sendReminders(deps, NOW)).toBe(0);
     }
   });
 
   it("never at night (local time)", async () => {
     const night = new Date("2026-10-06T02:30:00Z"); // 23:30 in São Paulo
-    await repo.touch(userId, new Date(night.getTime() - 21 * HOUR));
+    await repo.touch(userId, new Date(night.getTime() - 21 * HOUR), CONN, PHONE);
     expect(await sendReminders(deps, night)).toBe(0);
     expect(repo.reminded.size).toBe(0); // still due in the morning, if the window allows
   });
 
   it("nothing when the goal is done, reminders are off, or the plan ended", async () => {
-    await repo.touch(userId, new Date(NOW.getTime() - 21 * HOUR));
+    await repo.touch(userId, new Date(NOW.getTime() - 21 * HOUR), CONN, PHONE);
     setAccess({ level: "A2", daily_goal: 2 });
     practiced(2, new Date(NOW.getTime() - 2 * HOUR)); // after midnight: today's goal is done
     expect(await sendReminders(deps, NOW)).toBe(0);
@@ -107,7 +107,7 @@ describe("reminders", () => {
   it("English from B1 without a choice; reviews waiting when there is no streak", async () => {
     setAccess({ level: "B1", name: null });
     due = 7;
-    await repo.touch(userId, new Date(NOW.getTime() - 22 * HOUR));
+    await repo.touch(userId, new Date(NOW.getTime() - 22 * HOUR), CONN, PHONE);
     expect(await sendReminders(deps, NOW)).toBe(1);
     const body = formatText(EN.reminder, {
       name: "",

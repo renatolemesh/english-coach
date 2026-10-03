@@ -16,7 +16,7 @@ import type { IncomingMessage } from "../domain/messages.js";
 import { formatText, type Texts, textsFor } from "../domain/texts.js";
 import { getLogger } from "../logging.js";
 import type { Cache } from "../ports/cache.js";
-import type { WhatsAppChannel } from "../ports/channel.js";
+import type { ChatChannel } from "../ports/channel.js";
 import type { TurnRepository } from "../ports/repository.js";
 import { samePhone } from "./phones.js";
 import type { RuntimeConfig } from "./runtime.js";
@@ -42,7 +42,7 @@ export class AccountGate {
   async admit(
     msg: IncomingMessage,
     connectionId: string,
-    channel: WhatsAppChannel,
+    channel: ChatChannel,
     config: RuntimeConfig,
   ): Promise<Admission> {
     const phone = msg.from;
@@ -90,7 +90,7 @@ export class AccountGate {
     [kind, digits]: [verification.Kind, string],
     msg: IncomingMessage,
     connectionId: string,
-    channel: WhatsAppChannel,
+    channel: ChatChannel,
     config: RuntimeConfig,
     texts: Texts,
     access: StudentAccess | null,
@@ -134,7 +134,7 @@ export class AccountGate {
   }
 
   private async planChanged(
-    channel: WhatsAppChannel,
+    channel: ChatChannel,
     phone: string,
     texts: Texts,
     ended: string,
@@ -158,7 +158,7 @@ export class AccountGate {
     }
   }
 
-  private async once(channel: WhatsAppChannel, phone: string, what: string, text: string) {
+  private async once(channel: ChatChannel, phone: string, what: string, text: string) {
     if (await this.cache.setIfAbsent(`gate:${what}:${phone}`, Buffer.from("1"), REPLY_ONCE_S)) {
       await channel.sendText(phone, text);
     }

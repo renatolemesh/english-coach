@@ -14,7 +14,7 @@ import { GOOD_SCORE, goalOf } from "../domain/progress.js";
 import { formatText, textsFor } from "../domain/texts.js";
 import { getLogger } from "../logging.js";
 import { localMidnight, wallClock } from "../panel/zones.js";
-import type { WhatsAppChannel } from "../ports/channel.js";
+import type { ChatChannel } from "../ports/channel.js";
 import type { ReminderCandidate, TurnRepository } from "../ports/repository.js";
 
 const log = getLogger("coach.worker.reminders");
@@ -28,7 +28,7 @@ export const REMINDERS_EVERY_MS = 10 * 60 * 1000; // the worker's job scheduler
 export interface ReminderDeps {
   repo: TurnRepository;
   config: RuntimeConfig;
-  channelFor(connectionId: string): Promise<WhatsAppChannel | null>;
+  channelFor(connectionId: string): Promise<ChatChannel | null>;
   streakOf(userId: number, goal: number, level: string): Promise<number>;
   dueReviews(userId: number, now: Date): Promise<number>;
 }

@@ -10,7 +10,9 @@ import { type ConversationState, PER_TURN_CLEARED, type Update } from "./state.j
 
 const log = getLogger("coach.graph.runner");
 
-export const threadId = (connectionId: string, phone: string) => `${connectionId}:${phone}`;
+/** One conversation per student, whatever the channel: who switches from WhatsApp to the app
+ * carries on the same conversation. */
+export const threadId = (userId: number) => `student:${userId}`;
 
 /** An in-memory saver that can read back its own pending writes. MemorySaver stores a write's
  * bytes without its type and always loads them as JSON, so a raw Buffer write (the image or
@@ -71,7 +73,7 @@ export class ConversationRunner {
     try {
       // WhatsApp's 24 h window for free-form messages starts at the student's message
       const sent = message.timestamp.getTime() <= Date.now() ? message.timestamp : new Date();
-      await ctx.repo.touch(access.user_id, sent);
+      await ctx.repo.touch(access.user_id, sent, connectionId, phone);
     } catch (exc) {
       log.warning("touch_failed", { error: String(exc) }); // only reminders depend on it
     }
@@ -95,7 +97,7 @@ export class ConversationRunner {
       if (handled) return {};
     }
     const msg = admission.start ? { ...message, type: "text" as const, text: "/start" } : message; // just signed up
-    const tid = threadId(connectionId, phone);
+    const tid = threadId(access.user_id);
     return withContext(
       { user_id: access.user_id, connection_id: connectionId, thread_id: tid },
       async () => {
@@ -132,13 +134,9 @@ export class ConversationRunner {
   }
 
   /** Write topic/level straight into the thread state (simulate, eval). */
-  async setProfile(
-    connectionId: string,
-    phone: string,
-    values: { topic?: string; level?: string },
-  ) {
+  async setProfile(userId: number, values: { topic?: string; level?: string }) {
     await this.graph.updateState(
-      { configurable: { thread_id: threadId(connectionId, phone) } },
+      { configurable: { thread_id: threadId(userId) } },
       values,
       "persist",
     );

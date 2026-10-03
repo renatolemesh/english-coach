@@ -6,10 +6,10 @@ import { formatText, EN as pt } from "../../src/domain/texts.js";
 import { threadId } from "../../src/graph/runner.js";
 import type { ConversationState } from "../../src/graph/state.js";
 import { emptyUsage } from "../../src/ports/llm.js";
-import { audioMsg, CONN, Harness, PHONE, started, testSettings, textMsg } from "./harness.js";
+import { audioMsg, Harness, started, testSettings, textMsg } from "./harness.js";
 
 const saved = async (h: Harness): Promise<ConversationState> =>
-  (await h.runner.graph.getState({ configurable: { thread_id: threadId(CONN, PHONE) } })).values;
+  (await h.runner.graph.getState({ configurable: { thread_id: threadId(1) } })).values;
 
 describe("graph", () => {
   it("first contact gets welcome and spoken opener", async () => {
@@ -19,6 +19,34 @@ describe("graph", () => {
     expect(h.texts()[0]).toBe(formatText(pt.welcome, { tutor: "Sarah" })); // the default tutor
     expect(state.topic).toBe("introducing yourself");
     expect(h.llm.calls.map(([p]) => p)).toEqual(["topic_opener"]); // no evaluation of "oi"
+  });
+
+  it("a channel that draws the evaluation itself gets it as data; no card is rendered", async () => {
+    const h = await Harness.create();
+    await started(h);
+    h.channel.cards = false; // the app
+    const images = h.container.requireMedia().image as FakeImageRenderer;
+    const before = images.calls.length;
+    h.channel.media.set("r1", [Buffer.from("I goed to the beach yesterday"), "audio/ogg"]);
+    await h.send(audioMsg("r1"));
+    expect(h.kinds()).toEqual(["evaluation", "voice", "choice"]);
+    expect(JSON.parse(String(h.channel.sent[0]?.data)).score).toBe(82);
+    expect(images.calls.length).toBe(before);
+  });
+
+  it("one student, two channels: the same account and the same conversation", async () => {
+    const h = await Harness.create();
+    h.repo.known = false; // only identities get in
+    const { user_id } = await h.repo.createStudent("conn-1", "5541999990000", "Ilimitado");
+    expect(await h.repo.linkIdentity(user_id, "telegram", "777")).toBe(true);
+    expect(await h.repo.linkIdentity(user_id + 1, "telegram", "777")).toBe(false); // taken
+    await h.send(textMsg("hi", 1)); // WhatsApp: first contact, welcome
+    await h.send(textMsg("/tema travel", 2));
+    const fromTelegram = { ...textMsg("/ajuda", 3), from: "777" };
+    const state = await h.send(fromTelegram, "telegram");
+    expect(state.user_id).toBe(user_id);
+    expect(state.topic).toBe("travel"); // the conversation followed the student
+    expect(h.repo.lastChannel.get(user_id)).toEqual(["telegram", "777"]); // reminders go there
   });
 
   it("audio turn sends image then voice", async () => {

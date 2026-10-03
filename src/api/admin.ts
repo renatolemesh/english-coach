@@ -18,7 +18,7 @@ import { NotImplementedChannelError } from "../adapters/channels/stub.js";
 import { Secret } from "../config.js";
 import { ConnectionConfig, Provider } from "../domain/connections.js";
 import { getLogger } from "../logging.js";
-import type { WhatsAppChannel } from "../ports/channel.js";
+import type { ChatChannel } from "../ports/channel.js";
 import type { AppState } from "./deps.js";
 import { httpError } from "./errors.js";
 
@@ -190,7 +190,7 @@ export function adminRouter(state: AppState): Hono {
     if (!parsed.ok) return parsed.response;
     const conn = await state.connections.get(connectionId);
     if (!conn) return httpError(c, 404);
-    let channel: WhatsAppChannel;
+    let channel: ChatChannel;
     try {
       channel = buildChannel(conn, state.settings);
     } catch (exc) {

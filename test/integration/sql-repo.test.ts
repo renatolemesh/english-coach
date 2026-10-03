@@ -157,8 +157,8 @@ describe("SqlRepository", () => {
     const bia = await repo.createStudent("c", "5542", null, "Bia");
     const now = new Date();
     const ago = (h: number) => new Date(now.getTime() - h * 3600_000);
-    await repo.touch(ana.user_id, ago(21));
-    await repo.touch(bia.user_id, ago(21));
+    await repo.touch(ana.user_id, ago(21), "c", "5541");
+    await repo.touch(bia.user_id, ago(21), "c", "5542");
     await database.pool.query("update students set reminders = false where id = $1", [bia.user_id]);
     const found = await repo.reminderCandidates(ago(23), ago(20));
     expect(found.map((c) => [c.access.user_id, c.connectionId, c.phone, c.access.name])).toEqual([
@@ -166,7 +166,29 @@ describe("SqlRepository", () => {
     ]);
     await repo.markReminded(ana.user_id, now);
     expect(await repo.reminderCandidates(ago(23), ago(20))).toEqual([]);
-    await repo.touch(ana.user_id, ago(-0.1)); // wrote again after the reminder: a new window
+    await repo.touch(ana.user_id, ago(-0.1), "c", "5541"); // wrote again after the reminder: a new window
     expect(await repo.reminderCandidates(ago(1), ago(-1))).toHaveLength(1);
+  });
+
+  it("identities: one student behind several channels; an address belongs to one student", async () => {
+    const ana = await repo.createStudent("meta-main", "5541", "Grátis", "Ana");
+    expect(await repo.linkIdentity(ana.user_id, "telegram", "777")).toBe(true);
+    expect((await repo.studentAccess("telegram", "777"))?.user_id).toBe(ana.user_id);
+    const bia = await repo.createStudent("meta-main", "5542", null, "Bia");
+    expect(await repo.linkIdentity(bia.user_id, "telegram", "777")).toBe(false);
+    // signing up on Telegram: the address is the chat id, the phone comes from the form
+    const caio = await repo.createStudent("telegram", "888", null, "Caio", "", null, "5543");
+    const phone = await database.pool.query("select phone from students where id = $1", [
+      caio.user_id,
+    ]);
+    expect(phone.rows[0]?.phone).toBe("5543");
+    expect((await repo.studentAccess("telegram", "888"))?.user_id).toBe(caio.user_id);
+    // the last channel used is where reminders go
+    await repo.touch(ana.user_id, new Date(Date.now() - 21 * 3600_000), "telegram", "777");
+    const [candidate] = await repo.reminderCandidates(
+      new Date(Date.now() - 23 * 3600_000),
+      new Date(Date.now() - 20 * 3600_000),
+    );
+    expect([candidate?.connectionId, candidate?.phone]).toEqual(["telegram", "777"]);
   });
 });

@@ -20,7 +20,7 @@ import { effectiveSpeed, effectiveTutor } from "../domain/tutors.js";
 import type { UsageLimits } from "../guardrails/limits.js";
 import { getLogger } from "../logging.js";
 import { localMidnight } from "../panel/zones.js";
-import type { WhatsAppChannel } from "../ports/channel.js";
+import type { ChatChannel } from "../ports/channel.js";
 import type { CourseRepository, Lesson, LessonKind } from "../ports/course.js";
 import type { SpeechToText, TextToSpeech } from "../ports/media.js";
 import type { CourseContent } from "./content.js";
@@ -89,7 +89,7 @@ export interface CourseDeps {
 export interface CourseTurn {
   msg: IncomingMessage;
   access: StudentAccess;
-  channel: WhatsAppChannel;
+  channel: ChatChannel;
   config: RuntimeConfig;
 }
 
