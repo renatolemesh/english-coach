@@ -1,6 +1,6 @@
 /** AppStore on Postgres (app_tokens, app_events, app_media). */
 import { createHash, randomBytes, randomUUID } from "node:crypto";
-import { and, asc, eq, gt, lt, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, lt, sql } from "drizzle-orm";
 import type { Db } from "../../db/client.js";
 import { appEvents, appMedia, appTokens } from "../../db/schema.js";
 import type { AppEvent, AppEventKind, AppMedia, AppStore } from "../../ports/app.js";
@@ -8,6 +8,15 @@ import type { AppEvent, AppEventKind, AppMedia, AppStore } from "../../ports/app
 export const tokenHash = (token: string) => createHash("sha256").update(token).digest("hex");
 export const newToken = () => randomBytes(32).toString("base64url");
 const TOUCH_EVERY_MS = 3600_000; // last_used_at, at most hourly (it is only for cleanup)
+
+const toEvent = (r: typeof appEvents.$inferSelect): AppEvent => ({
+  id: r.id,
+  kind: r.kind as AppEventKind,
+  text: r.text,
+  data: r.data,
+  mediaId: r.mediaId,
+  createdAt: r.createdAt,
+});
 
 export class SqlAppStore implements AppStore {
   constructor(private readonly db: Db) {}
@@ -21,6 +30,16 @@ export class SqlAppStore implements AppStore {
     return row.id;
   }
 
+  async recentEvents(studentId: number, limit: number): Promise<AppEvent[]> {
+    const rows = await this.db
+      .select()
+      .from(appEvents)
+      .where(eq(appEvents.studentId, studentId))
+      .orderBy(desc(appEvents.id))
+      .limit(limit);
+    return rows.reverse().map(toEvent);
+  }
+
   async events(studentId: number, afterId: number, limit: number): Promise<AppEvent[]> {
     const rows = await this.db
       .select()
@@ -28,14 +47,7 @@ export class SqlAppStore implements AppStore {
       .where(and(eq(appEvents.studentId, studentId), gt(appEvents.id, afterId)))
       .orderBy(asc(appEvents.id))
       .limit(limit);
-    return rows.map((r) => ({
-      id: r.id,
-      kind: r.kind as AppEventKind,
-      text: r.text,
-      data: r.data,
-      mediaId: r.mediaId,
-      createdAt: r.createdAt,
-    }));
+    return rows.map(toEvent);
   }
 
   async putMedia(studentId: number, data: Buffer, mime: string): Promise<string> {

@@ -122,6 +122,7 @@ export const SettingsSchema = z.object({
   promptsDir: z.string().default(root("prompts")),
   templatesDir: z.string().default(root("templates")),
   dataDir: z.string().default(root("data")),
+  appWebDir: z.string().default("/srv/app-web"), // the Flutter web build, served at /app/
   modelsDir: z.string().default(root("models")),
 });
 

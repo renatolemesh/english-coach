@@ -25,6 +25,8 @@ services:
     ports: ["127.0.0.1:8010:8000"]
     networks: [default, shared-net]
     mem_limit: 512m
+    # the Flutter web build (cd app && flutter build web --base-href /app/), served at /app/
+    volumes: ["./app/build/web:/srv/app-web:ro"]
 
   worker:
     <<: *app

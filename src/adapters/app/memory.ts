@@ -17,6 +17,10 @@ export class MemoryAppStore implements AppStore {
     return id;
   }
 
+  async recentEvents(studentId: number, limit: number): Promise<AppEvent[]> {
+    return (this.eventsByStudent.get(studentId) ?? []).slice(-limit);
+  }
+
   async events(studentId: number, afterId: number, limit: number): Promise<AppEvent[]> {
     return (this.eventsByStudent.get(studentId) ?? [])
       .filter((e) => e.id > afterId)

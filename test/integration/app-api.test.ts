@@ -120,15 +120,11 @@ describe("app API", () => {
     expect(later.events).toHaveLength(1);
     const file = await call(later.events[0].media.replace("/app/v1", ""), { token });
     expect([file.status, file.headers.get("content-type")]).toEqual([200, "audio/mpeg"]);
-    // someone else's token cannot read it
-    const other = await new SqlRepository(database.db).createStudent(
-      "meta-main",
-      "5511900000000",
-      null,
-    );
-    const otherToken = await store.createToken(other.user_id);
-    expect(
-      (await call(later.events[0].media.replace("/app/v1", ""), { token: otherToken })).status,
-    ).toBe(404);
+    // the history when the app opens: the last N events
+    const recent = await (await call("/events?recent=1", { token })).json();
+    expect(recent.events.map((e: { kind: string }) => e.kind)).toEqual(["voice"]);
+    // media: by its unguessable id, no token (the web's audio player cannot send one)
+    expect((await call(later.events[0].media.replace("/app/v1", ""))).status).toBe(200);
+    expect((await call("/media/00000000-0000-4000-8000-000000000000")).status).toBe(404);
   });
 });

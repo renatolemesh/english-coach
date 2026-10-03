@@ -8,7 +8,7 @@
  */
 import { randomUUID } from "node:crypto";
 import { eq, inArray } from "drizzle-orm";
-import { type Context, Hono } from "hono";
+import { Hono } from "hono";
 import { z } from "zod";
 import { verifyPassword } from "../accounts/passwords.js";
 import { fromForm, variants } from "../accounts/phones.js";
@@ -25,7 +25,7 @@ import { goalOf, MAX_DAILY_GOAL } from "../domain/progress.js";
 import { LEVELS } from "../domain/topics.js";
 import { getLogger } from "../logging.js";
 import { PanelQueries } from "../panel/queries.js";
-import type { AppStore } from "../ports/app.js";
+import type { AppEvent, AppStore } from "../ports/app.js";
 import type { AppState } from "./deps.js";
 import { httpError } from "./errors.js";
 import { messageJson } from "./webhooks.js";
@@ -54,6 +54,15 @@ const Settings = z
   })
   .partial()
   .strict();
+
+const eventJson = (e: AppEvent) => ({
+  id: e.id,
+  kind: e.kind,
+  text: e.text,
+  data: e.data,
+  media: e.mediaId ? `/app/v1/media/${e.mediaId}` : null,
+  at: e.createdAt.toISOString(),
+});
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -89,6 +98,17 @@ export function appRouter(state: AppState, store?: AppStore): Hono<Env> {
     const token = await apps.createToken(student.id);
     log.info("app_login", { user_id: student.id });
     return c.json({ token, student: { id: student.id, name: student.name } });
+  });
+
+  // Media: an unguessable id (random UUID) that only its owner gets, in their events, and that
+  // goes after a week. No bearer token here: the web's audio player cannot send one.
+  app.get("/media/:id{[0-9a-f-]{36}}", async (c) => {
+    const media = await apps.media(c.req.param("id") ?? "");
+    if (!media) return httpError(c, 404);
+    return c.body(new Uint8Array(media.data), 200, {
+      "content-type": media.mime,
+      "cache-control": "private, max-age=604800",
+    });
   });
 
   // everything below needs the bearer token
@@ -196,9 +216,12 @@ export function appRouter(state: AppState, store?: AppStore): Hono<Env> {
     return c.json({ id: msg.id }, 202);
   });
 
-  /** New events after `after`; waits up to `wait` seconds (25 at most) for the first one. */
+  /** New events after `after`; waits up to `wait` seconds (25 at most) for the first one.
+   * `recent=N`: the last N events instead (the history when the app opens). */
   app.get("/events", async (c) => {
     const id = c.get("student");
+    const recent = Math.min(EVENTS_LIMIT, Number(c.req.query("recent") ?? 0) || 0);
+    if (recent > 0) return c.json({ events: (await apps.recentEvents(id, recent)).map(eventJson) });
     const after = Math.max(0, Number(c.req.query("after") ?? 0) || 0);
     const wait = Math.min(EVENTS_WAIT_S, Math.max(0, Number(c.req.query("wait") ?? 0) || 0));
     const until = Date.now() + wait * 1000;
@@ -207,25 +230,7 @@ export function appRouter(state: AppState, store?: AppStore): Hono<Env> {
       await sleep(POLL_MS);
       events = await apps.events(id, after, EVENTS_LIMIT);
     }
-    return c.json({
-      events: events.map((e) => ({
-        id: e.id,
-        kind: e.kind,
-        text: e.text,
-        data: e.data,
-        media: e.mediaId ? `/app/v1/media/${e.mediaId}` : null,
-        at: e.createdAt.toISOString(),
-      })),
-    });
-  });
-
-  app.get("/media/:id{[0-9a-f-]{36}}", async (c: Context<Env>) => {
-    const media = await apps.media(c.req.param("id") ?? "");
-    if (!media || media.studentId !== c.get("student")) return httpError(c, 404);
-    return c.body(new Uint8Array(media.data), 200, {
-      "content-type": media.mime,
-      "cache-control": "private, max-age=604800",
-    });
+    return c.json({ events: events.map(eventJson) });
   });
 
   return app;

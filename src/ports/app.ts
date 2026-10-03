@@ -20,6 +20,8 @@ export interface AppMedia {
 
 export interface AppStore {
   addEvent(studentId: number, event: Omit<AppEvent, "id" | "createdAt">): Promise<number>;
+  /** The last `limit` events, oldest first. */
+  recentEvents(studentId: number, limit: number): Promise<AppEvent[]>;
   /** Events after `afterId`, oldest first. */
   events(studentId: number, afterId: number, limit: number): Promise<AppEvent[]>;
   putMedia(studentId: number, data: Buffer, mime: string): Promise<string>;
