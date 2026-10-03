@@ -16,7 +16,7 @@ import { z } from "zod";
 import type { Cache } from "../ports/cache.js";
 
 export const CODE_TTL_S = 30 * 60;
-export const Kind = z.enum(["signup", "reset"]);
+export const Kind = z.enum(["signup", "reset", "link"]); // link: one more channel, same account
 export type Kind = z.infer<typeof Kind>;
 // what the student sends; the site shows the Portuguese or English word for the kind
 export const WORDS: Readonly<Record<string, Kind>> = {
@@ -25,6 +25,8 @@ export const WORDS: Readonly<Record<string, Kind>> = {
   senha: "reset",
   password: "reset",
   reset: "reset",
+  vincular: "link",
+  link: "link",
 };
 export const CODE_RE = new RegExp(
   String.raw`^\s*\/?(${Object.keys(WORDS).join("|")})\s*[:#-]?\s*(\d{6})\s*[.!]?\s*$`,
@@ -34,7 +36,7 @@ export const CODE_RE = new RegExp(
 export const Pending = z.object({
   kind: Kind,
   token: z.string(),
-  phone: z.string(), // as typed on the site (checked loosely against the WhatsApp id)
+  phone: z.string().default(""), // as typed on the site (checked loosely against the WhatsApp id)
   name: z.string().default(""),
   password_hash: z.string().default(""),
   user_id: z.number().int().nullable().default(null), // reset: the account
@@ -43,7 +45,7 @@ export const Pending = z.object({
 export type Pending = z.infer<typeof Pending>;
 
 export const TokenStatus = z.object({
-  status: z.enum(["pending", "done", "wrong_phone", "expired"]).default("pending"),
+  status: z.enum(["pending", "done", "wrong_phone", "phone_taken", "expired"]).default("pending"),
   user_id: z.number().int().nullable().default(null),
 });
 export type TokenStatus = z.infer<typeof TokenStatus>;

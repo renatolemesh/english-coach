@@ -191,12 +191,15 @@ export function authRoutes(app: Hono, p: Panel): void {
     const message = `${word} ${code}`;
     const number = config.whatsapp_number.replace(/\D/g, "");
     const link = number ? `https://wa.me/${number}?text=${quote(message)}` : "";
+    const bot = config.telegram_bot;
     const response = p.views.render(c, "wait.html", {
       code,
       waText: message,
       link,
       status,
       number,
+      // the same code through the Telegram bot (no phone there: the code is the proof)
+      telegram: bot && /^\d{6}$/.test(code) ? `https://t.me/${bot}?start=${word}_${code}` : "",
     });
     if (status === "pending") response.headers.set("Refresh", String(WAIT_REFRESH_S));
     return response;

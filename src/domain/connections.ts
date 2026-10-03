@@ -1,8 +1,9 @@
-/** A WhatsApp connection, n8n-style: provider + credentials + webhook secret + settings. */
+/** A chat connection (WhatsApp, Telegram), n8n-style: provider + credentials + webhook secret +
+ * settings. */
 import { z } from "zod";
 import { Secret } from "../config.js";
 
-export const Provider = z.enum(["meta", "evolution", "waha", "zapi"]);
+export const Provider = z.enum(["meta", "evolution", "waha", "zapi", "telegram"]);
 export type Provider = z.infer<typeof Provider>;
 
 const secret = z

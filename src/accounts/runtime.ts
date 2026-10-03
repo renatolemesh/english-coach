@@ -34,6 +34,15 @@ export const RuntimeConfigSchema = z.object({
       "Número do saybest no WhatsApp, só dígitos (ex.: 5541999990000). " +
         "Usado no botão de ativação do cadastro.",
     ),
+  telegram_bot: z
+    .string()
+    .regex(/^@?\w*$/)
+    .transform((v) => v.replace(/^@/, ""))
+    .default("")
+    .describe(
+      "Usuário do bot no Telegram, sem @ (ex.: saybest_bot). Vazio: sem as opções de Telegram " +
+        "no cadastro e no painel.",
+    ),
   signup_connection: z
     .string()
     .default("meta-main")

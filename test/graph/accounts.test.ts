@@ -173,4 +173,53 @@ describe("accounts through the graph", () => {
       expect(h.repo.access.get(1)?.ui_lang ?? null).toBe(saved);
     }
   });
+
+  describe("Telegram: no phone, the code is the proof", () => {
+    const chat = (text: string, n: number) => ({ ...textMsg(text, n), from: "7001" });
+    const signup = async (phone: string) =>
+      verification.start(h.container.cache, {
+        kind: "signup",
+        token: verification.newToken(),
+        phone,
+        name: "Bia",
+        password_hash: await hashPassword("secret123"),
+      });
+
+    beforeEach(() => {
+      h.channel.phones = false;
+    });
+
+    it("signs up from the t.me link: the chat is the identity, the form's phone is kept", async () => {
+      const code = await signup("5511988887777");
+      await h.send(chat(`ATIVAR ${code}`, 1), "telegram");
+      expect(h.channel.sent.map((s) => s.text)).toEqual([
+        `${COURSE_PT.placementOffer} [teste start]`,
+      ]);
+      const access = await h.repo.studentAccess("telegram", "7001");
+      expect(access?.name).toBe("Bia");
+    });
+
+    it("refuses a phone that already has an account (link it from the panel instead)", async () => {
+      await h.repo.createStudent(CONN, "5511988887777", "Grátis", "Ana");
+      const code = await signup("5511988887777");
+      await h.send(chat(`ATIVAR ${code}`, 1), "telegram");
+      expect(h.texts()).toEqual([EN.phoneTaken]);
+      expect(await h.repo.studentAccess("telegram", "7001")).toBeNull();
+    });
+
+    it("links the chat to the logged-in student's account", async () => {
+      const { user_id } = await h.repo.createStudent(CONN, PHONE, "Ilimitado", "Ana");
+      const token = verification.newToken();
+      const code = await verification.start(h.container.cache, {
+        kind: "link",
+        token,
+        user_id,
+      });
+      await h.send(chat(`VINCULAR ${code}`, 1), "telegram");
+      expect(h.texts()).toEqual([EN.linkDone]);
+      expect((await verification.status(h.container.cache, token)).status).toBe("done");
+      const state = await h.send(chat("/ajuda", 2), "telegram");
+      expect(state.user_id).toBe(user_id); // the same account, from Telegram
+    });
+  });
 });

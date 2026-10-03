@@ -11,6 +11,7 @@ export abstract class NotImplementedChannel implements ChatChannel {
   abstract readonly provider: string;
   readonly interactive = false;
   readonly cards = true;
+  readonly phones = true;
 
   constructor(readonly conn: ConnectionConfig) {}
 

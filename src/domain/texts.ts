@@ -69,6 +69,9 @@ export interface TextsData {
   readonly codeUnknown: string;
   readonly codeWrongPhone: string;
   readonly resetConfirmed: string;
+  readonly linkDone: string; // this chat now belongs to the student's account
+  readonly linkTaken: string; // this chat is another account's
+  readonly phoneTaken: string; // signup on Telegram with a phone that has an account
   readonly messagesLeft: string; // {n}
   readonly planChanged: string; // {old} {plan} {limit} {panel_url}
   readonly planLimit: string; // {n}
@@ -249,6 +252,13 @@ export const EN: Texts = makeTexts({
     "That code was created for another phone number. Send it from the number you typed " +
     "on the website.",
   resetConfirmed: "Code confirmed ✅ Go back to the website to choose your new password.",
+  linkDone:
+    "Connected ✅ This chat is now part of your saybest account: same level, goals and " +
+    "progress. Send a voice message to practise, or /aula for a lesson.",
+  linkTaken: "This chat is already connected to another saybest account.",
+  phoneTaken:
+    "That phone number already has a saybest account. Log in at the website and use " +
+    "*Connect Telegram* in your settings.",
   messagesLeft: "{n} messages left today.",
   planChanged:
     "Your *{old}* period has ended. You're now on the *{plan}* plan ({limit}). " +
@@ -443,6 +453,13 @@ export const PT: Texts = makeTexts({
   codeWrongPhone:
     "Esse código foi criado para outro número. Envie do número que você digitou no site.",
   resetConfirmed: "Código confirmado ✅ Volte ao site para escolher sua nova senha.",
+  linkDone:
+    "Conectado ✅ Este chat agora faz parte da sua conta do saybest: mesmo nível, metas e " +
+    "progresso. Mande um áudio para praticar, ou /aula para uma aula.",
+  linkTaken: "Este chat já está conectado a outra conta do saybest.",
+  phoneTaken:
+    "Esse telefone já tem conta no saybest. Entre pelo site e use *Conectar Telegram* nas " +
+    "configurações.",
   messagesLeft: "Restam {n} mensagens hoje.",
   planChanged:
     "Seu período *{old}* terminou. Agora você está no plano *{plan}* ({limit}). " +

@@ -4,6 +4,7 @@ import type { ConnectionConfig, Provider } from "../../domain/connections.js";
 import type { ChatChannel } from "../../ports/channel.js";
 import { EvolutionChannel } from "./evolution.js";
 import { MetaCloudChannel } from "./meta-cloud.js";
+import { TelegramChannel } from "./telegram.js";
 import { WahaChannel } from "./waha.js";
 import { ZapiChannel } from "./zapi.js";
 
@@ -13,6 +14,7 @@ export const REQUIRED: Record<Provider, readonly [readonly string[], readonly st
   evolution: [["api_key"], ["base_url", "instance"]],
   waha: [[], []],
   zapi: [[], []],
+  telegram: [["bot_token"], []], // settings.username: the bot's @name, for t.me links
 };
 
 export function missingFields(conn: ConnectionConfig): string[] {
@@ -22,7 +24,8 @@ export function missingFields(conn: ConnectionConfig): string[] {
     const value = conn.settings[s];
     if (value === undefined || value === null || value === "") missing.push(`settings.${s}`);
   }
-  if (conn.provider === "evolution" && !conn.webhook_secret.value) missing.push("webhook_secret");
+  const signed = conn.provider === "evolution" || conn.provider === "telegram";
+  if (signed && !conn.webhook_secret.value) missing.push("webhook_secret");
   return missing;
 }
 
@@ -45,5 +48,7 @@ export function buildChannel(conn: ConnectionConfig, settings: Settings): ChatCh
       return new WahaChannel(conn);
     case "zapi":
       return new ZapiChannel(conn);
+    case "telegram":
+      return new TelegramChannel(conn, settings.maxAudioBytes);
   }
 }

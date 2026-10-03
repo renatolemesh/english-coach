@@ -2,6 +2,7 @@
  * WhatsApp message loads them into the conversation (graph/runner.ts preferences()). */
 import type { Context, Hono } from "hono";
 import { hashPassword, passwordProblem, verifyPassword } from "../accounts/passwords.js";
+import * as verification from "../accounts/verification.js";
 import { SqlCourseRepository } from "../adapters/course/sql.js";
 import {
   DAILY_GOALS,
@@ -27,7 +28,7 @@ import {
   tutorOffered,
 } from "../domain/tutors.js";
 import { localDay } from "../guardrails/limits.js";
-import { PASSWORD_ERRORS } from "./auth-routes.js";
+import { PASSWORD_ERRORS, WAIT_REFRESH_S } from "./auth-routes.js";
 import { type Panel, posted, student, target, text } from "./deps.js";
 import type { Session } from "./security.js";
 import { scoreChart } from "./views.js";
@@ -144,8 +145,49 @@ export function studentRoutes(app: Hono, p: Panel): void {
       goals: DAILY_GOALS,
       goal: goalOf(s.dailyGoal),
       maxGoal: Math.min(MAX_DAILY_GOAL, plan?.messagesPerDay || MAX_DAILY_GOAL),
+      telegramBot: config.telegram_bot,
+      telegramLinked: await telegramLinked(me(session).id),
     });
   };
+
+  /** Has this student a chat on any Telegram connection? */
+  const telegramLinked = async (studentId: number): Promise<boolean> => {
+    const telegram = new Set(
+      (await p.deps.connections.list()).filter((c) => c.provider === "telegram").map((c) => c.id),
+    );
+    return (await p.queries.identities(studentId)).some((i) => telegram.has(i.connectionId));
+  };
+
+  // "Conectar Telegram": a one-time code in a t.me link; the bot links that chat to this account
+  app.post("/me/telegram", async (c) => {
+    const session = await student(p, c);
+    await posted(c, session);
+    const token = verification.newToken();
+    const code = await verification.start(p.deps.cache, {
+      kind: "link",
+      token,
+      user_id: me(session).id,
+      lang: me(session).uiLang ?? "pt",
+    });
+    return c.redirect(target(`/me/telegram?t=${token}&c=${code}`), 303);
+  });
+
+  app.get("/me/telegram", async (c) => {
+    const session = await student(p, c);
+    const config = await p.runtime.get();
+    const token = c.req.query("t") ?? "";
+    const code = (c.req.query("c") ?? "").replace(/\D/g, "").slice(0, 6);
+    const status = await verification.status(p.deps.cache, token);
+    const mine = status.user_id === null || status.user_id === me(session).id;
+    const response = p.views.render(c, "me_telegram.html", {
+      session,
+      status: mine ? status.status : "expired",
+      link: config.telegram_bot ? `https://t.me/${config.telegram_bot}?start=VINCULAR_${code}` : "",
+      bot: config.telegram_bot,
+    });
+    if (status.status === "pending") response.headers.set("Refresh", String(WAIT_REFRESH_S));
+    return response;
+  });
 
   app.get("/me/settings", async (c) => settingsPage(c, await student(p, c)));
 

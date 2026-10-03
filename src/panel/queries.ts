@@ -232,6 +232,14 @@ export class PanelQueries {
     await advanceEndedPlan(this.db, studentId);
   }
 
+  /** The channels a student talks from: (connection, address) pairs. */
+  async identities(studentId: number): Promise<{ connectionId: string; address: string }[]> {
+    return this.db
+      .select({ connectionId: studentIdentities.connectionId, address: studentIdentities.address })
+      .from(studentIdentities)
+      .where(eq(studentIdentities.studentId, studentId));
+  }
+
   async studentsByPhone(phone: string): Promise<Student[]> {
     return this.db
       .select()

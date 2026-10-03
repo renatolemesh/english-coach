@@ -12,7 +12,11 @@
   <p>Envie esta mensagem para o saybest{% if number %} (<b>{{ number | phone }}</b>){% endif %}:</p>
   <p class="code">{{ waText }}</p>
   {% if link %}<p><a class="button wa" href="{{ link }}" target="_blank" rel="noopener noreferrer">Abrir o WhatsApp com a mensagem</a></p>{% endif %}
+  {% if telegram %}<p class="muted small">Prefere o Telegram?</p><p><a class="button" href="{{ telegram }}" target="_blank" rel="noopener noreferrer">Continuar no Telegram</a></p>{% endif %}
   <p class="muted small">Esta página atualiza sozinha quando recebermos. O código vale por 30 minutos.</p>
+  {% elif status == 'phone_taken' %}
+  <h1>Telefone já cadastrado</h1>
+  <p>Esse telefone já tem conta. <a href="/panel/login">Entre</a> e use <b>Conectar Telegram</b> nas configurações.</p>
   {% elif status == 'wrong_phone' %}
   <h1>Número diferente</h1>
   <p>O código foi enviado de outro número. Envie do número que você digitou, ou <a href="/panel/signup">comece de novo</a>.</p>

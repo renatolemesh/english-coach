@@ -44,6 +44,8 @@ export interface TurnRepository {
   /** Status, plan and preferences of the student behind (connection, address) (the phone on
    * WhatsApp, the chat id on Telegram...); null for an unknown one. */
   studentAccess(connectionId: string, address: string): Promise<StudentAccess | null>;
+  /** The student whose phone (students.phone) is this one, with or without the ninth digit. */
+  studentIdByPhone(phone: string): Promise<number | null>;
   /** One more channel for a student; false when the address already belongs to another one. */
   linkIdentity(userId: number, connectionId: string, address: string): Promise<boolean>;
   /** A verified student on `planName` (its duration starts now), or the existing one with the

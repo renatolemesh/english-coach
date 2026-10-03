@@ -40,6 +40,20 @@
     <button>Salvar</button>
   </form>
 </section>
+{% if telegramBot %}
+<section class="card">
+  <h2>Telegram</h2>
+  {% if telegramLinked %}
+  <p>Conectado ✅ Você pode praticar pelo <a href="https://t.me/{{ telegramBot }}" target="_blank" rel="noopener noreferrer">@{{ telegramBot }}</a> com o mesmo progresso.</p>
+  {% else %}
+  <p class="muted">Pratique também pelo Telegram, com o mesmo nível, metas e progresso.</p>
+  <form method="post" action="/panel/me/telegram">
+    {{ csrf_field(csrf) }}
+    <button>Conectar Telegram</button>
+  </form>
+  {% endif %}
+</section>
+{% endif %}
 <section class="card">
   <h2>Senha do site</h2>
   <form method="post" action="/panel/me/password">

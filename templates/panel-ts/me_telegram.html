@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Conectar Telegram{% endblock %}
+{% block content %}
+<section class="card center">
+  {% if status == 'pending' and link %}
+  <h1>Conectar o Telegram</h1>
+  <p>Abra o bot <b>@{{ bot }}</b> pelo botão e toque em <b>Começar</b>. Pronto: o mesmo nível, metas e progresso, sem custo por mensagem.</p>
+  <p><a class="button" href="{{ link }}" target="_blank" rel="noopener noreferrer">Abrir no Telegram</a></p>
+  <p class="muted small">Esta página atualiza sozinha quando o Telegram confirmar. O link vale por 30 minutos.</p>
+  {% elif status == 'done' %}
+  <h1>Telegram conectado ✅</h1>
+  <p>Mande um áudio para o bot e continue de onde parou. <a href="/panel/me">Voltar</a></p>
+  {% else %}
+  <h1>Link expirado</h1>
+  <p>O link venceu ou esse Telegram já está em outra conta. <a href="/panel/me/settings">Tente de novo</a>.</p>
+  {% endif %}
+</section>
+{% endblock %}

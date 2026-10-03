@@ -1,0 +1,11 @@
+{
+  "update_id": 900004,
+  "message": {
+    "message_id": 14,
+    "from": { "id": 7002, "is_bot": false, "first_name": "Bia" },
+    "chat": { "id": 7002, "first_name": "Bia", "type": "private" },
+    "date": 1790900030,
+    "text": "/start ATIVAR_482913",
+    "entities": [{ "offset": 0, "length": 6, "type": "bot_command" }]
+  }
+}

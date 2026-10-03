@@ -17,6 +17,7 @@ export class FakeChannel implements ChatChannel {
   readonly provider = "fake";
   interactive = true;
   cards = true; // false: records evaluations as data, like the app
+  phones = true;
   readonly media = new Map<string, [Buffer, string]>();
   readonly sent: Sent[] = [];
 

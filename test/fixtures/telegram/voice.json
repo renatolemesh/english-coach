@@ -1,0 +1,16 @@
+{
+  "update_id": 900002,
+  "message": {
+    "message_id": 12,
+    "from": { "id": 7001, "is_bot": false, "first_name": "Ana" },
+    "chat": { "id": 7001, "first_name": "Ana", "type": "private" },
+    "date": 1790900010,
+    "voice": {
+      "duration": 4,
+      "mime_type": "audio/ogg",
+      "file_id": "AwACAgEAAxkBAAMMZ",
+      "file_unique_id": "AgADxQ",
+      "file_size": 14563
+    }
+  }
+}

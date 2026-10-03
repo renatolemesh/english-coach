@@ -70,10 +70,11 @@ npx tsx scripts/create-admin.ts --email voce@exemplo.com --name Voce   # --role 
 A senha temporária vai para `out/panel_password.txt` (modo 600) e não é impressa; troque-a no
 primeiro login em `https://<dominio>/panel/admin/login`.
 
-## Conectar o WhatsApp
+## Conectar o WhatsApp e o Telegram
 
-Cada conexão tem `provider` (`meta` ou `evolution`), credenciais cifradas, um `webhook_secret` e
-`settings`. A URL de webhook é `https://<dominio>/webhooks/<id>`.
+Cada conexão tem `provider` (`meta`, `evolution` ou `telegram`), credenciais cifradas, um
+`webhook_secret` e `settings`. O aluno é o mesmo em todos os canais (identidades em
+`student_identities`; plano em `docs/multicanal.md`). A URL de webhook é `https://<dominio>/webhooks/<id>`.
 
 ```bash
 ssh -L 8010:127.0.0.1:8010 <servidor>           # na sua máquina
@@ -92,6 +93,12 @@ curl -s localhost:8010/admin/connections -H "x-api-key: $K" -H 'content-type: ap
   "webhook_secret": "<segredo aleatório>",
   "credentials": {"api_key": "<token da instância>"},
   "settings": {"base_url": "http://evolution_api:8080", "instance": "coach"}}'
+
+# Telegram (token do @BotFather)
+curl -s localhost:8010/admin/connections -H "x-api-key: $K" -H 'content-type: application/json' -d '{
+  "id": "telegram-main", "name": "Telegram", "provider": "telegram",
+  "webhook_secret": "<segredo aleatório, letras e números>",
+  "credentials": {"bot_token": "<token do bot>"}}'
 ```
 
 Outras rotas (todas com `x-api-key`): `GET /admin/connections` (lista, sem segredos),
@@ -104,6 +111,12 @@ Outras rotas (todas com `x-api-key`): `GET /admin/connections` (lista, sem segre
 - **Evolution:** configure o webhook da instância (`POST /webhook/set/<instancia>`) com a URL
   acima, header `x-webhook-secret: <webhook_secret>`, `base64: false` e o evento
   `MESSAGES_UPSERT`. O worker precisa alcançar o `base_url`.
+
+- **Telegram:** `docker exec saybest-api npx tsx scripts/telegram-setup.ts` registra o webhook
+  (com o segredo) e a lista de comandos, e mostra o `@` do bot: ponha-o em `telegram_bot` nas
+  configurações do painel. Aí o cadastro oferece "Continuar no Telegram" e o aluno ganha
+  "Conectar Telegram" nas configurações (vincula o chat à conta dele). Sem telefone no Telegram,
+  o código de uso único gerado no site é a prova; um telefone que já tem conta não abre outra.
 
 Alternativa: `CONNECTIONS_FILE=connections.yaml` (modelo em `connections.example.yaml`, aceita
 `${VAR}` do `.env`). O arquivo é regravado no banco a cada boot da API; gerencie cada conexão

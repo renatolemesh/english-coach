@@ -96,14 +96,16 @@ export class AccountGate {
     access: StudentAccess | null,
   ): Promise<Admission> {
     const pending = await verification.claim(this.cache, kind, digits);
-    const phone = msg.from;
+    const phone = msg.from; // the address: a phone on WhatsApp, the chat id on Telegram
     if (!pending) {
       await channel.sendText(phone, texts.codeUnknown);
       return refused;
     }
     const lang = textsFor(pending.lang);
+    if (kind === "link") return this.link(pending, phone, connectionId, channel, lang);
     const wrongAccount = kind === "reset" && pending.user_id !== (access?.user_id ?? null);
-    if (!samePhone(pending.phone, phone) || wrongAccount) {
+    // without phones (Telegram) the code, shown only on the site, is the proof
+    if ((channel.phones && !samePhone(pending.phone, phone)) || wrongAccount) {
       log.warning("verification_wrong_phone", { kind });
       await verification.setStatus(this.cache, pending.token, { status: "wrong_phone" });
       await channel.sendText(phone, lang.codeWrongPhone);
@@ -117,6 +119,13 @@ export class AccountGate {
       await channel.sendText(phone, lang.resetConfirmed);
       return refused;
     }
+    if (!channel.phones && access === null && (await this.repo.studentIdByPhone(pending.phone))) {
+      // that phone has an account: link this chat from the panel instead (an unchecked phone
+      // must never open someone else's account)
+      await verification.setStatus(this.cache, pending.token, { status: "phone_taken" });
+      await channel.sendText(phone, lang.phoneTaken);
+      return refused;
+    }
     const created = await this.repo.createStudent(
       connectionId,
       phone,
@@ -124,6 +133,7 @@ export class AccountGate {
       pending.name,
       pending.password_hash,
       pending.lang === "en" || pending.lang === "pt" ? pending.lang : null, // "auto": by level
+      channel.phones ? null : pending.phone,
     );
     await verification.setStatus(this.cache, pending.token, {
       status: "done",
@@ -131,6 +141,26 @@ export class AccountGate {
     });
     log.info("student_signed_up", { user_id: created.user_id });
     return { access: created, start: true };
+  }
+
+  /** "VINCULAR 123456" (Telegram: the panel's "Conectar Telegram" link): this chat joins the
+   * logged-in student's account. */
+  private async link(
+    pending: verification.Pending,
+    address: string,
+    connectionId: string,
+    channel: ChatChannel,
+    lang: Texts,
+  ): Promise<Admission> {
+    const userId = pending.user_id;
+    const linked = userId !== null && (await this.repo.linkIdentity(userId, connectionId, address));
+    await verification.setStatus(this.cache, pending.token, {
+      status: linked ? "done" : "expired",
+      user_id: userId,
+    });
+    log.info("identity_linked", { user_id: userId, connection_id: connectionId, linked });
+    await channel.sendText(address, linked ? lang.linkDone : lang.linkTaken);
+    return refused;
   }
 
   private async planChanged(

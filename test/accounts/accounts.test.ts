@@ -145,6 +145,7 @@ describe("runtime config", () => {
       signup_enabled: true,
       trial_plan: "Teste Ilimitado",
       whatsapp_number: "",
+      telegram_bot: "",
       signup_connection: "meta-main",
       contact_text: "",
       rate_limit_per_minute: null,

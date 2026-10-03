@@ -14,6 +14,9 @@ export interface ChatChannel {
   /** true: the evaluation goes out as the PNG card (render_image); false: sendEvaluation gets the
    * evaluation itself and draws it (the app), so no browser renders anything for it. */
   readonly cards: boolean;
+  /** true: addresses are phone numbers (WhatsApp), checked against the phone typed at signup;
+   * false (Telegram, app): the signup code alone proves who it is. */
+  readonly phones: boolean;
   parseWebhook(headers: Headers, body: Buffer): IncomingMessage[];
   /** true/false for signature checks; a string for GET challenges to echo back. */
   verifyWebhook(headers: Headers, body: Buffer, query: Record<string, string>): boolean | string;

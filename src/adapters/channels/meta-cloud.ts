@@ -42,6 +42,7 @@ export class MetaCloudChannel implements ChatChannel {
   readonly provider = "meta";
   readonly interactive = true;
   readonly cards = true;
+  readonly phones = true;
   readonly http: HttpClient;
   private readonly phoneId: string;
   readonly version: string;

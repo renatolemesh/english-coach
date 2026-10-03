@@ -413,6 +413,7 @@ describe("panel", () => {
         signup_enabled: "on",
         trial_plan: "Grátis",
         whatsapp_number: "5541999990000",
+        telegram_bot: "@saybest_bot",
         signup_connection: CONN,
         contact_text: "",
         rate_limit_per_minute: "",

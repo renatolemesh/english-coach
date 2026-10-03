@@ -98,6 +98,14 @@ export class SqlRepository implements TurnRepository {
     return row ? toAccess(row.student, row.plan) : null;
   }
 
+  async studentIdByPhone(phone: string): Promise<number | null> {
+    const row = await this.db.query.students.findFirst({
+      columns: { id: true },
+      where: inArray(students.phone, variants(phone)),
+    });
+    return row?.id ?? null;
+  }
+
   async linkIdentity(userId: number, connectionId: string, address: string): Promise<boolean> {
     const taken = await this.studentIdOf(connectionId, address);
     if (taken !== null) return taken === userId;

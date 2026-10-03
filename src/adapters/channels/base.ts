@@ -103,7 +103,12 @@ export class HttpClient {
     private readonly headers: Record<string, string>,
     private readonly attempts = 3,
     public wait = 1.0, // initial backoff in seconds (0 in tests)
+    private readonly urlSecrets: readonly string[] = [], // Telegram: the token is in the path
   ) {}
+
+  private get secrets(): string[] {
+    return [...Object.values(this.headers), ...this.urlSecrets];
+  }
 
   private url(path: string): string {
     return /^https?:\/\//.test(path) ? path : `${this.baseUrl}${path}`;
@@ -111,7 +116,7 @@ export class HttpClient {
 
   // Error messages never carry the provider path's query nor our tokens.
   private describe(method: string, url: string): string {
-    return redact(`${method} ${url.split("?")[0]}`, Object.values(this.headers));
+    return redact(`${method} ${url.split("?")[0]}`, this.secrets);
   }
 
   private async fetchOnce(method: string, url: string, opts: RequestOptions): Promise<Response> {
@@ -132,10 +137,10 @@ export class HttpClient {
       });
     } catch (exc) {
       const reason = exc instanceof Error ? exc.message : String(exc);
-      throw new TransportError(`${this.describe(method, url)}: ${reason}`);
+      throw new TransportError(`${this.describe(method, url)}: ${redact(reason, this.secrets)}`);
     }
     if (!response.ok) {
-      const text = redact(await response.text().catch(() => ""), Object.values(this.headers));
+      const text = redact(await response.text().catch(() => ""), this.secrets);
       const kind = response.status >= 500 ? "Server error" : "Client error";
       throw new HttpStatusError(
         response.status,
@@ -149,7 +154,11 @@ export class HttpClient {
   async request(method: string, path: string, opts: RequestOptions = {}): Promise<Response> {
     const url = this.url(path);
     for (let n = 1; ; n++) {
-      if (n > 1) log.warning("channel_retry", { url: url.split("?")[0], attempt: n });
+      if (n > 1)
+        log.warning("channel_retry", {
+          url: redact(url.split("?")[0] ?? "", this.secrets),
+          attempt: n,
+        });
       try {
         return await this.fetchOnce(method, url, opts);
       } catch (exc) {

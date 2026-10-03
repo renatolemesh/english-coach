@@ -139,6 +139,11 @@ export class MemoryRepository implements TurnRepository {
     this.lastChannel.set(userId, [connectionId, address]);
   }
 
+  async studentIdByPhone(phone: string): Promise<number | null> {
+    for (const [key, id] of this.students) if (key.split("|")[1] === phone) return id;
+    return null;
+  }
+
   async linkIdentity(userId: number, connectionId: string, address: string): Promise<boolean> {
     const key = `${connectionId}|${address}`;
     const taken = this.students.get(key);

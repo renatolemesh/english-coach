@@ -53,6 +53,7 @@ export class EvolutionChannel implements ChatChannel {
   readonly provider = "evolution";
   readonly interactive = false;
   readonly cards = true;
+  readonly phones = true;
   readonly http: HttpClient;
   private readonly instance: string;
 
